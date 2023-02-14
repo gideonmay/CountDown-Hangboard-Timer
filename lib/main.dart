@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'screens/workouts_screen.dart';
+import 'screens/settings_screen.dart';
+import 'screens/timer_screen.dart';
+import 'screens/workout_screen.dart';
 
 void main() {
   runApp(const App());
@@ -30,9 +32,9 @@ class _AppScaffoldState extends State<AppScaffold> {
   int _selectedIndex = 0;
 
   static const List<Widget> _screenOptions = <Widget>[
-    Text('Index 0: My Workouts'),
-    Text('Index 1: Timer'),
-    Text('Index 2: Settings')
+    WorkoutScreen(),
+    TimerScreen(),
+    SettingsScreen()
   ];
 
   static const List<Widget> _titleOptions = <Widget>[
@@ -50,9 +52,6 @@ class _AppScaffoldState extends State<AppScaffold> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: _titleOptions.elementAt(_selectedIndex),
-      ),
       body: Center(
         child: _screenOptions.elementAt(_selectedIndex),
       ),

@@ -1,6 +1,6 @@
-# countdown_app
+# CountDown - an iOS and Android App
 
-A new Flutter project.
+A tool for creating custom hangboard workouts.
 
 ## Getting Started
 

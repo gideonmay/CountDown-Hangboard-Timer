@@ -19,13 +19,18 @@ class DurationStatusList {
   final Duration restDuration;
   final Duration breakDuration;
   final List<DurationStatus> _durationStatusList = [];
+  
+  /// Whether or not to include prepare DurationStatus
+  final bool includePrepare;
+  
 
   DurationStatusList(
       {required this.sets,
       required this.reps,
       required this.workDuration,
       required this.restDuration,
-      required this.breakDuration}) {
+      required this.breakDuration,
+      required this.includePrepare}) {
     _buildList();
   }
 
@@ -38,19 +43,23 @@ class DurationStatusList {
   /// reps. Each list starts with a DurationStatus object with a StatusValue of
   /// 'prepare', which gives the user time seconds to prepare for the first rep.
   void _buildList() {
-    // Add 'prepare' DurationStatus
-    _durationStatusList.add(DurationStatus(
+    // Add 'prepare' DurationStatus if includePrepare was specified
+    if (includePrepare && sets > 0 && reps > 0) {
+      _durationStatusList.add(DurationStatus(
         duration: const Duration(seconds: 15),
         statusValue: StatusValue.isPreparing(),
         statusColor: prepareColor));
+    }
 
     int currSet = 0;
     while (currSet < sets) {
       // Add initial work duration due to fence post problem
-      _durationStatusList.add(DurationStatus(
+      if (reps > 0) {
+        _durationStatusList.add(DurationStatus(
           duration: workDuration,
           statusValue: StatusValue.isWorking(),
           statusColor: workColor));
+      }
 
       int currRep = 1;
       while (currRep < reps) {

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import '../widgets/timer_details.dart';
+import '../widgets/timer_control_buttons.dart';
 
+/// Provides a layout for the countdown timer, timer details, and timer control 
+/// buttons.
 class TimerScreen extends StatefulWidget {
   const TimerScreen({super.key});
 
@@ -14,12 +18,21 @@ class _TimerScreenState extends State<TimerScreen> {
       appBar: AppBar(
         title: const Text('Timer'),
       ),
-      body: Center(
+      body: SizedBox.expand(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const <Widget>[
-            Text(
-              'Timer Screen',
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: const [
+            Flexible(
+              flex: 20,
+              child: TimerDetails(),
+            ),
+            Flexible(
+              flex: 55,
+              child: Placeholder(child: Text('Timer Here')),
+            ),
+            Flexible(
+              flex: 25,
+              child: TimerControlButtons(),
             ),
           ],
         ),

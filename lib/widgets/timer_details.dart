@@ -2,48 +2,63 @@ import 'package:flutter/material.dart';
 import '../widgets/timer_details_tile.dart';
 
 class TimerDetails extends StatefulWidget {
-  const TimerDetails({super.key});
+  final Duration workDuration;
+  final Duration restDuration;
+  final Duration breakDuration;
+
+  const TimerDetails(
+      {super.key,
+      required this.workDuration,
+      required this.restDuration,
+      required this.breakDuration});
 
   @override
   State<TimerDetails> createState() => _TimerDetailsState();
 }
 
 class _TimerDetailsState extends State<TimerDetails> {
+
+  /// Converts the given duration into a string with format 'M:SS'
+  String durationString(Duration duration) {
+    int minutes = duration.inMinutes;
+    int seconds = duration.inSeconds % 60;
+    return '$minutes:${(seconds).toString().padLeft(2, '0')}';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        
         Expanded(
           child: Row(
-            children: const [
+            children: [
               Expanded(
                 child: Padding(
-                  padding: EdgeInsets.all(6.0),
+                  padding: const EdgeInsets.all(6.0),
                   child: TimerDetailsTile(
                     color: Colors.grey,
-                    text: 'Work 0:12',
+                    text: 'Work ${durationString(widget.workDuration)}',
                     fontSize: 16.0,
                   ),
                 ),
               ),
               Expanded(
                 child: Padding(
-                  padding: EdgeInsets.all(6.0),
+                  padding: const EdgeInsets.all(6.0),
                   child: TimerDetailsTile(
                     color: Colors.grey,
-                    text: 'Rest 0:03',
+                    text: 'Rest ${durationString(widget.restDuration)}',
                     fontSize: 16.0,
                   ),
                 ),
               ),
               Expanded(
                 child: Padding(
-                  padding: EdgeInsets.all(6.0),
+                  padding: const EdgeInsets.all(6.0),
                   child: TimerDetailsTile(
                     color: Colors.grey,
-                    text: 'Break 3:00',
+                    text: 'Break ${durationString(widget.breakDuration)}',
                     fontSize: 16.0,
                   ),
                 ),

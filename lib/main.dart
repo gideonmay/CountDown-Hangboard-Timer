@@ -15,7 +15,6 @@ class App extends StatelessWidget {
     return MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
-          // primarySwatch: Colors.teal,
           colorScheme: ColorScheme.fromSwatch().copyWith(
             primary: Colors.teal,
             secondary: Colors.teal[300]
@@ -37,14 +36,12 @@ class _AppScaffoldState extends State<AppScaffold> {
 
   static const List<Widget> _screenOptions = <Widget>[
     WorkoutScreen(),
-    TimerScreen(),
+    TimerScreen(
+      workDuration: Duration(seconds: 11),
+      restDuration: Duration(seconds: 3),
+      breakDuration: Duration(minutes: 3),
+    ),
     SettingsScreen()
-  ];
-
-  static const List<Widget> _titleOptions = <Widget>[
-    Text('My Workouts'),
-    Text('Timer'),
-    Text('Settings')
   ];
 
   void _onItemTapped(int index) {
@@ -75,7 +72,7 @@ class _AppScaffoldState extends State<AppScaffold> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
+        selectedItemColor: Theme.of(context).colorScheme.primary,
         onTap: _onItemTapped,
       ),
     );

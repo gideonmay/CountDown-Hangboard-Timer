@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../widgets/timer_details_tile.dart';
 
+/// Displays details about the timer's current work, rest, and break durations,
+/// and the number of sets and reps left
 class TimerDetails extends StatefulWidget {
   final Duration workDuration;
   final Duration restDuration;

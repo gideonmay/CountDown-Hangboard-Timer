@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'screens/settings_screen.dart';
-import 'screens/timer_screen.dart';
+import 'screens/durations_picker_screen.dart';
 import 'screens/workout_screen.dart';
 
 void main() {
@@ -15,11 +15,8 @@ class App extends StatelessWidget {
     return MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSwatch().copyWith(
-            primary: Colors.teal,
-            secondary: Colors.teal[300]
-          )
-        ),
+            colorScheme: ColorScheme.fromSwatch()
+                .copyWith(primary: Colors.teal, secondary: Colors.teal[300])),
         home: const AppScaffold());
   }
 }
@@ -36,11 +33,7 @@ class _AppScaffoldState extends State<AppScaffold> {
 
   static const List<Widget> _screenOptions = <Widget>[
     WorkoutScreen(),
-    TimerScreen(
-      workDuration: Duration(seconds: 11),
-      restDuration: Duration(seconds: 3),
-      breakDuration: Duration(minutes: 3),
-    ),
+    DurationsPickerScreen(),
     SettingsScreen()
   ];
 

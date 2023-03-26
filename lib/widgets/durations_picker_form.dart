@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinbox/flutter_spinbox.dart';
+import '../models/timer_durations.dart';
 
-/// A form widget that allows the user to pick the number of _sets and reps, and
+/// A form widget that allows the user to pick the number of sets and reps, and
 /// the work, rest, and break durations for the countdown timer.
 class DurationsPickerForm extends StatefulWidget {
   /// Function to be called when start button is pressed
@@ -14,12 +15,7 @@ class DurationsPickerForm extends StatefulWidget {
 }
 
 class _DurationsPickerFormState extends State<DurationsPickerForm> {
-  double _sets = 1;
-  double _reps = 1;
-  double _workSeconds = 10;
-  double _restSeconds = 5;
-  double _breakMinutes = 0;
-  double _breakSeconds = 30;
+  final timerDurations = TimerDurations.standard();
 
   @override
   Widget build(BuildContext context) {
@@ -28,12 +24,12 @@ class _DurationsPickerFormState extends State<DurationsPickerForm> {
         Padding(
           padding: const EdgeInsets.all(16.0),
           child: SpinBox(
-            value: _sets,
+            value: timerDurations.sets,
             min: 1,
             max: 50,
             onChanged: (value) {
               setState(() {
-                _sets = value;
+                timerDurations.sets = value;
               });
             },
             decoration: const InputDecoration(
@@ -43,12 +39,12 @@ class _DurationsPickerFormState extends State<DurationsPickerForm> {
         Padding(
           padding: const EdgeInsets.all(16),
           child: SpinBox(
-            value: _reps,
+            value: timerDurations.reps,
             min: 1,
             max: 50,
             onChanged: (value) {
               setState(() {
-                _reps = value;
+                timerDurations.reps = value;
               });
             },
             decoration: const InputDecoration(
@@ -58,12 +54,12 @@ class _DurationsPickerFormState extends State<DurationsPickerForm> {
         Padding(
           padding: const EdgeInsets.all(16),
           child: SpinBox(
-            value: _workSeconds,
+            value: timerDurations.workSeconds,
             min: 1,
             max: 60,
             onChanged: (value) {
               setState(() {
-                _workSeconds = value;
+                timerDurations.workSeconds = value;
               });
             },
             decoration: const InputDecoration(
@@ -73,12 +69,12 @@ class _DurationsPickerFormState extends State<DurationsPickerForm> {
         Padding(
           padding: const EdgeInsets.all(16),
           child: SpinBox(
-            value: _restSeconds,
+            value: timerDurations.restSeconds,
             min: 1,
             max: 60,
             onChanged: (value) {
               setState(() {
-                _restSeconds = value;
+                timerDurations.restSeconds = value;
               });
             },
             decoration: const InputDecoration(
@@ -91,12 +87,12 @@ class _DurationsPickerFormState extends State<DurationsPickerForm> {
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(16.0, 16.0, 8.0, 16.0),
                 child: SpinBox(
-                  value: _breakMinutes,
+                  value: timerDurations.breakMinutes,
                   min: 0,
                   max: 30,
                   onChanged: (value) {
                     setState(() {
-                      _breakMinutes = value;
+                      timerDurations.breakMinutes = value;
                     });
                   },
                   decoration: const InputDecoration(
@@ -109,12 +105,12 @@ class _DurationsPickerFormState extends State<DurationsPickerForm> {
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(8.0, 16.0, 16.0, 16.0),
                 child: SpinBox(
-                  value: _breakSeconds,
+                  value: timerDurations.breakSeconds,
                   min: 0,
                   max: 60,
                   onChanged: (value) {
                     setState(() {
-                      _breakSeconds = value;
+                      timerDurations.breakSeconds = value;
                     });
                   },
                   decoration: const InputDecoration(
@@ -129,12 +125,7 @@ class _DurationsPickerFormState extends State<DurationsPickerForm> {
           padding: const EdgeInsets.all(16.0),
           child: ElevatedButton(
               onPressed: () {
-                widget.onStartPressed(
-                  context,
-                  _workSeconds.toInt(),
-                  _restSeconds.toInt(),
-                  _breakSeconds.toInt()
-                );
+                widget.onStartPressed(context, timerDurations);
               },
               child: const Text(
                 'Start',

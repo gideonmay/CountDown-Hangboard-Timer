@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
 import '../widgets/timer_details.dart';
 import '../widgets/timer_control_buttons.dart';
+import '../models/timer_durations.dart';
 
 /// Provides a layout for the countdown timer, timer details, and timer control
 /// buttons. Contains the state variable necessary to start a countdown timer.
 class CountdownTimerScreen extends StatefulWidget {
-  final Duration workDuration;
-  final Duration restDuration;
-  final Duration breakDuration;
+  final TimerDurations timerDurations;
 
   const CountdownTimerScreen(
-      {super.key,
-      required this.workDuration,
-      required this.restDuration,
-      required this.breakDuration});
+      {super.key, required this.timerDurations});
 
   @override
   State<CountdownTimerScreen> createState() => _CountdownTimerScreenState();
@@ -32,11 +28,7 @@ class _CountdownTimerScreenState extends State<CountdownTimerScreen> {
           children: [
             Flexible(
               flex: 18,
-              child: TimerDetails(
-                workDuration: widget.workDuration,
-                restDuration: widget.restDuration,
-                breakDuration: widget.breakDuration,
-              ),
+              child: TimerDetails(timerDurations: widget.timerDurations),
             ),
             const Flexible(
               flex: 60,

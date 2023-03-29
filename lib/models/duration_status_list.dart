@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'duration_status.dart';
 import 'status_value.dart';
 
-// These colors define correspond to different status values
-const workColor = Color.fromRGBO(93, 199, 93, 0.0); // Green
-const restColor = Color.fromRGBO(246, 213, 97, 0.0); // Yellow
-const breakColor = Color.fromRGBO(241, 118, 84, 0.0); // Dark orange
-const prepareColor = Color.fromRGBO(3, 60, 106, 0.0); // Blue
+// These colors correspond to different status values
+Color workColor = Colors.green;
+Color restColor = Colors.yellow.shade700;
+Color breakColor = Colors.orange.shade900;
+Color prepareColor =Colors.blue;
 
 /// Represents a list of DurationStatus objects that can be 'fed' into the
 /// countdown timer. This object takes the given values for reps, sets,
@@ -19,10 +19,9 @@ class DurationStatusList {
   final Duration restDuration;
   final Duration breakDuration;
   final List<DurationStatus> _durationStatusList = [];
-  
+
   /// Whether or not to include prepare DurationStatus
   final bool includePrepare;
-  
 
   DurationStatusList(
       {required this.sets,
@@ -46,9 +45,9 @@ class DurationStatusList {
     // Add 'prepare' DurationStatus if includePrepare was specified
     if (includePrepare && sets > 0 && reps > 0) {
       _durationStatusList.add(DurationStatus(
-        duration: const Duration(seconds: 15),
-        statusValue: StatusValue.isPreparing(),
-        statusColor: prepareColor));
+          duration: const Duration(seconds: 15),
+          statusValue: StatusValue.isPreparing(),
+          statusColor: prepareColor));
     }
 
     int currSet = 0;
@@ -56,9 +55,9 @@ class DurationStatusList {
       // Add initial work duration due to fence post problem
       if (reps > 0) {
         _durationStatusList.add(DurationStatus(
-          duration: workDuration,
-          statusValue: StatusValue.isWorking(),
-          statusColor: workColor));
+            duration: workDuration,
+            statusValue: StatusValue.isWorking(),
+            statusColor: workColor));
       }
 
       int currRep = 1;

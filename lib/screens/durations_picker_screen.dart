@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'countdown_timer_screen.dart';
 import '../widgets/durations_picker_form.dart';
-import '../models/timer_durations.dart';
+import '../models/timer_durations_dto.dart';
 
 /// A screen with a form that allows the user to choose the work, rest, and
 /// break durations in addition to the number or reps and sets.
@@ -14,12 +14,13 @@ class DurationsPickerScreen extends StatefulWidget {
 
 class _DurationsPickerScreenState extends State<DurationsPickerScreen> {
   /// Navigates to the countdown timer screen
-  static navigateToTimer(BuildContext context, TimerDurations timerDurations) {
+  static navigateToTimer(
+      BuildContext context, TimerDurationsDTO timerDurations) {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => 
-            CountdownTimerScreen(timerDurations: timerDurations)),
+          builder: (context) =>
+              CountdownTimerScreen(timerDurations: timerDurations)),
     );
   }
 

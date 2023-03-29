@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import '../widgets/timer_details_tile.dart';
-import '../models/timer_durations.dart';
+import '../models/timer_durations_dto.dart';
 
 /// Displays details about the timer's current work, rest, and break durations,
 /// and the number of sets and reps left
 class TimerDetails extends StatefulWidget {
-  final TimerDurations timerDurations;
+  final TimerDurationsDTO timerDurations;
+  final int currentSet;
+  final int currentRep;
 
-  const TimerDetails({super.key, required this.timerDurations});
+  const TimerDetails(
+      {super.key,
+      required this.timerDurations,
+      required this.currentSet,
+      required this.currentRep});
 
   @override
   State<TimerDetails> createState() => _TimerDetailsState();
@@ -34,8 +40,8 @@ class _TimerDetailsState extends State<TimerDetails> {
                   padding: const EdgeInsets.all(6.0),
                   child: TimerDetailsTile(
                     color: Colors.grey,
-                    text: 'Work ${durationString(
-                      widget.timerDurations.workDuration)}',
+                    text:
+                        'Work ${durationString(widget.timerDurations.workDuration)}',
                     fontSize: 16.0,
                   ),
                 ),
@@ -45,8 +51,8 @@ class _TimerDetailsState extends State<TimerDetails> {
                   padding: const EdgeInsets.all(6.0),
                   child: TimerDetailsTile(
                     color: Colors.grey,
-                    text: 'Rest ${durationString(
-                      widget.timerDurations.restDuration)}',
+                    text:
+                        'Rest ${durationString(widget.timerDurations.restDuration)}',
                     fontSize: 16.0,
                   ),
                 ),
@@ -56,8 +62,8 @@ class _TimerDetailsState extends State<TimerDetails> {
                   padding: const EdgeInsets.all(6.0),
                   child: TimerDetailsTile(
                     color: Colors.grey,
-                    text: 'Break ${durationString(
-                      widget.timerDurations.breakDuration)}',
+                    text:
+                        'Break ${durationString(widget.timerDurations.breakDuration)}',
                     fontSize: 16.0,
                   ),
                 ),
@@ -73,7 +79,8 @@ class _TimerDetailsState extends State<TimerDetails> {
                   padding: const EdgeInsets.all(6.0),
                   child: TimerDetailsTile(
                     color: Theme.of(context).colorScheme.secondary,
-                    text: 'Set 1/${widget.timerDurations.sets.toInt()}',
+                    text:
+                        'Set ${widget.currentSet}/${widget.timerDurations.sets.toInt()}',
                     fontSize: 20.0,
                   ),
                 ),
@@ -83,7 +90,8 @@ class _TimerDetailsState extends State<TimerDetails> {
                   padding: const EdgeInsets.all(6.0),
                   child: TimerDetailsTile(
                     color: Theme.of(context).colorScheme.secondary,
-                    text: 'Rep 2/${widget.timerDurations.reps.toInt()}',
+                    text:
+                        'Rep ${widget.currentRep}/${widget.timerDurations.reps.toInt()}',
                     fontSize: 20.0,
                   ),
                 ),

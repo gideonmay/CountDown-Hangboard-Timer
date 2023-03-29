@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinbox/flutter_spinbox.dart';
-import '../models/timer_durations.dart';
+import '../models/timer_durations_dto.dart';
 
 /// A form widget that allows the user to pick the number of sets and reps, and
 /// the work, rest, and break durations for the countdown timer.
 class DurationsPickerForm extends StatefulWidget {
   /// Function to be called when start button is pressed
-  final Function onStartPressed;
+  final Function(BuildContext, TimerDurationsDTO) onStartPressed;
 
   const DurationsPickerForm({super.key, required this.onStartPressed});
 
@@ -15,7 +15,7 @@ class DurationsPickerForm extends StatefulWidget {
 }
 
 class _DurationsPickerFormState extends State<DurationsPickerForm> {
-  final timerDurations = TimerDurations.standard();
+  final timerDurations = TimerDurationsDTO.standard();
 
   @override
   Widget build(BuildContext context) {

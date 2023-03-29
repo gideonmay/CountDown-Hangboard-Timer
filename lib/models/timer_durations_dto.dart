@@ -1,7 +1,7 @@
 /// Stores the the number of reps and sets, and the work, rest, and break time
 /// for a timer. This class serves as a data transfer object between the timer
-/// durations picker form and the countdown timer widget.
-class TimerDurations {
+/// durations picker form and other areas of the app.
+class TimerDurationsDTO {
   double sets;
   double reps;
   double workSeconds;
@@ -9,7 +9,7 @@ class TimerDurations {
   double breakMinutes;
   double breakSeconds;
 
-  TimerDurations(
+  TimerDurationsDTO(
       {required this.sets,
       required this.reps,
       required this.workSeconds,
@@ -19,7 +19,7 @@ class TimerDurations {
 
   /// Assigns a set of standard values that can be used as a starting point when
   /// the use is performing the timer configuration
-  TimerDurations.standard()
+  TimerDurationsDTO.standard()
       : sets = 1,
         reps = 1,
         workSeconds = 10,

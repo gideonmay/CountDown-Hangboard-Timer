@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../widgets/timer_details.dart';
-import '../widgets/timer_control_buttons.dart';
 import '../models/duration_status_list.dart';
 import '../models/timer_durations_dto.dart';
 import '../widgets/countdown_timer.dart';
@@ -63,12 +62,8 @@ class _CountdownTimerScreenState extends State<CountdownTimerScreen> {
                   currentRep: _currentRep),
             ),
             Flexible(
-              flex: 60,
+              flex: 88,
               child: CountdownTimer(durationStatusList: _durationStatusList),
-            ),
-            const Flexible(
-              flex: 22,
-              child: TimerControlButtons(),
             ),
           ],
         ),

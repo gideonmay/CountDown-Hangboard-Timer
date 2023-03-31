@@ -124,13 +124,14 @@ class _DurationsPickerFormState extends State<DurationsPickerForm> {
         Padding(
           padding: const EdgeInsets.all(16.0),
           child: ElevatedButton(
-              onPressed: () {
-                widget.onStartPressed(context, timerDurations);
-              },
-              child: const Text(
-                'Start',
-                style: TextStyle(fontSize: 20.0),
-              )),
+            onPressed: () {
+              widget.onStartPressed(context, timerDurations);
+            },
+            child: const Text(
+              'Start',
+              style: TextStyle(fontSize: 20.0),
+            )
+          ),
         ),
       ],
     );

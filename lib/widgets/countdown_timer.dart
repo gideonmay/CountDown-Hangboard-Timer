@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import '../extensions/duration_ceil_extension.dart';
 import '../models/duration_status_list.dart';
+import '../widgets/timer_control_buttons.dart';
 
 /// Defines the countdown timer, which takes a DurationStatusList, then produces
 /// and animation of the timer. The timer can be started, paused, and reset
@@ -18,8 +19,49 @@ class CountdownTimer extends StatefulWidget {
 class _CountdownTimerState extends State<CountdownTimer>
     with TickerProviderStateMixin {
   /// The index in the durationStatusList that the timer is currently on
-  int durationIndex = 0;
+  int _durationIndex = 0;
+
+  /// Indicates if timer has started yet
+  bool _hasStarted = false;
+
+  /// Indicates if timer is currently paused
+  bool _isPaused = false;
   late final AnimationController _controller;
+
+  /// Starts the countdown timer
+  void startTimer() {
+    setState(() {
+      _controller.forward();
+      _hasStarted = true;
+    });
+  }
+
+  /// Pauses timer operation
+  void pauseTimer() {
+    setState(() {
+      _controller.stop();
+      _isPaused = true;
+    });
+  }
+
+  /// Resumes timer operation
+  void resumeTimer() {
+    setState(() {
+      _controller.forward();
+      _isPaused = false;
+    });
+  }
+
+  /// Resets timer to initial state
+  void resetTimer() {
+    setState(() {
+      _durationIndex = 0;
+      _controller.duration = widget.durationStatusList[_durationIndex].duration;
+      _controller.reset();
+      _hasStarted = false;
+      _isPaused = false;
+    });
+  }
 
   @override
   void dispose() {
@@ -32,17 +74,15 @@ class _CountdownTimerState extends State<CountdownTimer>
     super.initState();
 
     _controller = AnimationController(
-      duration: widget.durationStatusList[durationIndex].duration,
+      duration: widget.durationStatusList[_durationIndex].duration,
       vsync: this,
-    )
-      ..forward()
-      ..addStatusListener((status) {
+    )..addStatusListener((status) {
         if (status == AnimationStatus.completed &&
-            durationIndex < widget.durationStatusList.length - 1) {
+            _durationIndex < widget.durationStatusList.length - 1) {
           setState(() {
-            durationIndex += 1;
+            _durationIndex += 1;
             _controller.duration =
-                widget.durationStatusList[durationIndex].duration;
+                widget.durationStatusList[_durationIndex].duration;
             _controller.reset();
             _controller.forward();
           });
@@ -66,7 +106,7 @@ class _CountdownTimerState extends State<CountdownTimer>
     /// animation jank where zero flashes very briefly before starting next
     /// countdown.
     if (timeLeft == Duration.zero &&
-        durationIndex < widget.durationStatusList.length - 1) {
+        _durationIndex < widget.durationStatusList.length - 1) {
       timeLeftCeil = const Duration(seconds: 1);
     }
 
@@ -78,28 +118,47 @@ class _CountdownTimerState extends State<CountdownTimer>
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (BuildContext context, Widget? child) {
-        return Stack(
-          children: [
-            CustomPaint(
-              painter: ArcPainter(
-                animation: _controller,
-                color: widget.durationStatusList[durationIndex].statusColor
-              ),
-              child: Container(),
-            ),
-            Align(
-              alignment: Alignment.center,
-              child: Text(
-                timerString,
-                style: const TextStyle(fontSize: 112.0),
-              ),
-            ),
-          ],
-        );
-      });
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Flexible(
+          flex: 75,
+          child: AnimatedBuilder(
+              animation: _controller,
+              builder: (BuildContext context, Widget? child) {
+                return Stack(
+                  children: [
+                    CustomPaint(
+                      painter: ArcPainter(
+                          animation: _controller,
+                          color: widget
+                              .durationStatusList[_durationIndex].statusColor),
+                      child: Container(),
+                    ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        timerString,
+                        style: const TextStyle(fontSize: 112.0),
+                      ),
+                    ),
+                  ],
+                );
+              }),
+        ),
+        Flexible(
+          flex: 25,
+          child: TimerControlButtons(
+            hasStarted: _hasStarted,
+            isPaused: _isPaused,
+            startTimer: startTimer,
+            pauseTimer: pauseTimer,
+            resumeTimer: resumeTimer,
+            resetTimer: resetTimer,
+          ),
+        )
+      ],
+    );
   }
 }
 

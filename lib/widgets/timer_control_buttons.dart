@@ -7,6 +7,7 @@ class TimerControlButtons extends StatefulWidget {
   final Function pauseTimer;
   final Function resumeTimer;
   final Function resetTimer;
+  final Function skipDuration;
 
   const TimerControlButtons(
       {super.key,
@@ -15,13 +16,48 @@ class TimerControlButtons extends StatefulWidget {
       required this.startTimer,
       required this.pauseTimer,
       required this.resumeTimer,
-      required this.resetTimer});
+      required this.resetTimer,
+      required this.skipDuration});
 
   @override
   State<TimerControlButtons> createState() => _TimerControlButtonsState();
 }
 
 class _TimerControlButtonsState extends State<TimerControlButtons> {
+  /// Defines a Widget containing the Reset and Skip buttons
+  Widget resetAndSkipButtons() {
+    return Row(
+      children: [
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    minimumSize: const Size.fromHeight(40)),
+                onPressed: () {
+                  widget.resetTimer();
+                },
+                child: const Text('Reset', style: TextStyle(fontSize: 20.0))),
+          ),
+        ),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    minimumSize: const Size.fromHeight(40)),
+                onPressed: () {
+                  widget.skipDuration();
+                },
+                child: const Text('Skip', style: TextStyle(fontSize: 20.0))),
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // Only show Start button if timer has not started yet
@@ -37,22 +73,12 @@ class _TimerControlButtonsState extends State<TimerControlButtons> {
                       backgroundColor: Colors.green,
                       minimumSize: const Size.fromHeight(40)),
                   onPressed: () {
-                      widget.resumeTimer();
+                    widget.resumeTimer();
                   },
                   child:
                       const Text('Resume', style: TextStyle(fontSize: 20.0))),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                      minimumSize: const Size.fromHeight(40)),
-                  onPressed: () {
-                      widget.resetTimer();
-                  },
-                  child: const Text('Reset', style: TextStyle(fontSize: 20.0))),
-            ),
+            resetAndSkipButtons(),
           ],
         );
       } else {
@@ -70,17 +96,7 @@ class _TimerControlButtonsState extends State<TimerControlButtons> {
                   },
                   child: const Text('Pause', style: TextStyle(fontSize: 20.0))),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                      minimumSize: const Size.fromHeight(40)),
-                  onPressed: () {
-                      widget.resetTimer();
-                  },
-                  child: const Text('Reset', style: TextStyle(fontSize: 20.0))),
-            ),
+            resetAndSkipButtons(),
           ],
         );
       }

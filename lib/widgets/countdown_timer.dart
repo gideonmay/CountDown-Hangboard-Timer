@@ -26,11 +26,17 @@ class _CountdownTimerState extends State<CountdownTimer>
 
   /// Indicates if timer is currently paused
   bool _isPaused = false;
+
+  /// Indicates if the workout has completed
+  bool _isComplete = false;
   late final AnimationController _controller;
 
   /// Starts the countdown timer
   void startTimer() {
     setState(() {
+      _durationIndex = 0;
+      _controller.duration = widget.durationStatusList[_durationIndex].duration;
+      _controller.reset();
       _controller.forward();
       _hasStarted = true;
     });
@@ -63,6 +69,20 @@ class _CountdownTimerState extends State<CountdownTimer>
     });
   }
 
+  /// Skips to next element
+  void skipDuration() {
+    setState(() {
+      // Do not skip if already at last element
+      if (_durationIndex < widget.durationStatusList.length - 1) {
+        _durationIndex++;
+        _controller.duration =
+            widget.durationStatusList[_durationIndex].duration;
+        _controller.reset();
+        _controller.forward();
+      }
+    });
+  }
+
   @override
   void dispose() {
     _controller.dispose();
@@ -79,12 +99,20 @@ class _CountdownTimerState extends State<CountdownTimer>
     )..addStatusListener((status) {
         if (status == AnimationStatus.completed &&
             _durationIndex < widget.durationStatusList.length - 1) {
+          // Move timer to next DurationStatus if there are any left
           setState(() {
-            _durationIndex += 1;
+            _durationIndex++;
             _controller.duration =
                 widget.durationStatusList[_durationIndex].duration;
             _controller.reset();
             _controller.forward();
+          });
+        } else if (status == AnimationStatus.completed &&
+            _durationIndex == widget.durationStatusList.length - 1) {
+          // Mark timer as completed and reset buttons to start point
+          setState(() {
+            _isComplete = true;
+            _hasStarted = false; // Changes buttons to initial starting state
           });
         }
       });
@@ -116,49 +144,61 @@ class _CountdownTimerState extends State<CountdownTimer>
     return '$minutesLeft:${(secondsLeft).toString().padLeft(2, '0')}';
   }
 
+  /// Returns the minimum between the widgets current width and height. This
+  /// ensures that the timer animation never exceeds that available space.
+  double getTimerWidth(BoxConstraints constraints) {
+    double width = math.min(constraints.maxWidth, constraints.maxHeight);
+    return width * 0.87;  // 0.87 arbitrarily chosen based on what looks good
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Flexible(
-          flex: 75,
-          child: AnimatedBuilder(
-              animation: _controller,
-              builder: (BuildContext context, Widget? child) {
-                return Stack(
-                  children: [
-                    CustomPaint(
-                      painter: ArcPainter(
-                          animation: _controller,
-                          color: widget
-                              .durationStatusList[_durationIndex].statusColor),
-                      child: Container(),
-                    ),
-                    Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        timerString,
-                        style: const TextStyle(fontSize: 112.0),
+    return LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Flexible(
+            flex: 75,
+            child: AnimatedBuilder(
+                animation: _controller,
+                builder: (BuildContext context, Widget? child) {
+                  return Stack(
+                    children: [
+                      CustomPaint(
+                        painter: ArcPainter(
+                            animation: _controller,
+                            color: widget
+                                .durationStatusList[_durationIndex].statusColor,
+                            width: getTimerWidth(constraints)),
+                        child: Container(),
                       ),
-                    ),
-                  ],
-                );
-              }),
-        ),
-        Flexible(
-          flex: 25,
-          child: TimerControlButtons(
-            hasStarted: _hasStarted,
-            isPaused: _isPaused,
-            startTimer: startTimer,
-            pauseTimer: pauseTimer,
-            resumeTimer: resumeTimer,
-            resetTimer: resetTimer,
+                      Positioned.fill(
+                        child: Center(
+                          child: Text(
+                            timerString,
+                            style: const TextStyle(fontSize: 112.0),
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                }),
           ),
-        )
-      ],
-    );
+          Flexible(
+            flex: 25,
+            child: TimerControlButtons(
+                hasStarted: _hasStarted,
+                isPaused: _isPaused,
+                startTimer: startTimer,
+                pauseTimer: pauseTimer,
+                resumeTimer: resumeTimer,
+                resetTimer: resetTimer,
+                skipDuration: skipDuration),
+          )
+        ],
+      );
+    });
   }
 }
 
@@ -168,8 +208,11 @@ class _CountdownTimerState extends State<CountdownTimer>
 class ArcPainter extends CustomPainter {
   final Color color;
   final Animation<double> animation;
+  final double width;
 
-  ArcPainter({required this.color, required this.animation}) : super();
+  ArcPainter(
+      {required this.color, required this.animation, required this.width})
+      : super();
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -181,7 +224,7 @@ class ArcPainter extends CustomPainter {
 
     double progress = (1.0 - animation.value) * 2 * math.pi;
     Offset center = Offset(size.width / 2, size.height / 2);
-    Rect rect = Rect.fromCenter(center: center, width: 350, height: 350);
+    Rect rect = Rect.fromCenter(center: center, width: width, height: width);
 
     canvas.drawArc(rect, math.pi * 3 / 2, progress, false, paint);
   }

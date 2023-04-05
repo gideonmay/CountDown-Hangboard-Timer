@@ -29,6 +29,7 @@ void main() {
         includePrepare: true);
 
     expect(durationsList.length, 0);
+    expect(durationsList.totalSeconds, 0);
   });
 
   test('A list with 0 sets and 1 rep is empty', () {
@@ -41,6 +42,7 @@ void main() {
         includePrepare: true);
 
     expect(durationsList.length, 0);
+    expect(durationsList.totalSeconds, 0);
   });
 
   test('A list with 1 sets and 0 reps is empty', () {
@@ -53,6 +55,7 @@ void main() {
         includePrepare: true);
 
     expect(durationsList.length, 0);
+    expect(durationsList.totalSeconds, 0);
   });
 
   test('A list with includePrepare == false does not start with a prepare', () {
@@ -65,6 +68,7 @@ void main() {
         includePrepare: false);
 
     expect(durationsList.length, 1);
+    expect(durationsList.totalSeconds, 10);
     expect(durationsList[0].toString(), '(work for 10 sec)');
   });
 
@@ -78,6 +82,7 @@ void main() {
         includePrepare: true);
 
     expect(durationsList.length, 2);
+    expect(durationsList.totalSeconds, 25);
     expect(durationsList[0].toString(), '(prepare for 15 sec)');
     expect(durationsList[1].toString(), '(work for 10 sec)');
   });
@@ -92,6 +97,7 @@ void main() {
         includePrepare: true);
 
     expect(durationsList.length, 4);
+    expect(durationsList.totalSeconds, 38);
     expect(durationsList[0].toString(), '(prepare for 15 sec)');
     expect(durationsList[1].toString(), '(work for 10 sec)');
     expect(durationsList[2].toString(), '(rest for 3 sec)');
@@ -108,6 +114,7 @@ void main() {
         includePrepare: true);
 
     expect(durationsList.length, 4);
+    expect(durationsList.totalSeconds, 65);
     expect(durationsList[0].toString(), '(prepare for 15 sec)');
     expect(durationsList[1].toString(), '(work for 10 sec)');
     expect(durationsList[2].toString(), '(break for 30 sec)');
@@ -124,6 +131,7 @@ void main() {
         includePrepare: true);
 
     expect(durationsList.length, 8);
+    expect(durationsList.totalSeconds, 91);
     expect(durationsList[0].toString(), '(prepare for 15 sec)');
     expect(durationsList[1].toString(), '(work for 10 sec)');
     expect(durationsList[2].toString(), '(rest for 3 sec)');

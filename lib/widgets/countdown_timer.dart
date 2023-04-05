@@ -148,7 +148,7 @@ class _CountdownTimerState extends State<CountdownTimer>
   /// ensures that the timer animation never exceeds that available space.
   double getTimerWidth(BoxConstraints constraints) {
     double width = math.min(constraints.maxWidth, constraints.maxHeight);
-    return width * 0.87;  // 0.87 arbitrarily chosen based on what looks good
+    return width * 0.87; // 0.87 arbitrarily chosen based on what looks good
   }
 
   @override
@@ -164,6 +164,7 @@ class _CountdownTimerState extends State<CountdownTimer>
                 animation: _controller,
                 builder: (BuildContext context, Widget? child) {
                   return Stack(
+                    alignment: Alignment.center,
                     children: [
                       CustomPaint(
                         painter: ArcPainter(
@@ -178,6 +179,17 @@ class _CountdownTimerState extends State<CountdownTimer>
                           child: Text(
                             timerString,
                             style: const TextStyle(fontSize: 112.0),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: constraints.maxHeight / 2 - 185,
+                        child: Text(
+                          widget.durationStatusList[_durationIndex].status,
+                          style: TextStyle(
+                            fontSize: 40.0,
+                            color: widget
+                                .durationStatusList[_durationIndex].statusColor,
                           ),
                         ),
                       ),

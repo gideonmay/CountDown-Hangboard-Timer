@@ -23,4 +23,13 @@ void main() {
 
     expect(durationStatus.toString(), '(work for 10 sec)');
   });
+
+  test('DurationStatus status getter returns correct value', () {
+    final durationStatus = DurationStatus(
+        duration: const Duration(seconds: 10),
+        statusValue: StatusValue.isWorking(),
+        statusColor: const Color.fromARGB(0, 255, 0, 0));
+
+    expect(durationStatus.status, 'WORK');
+  });
 }

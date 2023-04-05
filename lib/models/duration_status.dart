@@ -15,6 +15,8 @@ class DurationStatus {
       required this.statusValue,
       required this.statusColor});
 
+  String get status => statusValue.status.toString().toUpperCase();
+
   @override
   String toString() {
     int seconds = duration.inSeconds;

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../extensions/duration_ceil_extension.dart';
 import '../models/duration_status_list.dart';
 import '../widgets/timer_control_buttons.dart';
+import '../widgets/time_text_row.dart';
 
 /// Defines the countdown timer, which takes a DurationStatusList, then produces
 /// and animation of the timer. The timer can be started, paused, and reset
@@ -139,8 +140,17 @@ class _CountdownTimerState extends State<CountdownTimer>
     }
 
     timeLeftCeil = timeLeft.ceil(const Duration(seconds: 1));
-    int minutesLeft = timeLeftCeil.inMinutes;
-    int secondsLeft = timeLeftCeil.inSeconds % 60;
+    return _durationString(timeLeftCeil);
+  }
+
+  /// Takes a Duration object then returns a String formatted like "M:SS"
+  String _durationString(Duration? duration) {
+    if (duration == null) {
+      return '0:00';
+    }
+
+    int minutesLeft = duration.inMinutes;
+    int secondsLeft = duration.inSeconds % 60;
     return '$minutesLeft:${(secondsLeft).toString().padLeft(2, '0')}';
   }
 
@@ -193,6 +203,27 @@ class _CountdownTimerState extends State<CountdownTimer>
                           ),
                         ),
                       ),
+                      Positioned(
+                          top: constraints.maxHeight / 2 - 10,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(3.0),
+                                child: TimeTextRow(
+                                    title: 'Total Time ',
+                                    durationString: _durationString(Duration(
+                                        seconds: widget
+                                            .durationStatusList.totalSeconds))),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(3.0),
+                                child: TimeTextRow(
+                                    title: 'Time Left   ',
+                                    durationString: _durationString(_controller.lastElapsedDuration)),
+                              ),
+                            ],
+                          )),
                     ],
                   );
                 }),

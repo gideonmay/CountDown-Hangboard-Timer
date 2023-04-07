@@ -6,4 +6,5 @@ class StatusValue {
   StatusValue.isResting() : status = 'rest';
   StatusValue.isBreak() : status = 'break';
   StatusValue.isPreparing() : status = 'prepare'; // Prior to first work rep
+  StatusValue.isComplete() : status = 'complete';
 }

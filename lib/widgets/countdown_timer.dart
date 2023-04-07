@@ -75,11 +75,15 @@ class _CountdownTimerState extends State<CountdownTimer>
     setState(() {
       // Do not skip if already at last element
       if (_durationIndex < widget.durationStatusList.length - 1) {
+        _controller.stop();
         _durationIndex++;
         _controller.duration =
             widget.durationStatusList[_durationIndex].duration;
         _controller.reset();
-        _controller.forward();
+
+        if (!_isPaused) {
+          _controller.forward();
+        }
       }
     });
   }
@@ -99,6 +103,13 @@ class _CountdownTimerState extends State<CountdownTimer>
       vsync: this,
     )..addStatusListener((status) {
         if (status == AnimationStatus.completed &&
+            _durationIndex == widget.durationStatusList.length - 1) {
+          // Mark timer as completed and reset buttons to start point
+          setState(() {
+            _isComplete = true;
+            _hasStarted = false; // Changes buttons to initial starting state
+          });
+        } else if (status == AnimationStatus.completed &&
             _durationIndex < widget.durationStatusList.length - 1) {
           // Move timer to next DurationStatus if there are any left
           setState(() {
@@ -107,13 +118,6 @@ class _CountdownTimerState extends State<CountdownTimer>
                 widget.durationStatusList[_durationIndex].duration;
             _controller.reset();
             _controller.forward();
-          });
-        } else if (status == AnimationStatus.completed &&
-            _durationIndex == widget.durationStatusList.length - 1) {
-          // Mark timer as completed and reset buttons to start point
-          setState(() {
-            _isComplete = true;
-            _hasStarted = false; // Changes buttons to initial starting state
           });
         }
       });
@@ -152,6 +156,28 @@ class _CountdownTimerState extends State<CountdownTimer>
     int minutesLeft = duration.inMinutes;
     int secondsLeft = duration.inSeconds % 60;
     return '$minutesLeft:${(secondsLeft).toString().padLeft(2, '0')}';
+  }
+
+  /// Returns a String representing the total duration that has passed during
+  /// this timer
+  String _elapsedDurationString() {
+    return _durationString(_elapsedDuration());
+  }
+
+  /// Returns the total duration that has passed during the current countdown
+  Duration _elapsedDuration() {
+    Duration startDuration =
+        widget.durationStatusList[_durationIndex].startTime;
+
+    // Get duration of current countdown
+    Duration? elapsedDuration = _controller.duration;
+
+    if (elapsedDuration != null) {
+      // elapsedDuration * value gives duration passed for current countdown
+      return startDuration + (elapsedDuration * _controller.value);
+    }
+
+    return startDuration;
   }
 
   /// Returns the minimum between the widgets current width and height. This
@@ -211,7 +237,7 @@ class _CountdownTimerState extends State<CountdownTimer>
                               Padding(
                                 padding: const EdgeInsets.all(3.0),
                                 child: TimeTextRow(
-                                    title: 'Total Time ',
+                                    title: 'Total ',
                                     durationString: _durationString(Duration(
                                         seconds: widget
                                             .durationStatusList.totalSeconds))),
@@ -219,8 +245,8 @@ class _CountdownTimerState extends State<CountdownTimer>
                               Padding(
                                 padding: const EdgeInsets.all(3.0),
                                 child: TimeTextRow(
-                                    title: 'Time Left   ',
-                                    durationString: _durationString(_controller.lastElapsedDuration)),
+                                    title: 'Elapsed ',
+                                    durationString: _elapsedDurationString()),
                               ),
                             ],
                           )),

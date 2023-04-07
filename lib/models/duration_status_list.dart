@@ -51,7 +51,8 @@ class DurationStatusList {
       _durationStatusList.add(DurationStatus(
           duration: const Duration(seconds: 15),
           statusValue: StatusValue.isPreparing(),
-          statusColor: prepareColor));
+          statusColor: prepareColor,
+          startTime: Duration(seconds: _totalSeconds)));
 
       _totalSeconds += 15;
     }
@@ -63,7 +64,8 @@ class DurationStatusList {
         _durationStatusList.add(DurationStatus(
             duration: workDuration,
             statusValue: StatusValue.isWorking(),
-            statusColor: workColor));
+            statusColor: workColor,
+            startTime: Duration(seconds: _totalSeconds)));
 
         _totalSeconds += workDuration.inSeconds;
       }
@@ -73,14 +75,17 @@ class DurationStatusList {
         _durationStatusList.add(DurationStatus(
             duration: restDuration,
             statusValue: StatusValue.isResting(),
-            statusColor: restColor));
+            statusColor: restColor,
+            startTime: Duration(seconds: _totalSeconds)));
+        _totalSeconds += restDuration.inSeconds;
 
         _durationStatusList.add(DurationStatus(
             duration: workDuration,
             statusValue: StatusValue.isWorking(),
-            statusColor: workColor));
+            statusColor: workColor,
+            startTime: Duration(seconds: _totalSeconds)));
 
-        _totalSeconds += restDuration.inSeconds + workDuration.inSeconds;
+        _totalSeconds += workDuration.inSeconds;
         currRep += 1;
       }
 
@@ -89,12 +94,20 @@ class DurationStatusList {
         _durationStatusList.add(DurationStatus(
             duration: breakDuration,
             statusValue: StatusValue.isBreak(),
-            statusColor: breakColor));
+            statusColor: breakColor,
+            startTime: Duration(seconds: _totalSeconds)));
 
         _totalSeconds += breakDuration.inSeconds;
       }
 
       currSet += 1;
     }
+
+    // Add final zero duration to mark timer as complete
+    _durationStatusList.add(DurationStatus(
+        duration: Duration.zero,
+        statusValue: StatusValue.isComplete(),
+        statusColor: prepareColor,
+        startTime: Duration(seconds: _totalSeconds)));
   }
 }

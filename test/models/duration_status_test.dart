@@ -8,18 +8,21 @@ void main() {
     final durationStatus = DurationStatus(
         duration: const Duration(seconds: 10),
         statusValue: StatusValue.isWorking(),
-        statusColor: const Color.fromARGB(0, 255, 0, 0));
+        statusColor: const Color.fromARGB(0, 255, 0, 0),
+        startTime: const Duration(seconds: 0));
 
     expect(durationStatus.duration, const Duration(seconds: 10));
     expect(durationStatus.statusValue.status, 'work');
     expect(durationStatus.statusColor, const Color.fromARGB(0, 255, 0, 0));
+    expect(durationStatus.startTime, Duration.zero);
   });
 
   test('DurationStatus toString returns correct value', () {
     final durationStatus = DurationStatus(
         duration: const Duration(seconds: 10),
         statusValue: StatusValue.isWorking(),
-        statusColor: const Color.fromARGB(0, 255, 0, 0));
+        statusColor: const Color.fromARGB(0, 255, 0, 0),
+        startTime: const Duration(seconds: 0));
 
     expect(durationStatus.toString(), '(work for 10 sec)');
   });
@@ -28,7 +31,8 @@ void main() {
     final durationStatus = DurationStatus(
         duration: const Duration(seconds: 10),
         statusValue: StatusValue.isWorking(),
-        statusColor: const Color.fromARGB(0, 255, 0, 0));
+        statusColor: const Color.fromARGB(0, 255, 0, 0),
+        startTime: const Duration(seconds: 0));
 
     expect(durationStatus.status, 'WORK');
   });

@@ -9,11 +9,16 @@ class DurationStatus {
   final Duration duration;
   final StatusValue statusValue;
   Color statusColor;
+  /// The duration elapsed when this object's duration begins. For example, if
+  /// this object's duration begins 10 seconds into the workout, then the
+  /// startTime will have a Duration value of 10 seconds.
+  late Duration startTime;
 
   DurationStatus(
       {required this.duration,
       required this.statusValue,
-      required this.statusColor});
+      required this.statusColor,
+      required this.startTime});
 
   String get status => statusValue.status.toString().toUpperCase();
 

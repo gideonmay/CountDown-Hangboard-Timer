@@ -28,7 +28,7 @@ void main() {
         breakDuration: const Duration(seconds: 30),
         includePrepare: true);
 
-    expect(durationsList.length, 0);
+    expect(durationsList.length, 1);
     expect(durationsList.totalSeconds, 0);
   });
 
@@ -41,7 +41,7 @@ void main() {
         breakDuration: const Duration(seconds: 30),
         includePrepare: true);
 
-    expect(durationsList.length, 0);
+    expect(durationsList.length, 1);
     expect(durationsList.totalSeconds, 0);
   });
 
@@ -54,7 +54,7 @@ void main() {
         breakDuration: const Duration(seconds: 30),
         includePrepare: true);
 
-    expect(durationsList.length, 0);
+    expect(durationsList.length, 1);
     expect(durationsList.totalSeconds, 0);
   });
 
@@ -67,7 +67,7 @@ void main() {
         breakDuration: const Duration(seconds: 30),
         includePrepare: false);
 
-    expect(durationsList.length, 1);
+    expect(durationsList.length, 2);
     expect(durationsList.totalSeconds, 10);
     expect(durationsList[0].toString(), '(work for 10 sec)');
   });
@@ -81,7 +81,7 @@ void main() {
         breakDuration: const Duration(seconds: 30),
         includePrepare: true);
 
-    expect(durationsList.length, 2);
+    expect(durationsList.length, 3);
     expect(durationsList.totalSeconds, 25);
     expect(durationsList[0].toString(), '(prepare for 15 sec)');
     expect(durationsList[1].toString(), '(work for 10 sec)');
@@ -96,7 +96,7 @@ void main() {
         breakDuration: const Duration(seconds: 30),
         includePrepare: true);
 
-    expect(durationsList.length, 4);
+    expect(durationsList.length, 5);
     expect(durationsList.totalSeconds, 38);
     expect(durationsList[0].toString(), '(prepare for 15 sec)');
     expect(durationsList[1].toString(), '(work for 10 sec)');
@@ -113,7 +113,7 @@ void main() {
         breakDuration: const Duration(seconds: 30),
         includePrepare: true);
 
-    expect(durationsList.length, 4);
+    expect(durationsList.length, 5);
     expect(durationsList.totalSeconds, 65);
     expect(durationsList[0].toString(), '(prepare for 15 sec)');
     expect(durationsList[1].toString(), '(work for 10 sec)');
@@ -130,7 +130,7 @@ void main() {
         breakDuration: const Duration(seconds: 30),
         includePrepare: true);
 
-    expect(durationsList.length, 8);
+    expect(durationsList.length, 9);
     expect(durationsList.totalSeconds, 91);
     expect(durationsList[0].toString(), '(prepare for 15 sec)');
     expect(durationsList[1].toString(), '(work for 10 sec)');
@@ -140,5 +140,22 @@ void main() {
     expect(durationsList[5].toString(), '(work for 10 sec)');
     expect(durationsList[6].toString(), '(rest for 3 sec)');
     expect(durationsList[7].toString(), '(work for 10 sec)');
+  });
+
+  test('The correct startTime is present at each index in the list', () {
+    var durationsList = DurationStatusList(
+        sets: 2,
+        reps: 1,
+        workDuration: const Duration(seconds: 10),
+        restDuration: const Duration(seconds: 3),
+        breakDuration: const Duration(seconds: 30),
+        includePrepare: true);
+
+    expect(durationsList.length, 5);
+    expect(durationsList.totalSeconds, 65);
+    expect(durationsList[0].startTime, const Duration(seconds: 0));
+    expect(durationsList[1].startTime, const Duration(seconds: 15));
+    expect(durationsList[2].startTime, const Duration(seconds: 25));
+    expect(durationsList[3].startTime, const Duration(seconds: 55));
   });
 }

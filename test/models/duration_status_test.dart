@@ -9,7 +9,9 @@ void main() {
         duration: const Duration(seconds: 10),
         statusValue: StatusValue.isWorking(),
         statusColor: const Color.fromARGB(0, 255, 0, 0),
-        startTime: const Duration(seconds: 0));
+        startTime: const Duration(seconds: 0),
+        currRep: 1,
+        currSet: 1);
 
     expect(durationStatus.duration, const Duration(seconds: 10));
     expect(durationStatus.statusValue.status, 'work');
@@ -22,7 +24,9 @@ void main() {
         duration: const Duration(seconds: 10),
         statusValue: StatusValue.isWorking(),
         statusColor: const Color.fromARGB(0, 255, 0, 0),
-        startTime: const Duration(seconds: 0));
+        startTime: const Duration(seconds: 0),
+        currRep: 1,
+        currSet: 1);
 
     expect(durationStatus.toString(), '(work for 10 sec)');
   });
@@ -32,7 +36,9 @@ void main() {
         duration: const Duration(seconds: 10),
         statusValue: StatusValue.isWorking(),
         statusColor: const Color.fromARGB(0, 255, 0, 0),
-        startTime: const Duration(seconds: 0));
+        startTime: const Duration(seconds: 0),
+        currRep: 1,
+        currSet: 1);
 
     expect(durationStatus.status, 'WORK');
   });

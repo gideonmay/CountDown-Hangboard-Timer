@@ -40,7 +40,7 @@ class DurationStatusList {
   int get totalSeconds => _totalSeconds;
 
   /// Enable indexing of _durationStatusList
-  operator [](index) => _durationStatusList[index];
+  DurationStatus operator [](index) => _durationStatusList[index];
 
   /// Builds a list of DurationStatus objects using the given number of sets and
   /// reps. Each list starts with a DurationStatus object with a StatusValue of
@@ -52,55 +52,67 @@ class DurationStatusList {
           duration: const Duration(seconds: 15),
           statusValue: StatusValue.isPreparing(),
           statusColor: prepareColor,
-          startTime: Duration(seconds: _totalSeconds)));
+          startTime: Duration(seconds: _totalSeconds),
+          currSet: 1,
+          currRep: 1));
 
       _totalSeconds += 15;
     }
 
-    int currSet = 0;
-    while (currSet < sets) {
+    int currSet = 1;
+    while (currSet <= sets) {
       // Add initial work duration due to fence post problem
+      int currRep = 1;
       if (reps > 0) {
         _durationStatusList.add(DurationStatus(
             duration: workDuration,
             statusValue: StatusValue.isWorking(),
             statusColor: workColor,
-            startTime: Duration(seconds: _totalSeconds)));
+            startTime: Duration(seconds: _totalSeconds),
+            currSet: currSet,
+            currRep: currRep));
 
         _totalSeconds += workDuration.inSeconds;
       }
 
-      int currRep = 1;
       while (currRep < reps) {
+        currRep += 1;
+
         _durationStatusList.add(DurationStatus(
             duration: restDuration,
             statusValue: StatusValue.isResting(),
             statusColor: restColor,
-            startTime: Duration(seconds: _totalSeconds)));
+            startTime: Duration(seconds: _totalSeconds),
+            currSet: currSet,
+            currRep: currRep));
         _totalSeconds += restDuration.inSeconds;
 
         _durationStatusList.add(DurationStatus(
             duration: workDuration,
             statusValue: StatusValue.isWorking(),
             statusColor: workColor,
-            startTime: Duration(seconds: _totalSeconds)));
+            startTime: Duration(seconds: _totalSeconds),
+            currSet: currSet,
+            currRep: currRep));
 
         _totalSeconds += workDuration.inSeconds;
-        currRep += 1;
       }
 
-      // Do not add break duration after last set
-      if (currSet < sets - 1) {
+      currSet += 1;
+  
+      // Add break duration after all but last set
+      if (currSet <= sets) {
         _durationStatusList.add(DurationStatus(
             duration: breakDuration,
             statusValue: StatusValue.isBreak(),
             statusColor: breakColor,
-            startTime: Duration(seconds: _totalSeconds)));
+            startTime: Duration(seconds: _totalSeconds),
+            currSet: currSet,
+            currRep: 1));  // Always 1 because break marks start of new set/rep
 
         _totalSeconds += breakDuration.inSeconds;
       }
 
-      currSet += 1;
     }
 
     // Add final zero duration to mark timer as complete
@@ -108,6 +120,8 @@ class DurationStatusList {
         duration: Duration.zero,
         statusValue: StatusValue.isComplete(),
         statusColor: prepareColor,
-        startTime: Duration(seconds: _totalSeconds)));
+        startTime: Duration(seconds: _totalSeconds),
+            currSet: sets,
+            currRep: reps));
   }
 }

@@ -19,7 +19,7 @@ void main() {
     expect(durationsList.includePrepare, true);
   });
 
-  test('A list with 0 sets and 0 reps is empty', () {
+  test('A list with 0 sets and 0 reps only has one element', () {
     var durationsList = DurationStatusList(
         sets: 0,
         reps: 0,
@@ -30,9 +30,10 @@ void main() {
 
     expect(durationsList.length, 1);
     expect(durationsList.totalSeconds, 0);
+    expect(durationsList[0].toString(), '(complete for 0 sec)');
   });
 
-  test('A list with 0 sets and 1 rep is empty', () {
+  test('A list with 0 sets and 1 rep only has one element', () {
     var durationsList = DurationStatusList(
         sets: 0,
         reps: 1,
@@ -43,9 +44,10 @@ void main() {
 
     expect(durationsList.length, 1);
     expect(durationsList.totalSeconds, 0);
+    expect(durationsList[0].toString(), '(complete for 0 sec)');
   });
 
-  test('A list with 1 sets and 0 reps is empty', () {
+  test('A list with 1 sets and 0 reps is only has one element', () {
     var durationsList = DurationStatusList(
         sets: 1,
         reps: 0,
@@ -56,6 +58,7 @@ void main() {
 
     expect(durationsList.length, 1);
     expect(durationsList.totalSeconds, 0);
+    expect(durationsList[0].toString(), '(complete for 0 sec)');
   });
 
   test('A list with includePrepare == false does not start with a prepare', () {
@@ -70,9 +73,10 @@ void main() {
     expect(durationsList.length, 2);
     expect(durationsList.totalSeconds, 10);
     expect(durationsList[0].toString(), '(work for 10 sec)');
+    expect(durationsList[1].toString(), '(complete for 0 sec)');
   });
 
-  test('A list with 1 sets and 1 reps contains 2 elements', () {
+  test('A list with 1 sets and 1 reps contains 3 elements', () {
     var durationsList = DurationStatusList(
         sets: 1,
         reps: 1,
@@ -85,6 +89,7 @@ void main() {
     expect(durationsList.totalSeconds, 25);
     expect(durationsList[0].toString(), '(prepare for 15 sec)');
     expect(durationsList[1].toString(), '(work for 10 sec)');
+    expect(durationsList[2].toString(), '(complete for 0 sec)');
   });
 
   test('A list with 1 sets and 2 reps contains the correct durations', () {
@@ -99,9 +104,20 @@ void main() {
     expect(durationsList.length, 5);
     expect(durationsList.totalSeconds, 38);
     expect(durationsList[0].toString(), '(prepare for 15 sec)');
+    expect(durationsList[0].currRep, 1);
+    expect(durationsList[0].currSet, 1);
     expect(durationsList[1].toString(), '(work for 10 sec)');
+    expect(durationsList[1].currRep, 1);
+    expect(durationsList[1].currSet, 1);
     expect(durationsList[2].toString(), '(rest for 3 sec)');
+    expect(durationsList[2].currRep, 2);
+    expect(durationsList[2].currSet, 1);
     expect(durationsList[3].toString(), '(work for 10 sec)');
+    expect(durationsList[3].currRep, 2);
+    expect(durationsList[3].currSet, 1);
+    expect(durationsList[4].toString(), '(complete for 0 sec)');
+    expect(durationsList[4].currRep, 2);
+    expect(durationsList[4].currSet, 1);
   });
 
   test('A list with 2 sets and 1 reps contains the correct durations', () {
@@ -116,9 +132,20 @@ void main() {
     expect(durationsList.length, 5);
     expect(durationsList.totalSeconds, 65);
     expect(durationsList[0].toString(), '(prepare for 15 sec)');
+    expect(durationsList[0].currRep, 1);
+    expect(durationsList[0].currSet, 1);
     expect(durationsList[1].toString(), '(work for 10 sec)');
+    expect(durationsList[1].currRep, 1);
+    expect(durationsList[1].currSet, 1);
     expect(durationsList[2].toString(), '(break for 30 sec)');
+    expect(durationsList[2].currRep, 1);
+    expect(durationsList[2].currSet, 2);
     expect(durationsList[3].toString(), '(work for 10 sec)');
+    expect(durationsList[3].currRep, 1);
+    expect(durationsList[3].currSet, 2);
+    expect(durationsList[4].toString(), '(complete for 0 sec)');
+    expect(durationsList[4].currRep, 1);
+    expect(durationsList[4].currSet, 2);
   });
 
   test('A list with 2 sets and 2 reps contains the correct durations', () {
@@ -133,13 +160,32 @@ void main() {
     expect(durationsList.length, 9);
     expect(durationsList.totalSeconds, 91);
     expect(durationsList[0].toString(), '(prepare for 15 sec)');
+    expect(durationsList[0].currRep, 1);
+    expect(durationsList[0].currSet, 1);
     expect(durationsList[1].toString(), '(work for 10 sec)');
+    expect(durationsList[1].currRep, 1);
+    expect(durationsList[1].currSet, 1);
     expect(durationsList[2].toString(), '(rest for 3 sec)');
+    expect(durationsList[2].currRep, 2);
+    expect(durationsList[2].currSet, 1);
     expect(durationsList[3].toString(), '(work for 10 sec)');
+    expect(durationsList[3].currRep, 2);
+    expect(durationsList[3].currSet, 1);
     expect(durationsList[4].toString(), '(break for 30 sec)');
+    expect(durationsList[4].currRep, 1);
+    expect(durationsList[4].currSet, 2);
     expect(durationsList[5].toString(), '(work for 10 sec)');
+    expect(durationsList[5].currRep, 1);
+    expect(durationsList[5].currSet, 2);
     expect(durationsList[6].toString(), '(rest for 3 sec)');
+    expect(durationsList[6].currRep, 2);
+    expect(durationsList[6].currSet, 2);
     expect(durationsList[7].toString(), '(work for 10 sec)');
+    expect(durationsList[7].currRep, 2);
+    expect(durationsList[7].currSet, 2);
+    expect(durationsList[8].toString(), '(complete for 0 sec)');
+    expect(durationsList[8].currRep, 2);
+    expect(durationsList[8].currSet, 2);
   });
 
   test('The correct startTime is present at each index in the list', () {
@@ -157,5 +203,6 @@ void main() {
     expect(durationsList[1].startTime, const Duration(seconds: 15));
     expect(durationsList[2].startTime, const Duration(seconds: 25));
     expect(durationsList[3].startTime, const Duration(seconds: 55));
+    expect(durationsList[4].startTime, const Duration(seconds: 65));
   });
 }

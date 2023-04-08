@@ -1,17 +1,20 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import '../extensions/duration_ceil_extension.dart';
+import '../models/duration_status.dart';
 import '../models/duration_status_list.dart';
+import '../models/timer_durations_dto.dart';
 import '../widgets/timer_control_buttons.dart';
+import '../widgets/timer_details.dart';
 import '../widgets/time_text_row.dart';
 
 /// Defines the countdown timer, which takes a DurationStatusList, then produces
 /// and animation of the timer. The timer can be started, paused, and reset
 /// using a set of buttons included in this widget.
 class CountdownTimer extends StatefulWidget {
-  final DurationStatusList durationStatusList;
+  final TimerDurationsDTO timerDurations;
 
-  const CountdownTimer({super.key, required this.durationStatusList});
+  const CountdownTimer({super.key, required this.timerDurations});
 
   @override
   State<CountdownTimer> createState() => _CountdownTimerState();
@@ -19,6 +22,8 @@ class CountdownTimer extends StatefulWidget {
 
 class _CountdownTimerState extends State<CountdownTimer>
     with TickerProviderStateMixin {
+  late DurationStatusList _durationStatusList;
+
   /// The index in the durationStatusList that the timer is currently on
   int _durationIndex = 0;
 
@@ -30,13 +35,15 @@ class _CountdownTimerState extends State<CountdownTimer>
 
   /// Indicates if the workout has completed
   bool _isComplete = false;
+  int _currentSet = 1;
+  int _currentRep = 1;
   late final AnimationController _controller;
 
   /// Starts the countdown timer
   void startTimer() {
     setState(() {
       _durationIndex = 0;
-      _controller.duration = widget.durationStatusList[_durationIndex].duration;
+      _controller.duration = _durationStatusList[_durationIndex].duration;
       _controller.reset();
       _controller.forward();
       _hasStarted = true;
@@ -63,7 +70,7 @@ class _CountdownTimerState extends State<CountdownTimer>
   void resetTimer() {
     setState(() {
       _durationIndex = 0;
-      _controller.duration = widget.durationStatusList[_durationIndex].duration;
+      _controller.duration = _durationStatusList[_durationIndex].duration;
       _controller.reset();
       _hasStarted = false;
       _isPaused = false;
@@ -74,11 +81,10 @@ class _CountdownTimerState extends State<CountdownTimer>
   void skipDuration() {
     setState(() {
       // Do not skip if already at last element
-      if (_durationIndex < widget.durationStatusList.length - 1) {
+      if (_durationIndex < _durationStatusList.length - 1) {
         _controller.stop();
         _durationIndex++;
-        _controller.duration =
-            widget.durationStatusList[_durationIndex].duration;
+        _controller.duration = _durationStatusList[_durationIndex].duration;
         _controller.reset();
 
         if (!_isPaused) {
@@ -98,24 +104,33 @@ class _CountdownTimerState extends State<CountdownTimer>
   void initState() {
     super.initState();
 
+    // Initialize DurationStatusList
+    _durationStatusList = DurationStatusList(
+        sets: widget.timerDurations.sets.toInt(),
+        reps: widget.timerDurations.reps.toInt(),
+        workDuration: widget.timerDurations.workDuration,
+        restDuration: widget.timerDurations.restDuration,
+        breakDuration: widget.timerDurations.breakDuration,
+        includePrepare: true);
+
+    // Initialize AnimationController and associated listeners
     _controller = AnimationController(
-      duration: widget.durationStatusList[_durationIndex].duration,
+      duration: _durationStatusList[_durationIndex].duration,
       vsync: this,
     )..addStatusListener((status) {
         if (status == AnimationStatus.completed &&
-            _durationIndex == widget.durationStatusList.length - 1) {
+            _durationIndex == _durationStatusList.length - 1) {
           // Mark timer as completed and reset buttons to start point
           setState(() {
             _isComplete = true;
             _hasStarted = false; // Changes buttons to initial starting state
           });
         } else if (status == AnimationStatus.completed &&
-            _durationIndex < widget.durationStatusList.length - 1) {
+            _durationIndex < _durationStatusList.length - 1) {
           // Move timer to next DurationStatus if there are any left
           setState(() {
             _durationIndex++;
-            _controller.duration =
-                widget.durationStatusList[_durationIndex].duration;
+            _controller.duration = _durationStatusList[_durationIndex].duration;
             _controller.reset();
             _controller.forward();
           });
@@ -139,7 +154,7 @@ class _CountdownTimerState extends State<CountdownTimer>
     /// animation jank where zero flashes very briefly before starting next
     /// countdown.
     if (timeLeft == Duration.zero &&
-        _durationIndex < widget.durationStatusList.length - 1) {
+        _durationIndex < _durationStatusList.length - 1) {
       timeLeftCeil = const Duration(seconds: 1);
     }
 
@@ -159,15 +174,14 @@ class _CountdownTimerState extends State<CountdownTimer>
   }
 
   /// Returns a String representing the total duration that has passed during
-  /// this timer
+  /// this workout
   String _elapsedDurationString() {
     return _durationString(_elapsedDuration());
   }
 
   /// Returns the total duration that has passed during the current countdown
   Duration _elapsedDuration() {
-    Duration startDuration =
-        widget.durationStatusList[_durationIndex].startTime;
+    Duration startDuration = _durationStatusList[_durationIndex].startTime;
 
     // Get duration of current countdown
     Duration? elapsedDuration = _controller.duration;
@@ -195,6 +209,13 @@ class _CountdownTimerState extends State<CountdownTimer>
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Flexible(
+            flex: 18,
+            child: TimerDetails(
+                timerDurations: widget.timerDurations,
+                currentSet: _durationStatusList[_durationIndex].currSet,
+                currentRep: _durationStatusList[_durationIndex].currRep),
+          ),
+          Flexible(
             flex: 75,
             child: AnimatedBuilder(
                 animation: _controller,
@@ -205,8 +226,8 @@ class _CountdownTimerState extends State<CountdownTimer>
                       CustomPaint(
                         painter: ArcPainter(
                             animation: _controller,
-                            color: widget
-                                .durationStatusList[_durationIndex].statusColor,
+                            color:
+                                _durationStatusList[_durationIndex].statusColor,
                             width: getTimerWidth(constraints)),
                         child: Container(),
                       ),
@@ -219,18 +240,18 @@ class _CountdownTimerState extends State<CountdownTimer>
                         ),
                       ),
                       Positioned(
-                        top: constraints.maxHeight / 2 - 185,
+                        top: constraints.maxHeight / 2 - 240,
                         child: Text(
-                          widget.durationStatusList[_durationIndex].status,
+                          _durationStatusList[_durationIndex].status,
                           style: TextStyle(
                             fontSize: 40.0,
-                            color: widget
-                                .durationStatusList[_durationIndex].statusColor,
+                            color:
+                                _durationStatusList[_durationIndex].statusColor,
                           ),
                         ),
                       ),
                       Positioned(
-                          top: constraints.maxHeight / 2 - 10,
+                          top: constraints.maxHeight / 2 - 65,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -239,8 +260,8 @@ class _CountdownTimerState extends State<CountdownTimer>
                                 child: TimeTextRow(
                                     title: 'Total ',
                                     durationString: _durationString(Duration(
-                                        seconds: widget
-                                            .durationStatusList.totalSeconds))),
+                                        seconds:
+                                            _durationStatusList.totalSeconds))),
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(3.0),

@@ -32,11 +32,6 @@ class _CountdownTimerState extends State<CountdownTimer>
 
   /// Indicates if timer is currently paused
   bool _isPaused = false;
-
-  /// Indicates if the workout has completed
-  bool _isComplete = false;
-  int _currentSet = 1;
-  int _currentRep = 1;
   late final AnimationController _controller;
 
   /// Starts the countdown timer
@@ -122,7 +117,6 @@ class _CountdownTimerState extends State<CountdownTimer>
             _durationIndex == _durationStatusList.length - 1) {
           // Mark timer as completed and reset buttons to start point
           setState(() {
-            _isComplete = true;
             _hasStarted = false; // Changes buttons to initial starting state
           });
         } else if (status == AnimationStatus.completed &&
@@ -309,7 +303,7 @@ class ArcPainter extends CustomPainter {
     Paint paint = Paint()
       ..color = color
       ..strokeWidth = 20.0
-      ..strokeCap = StrokeCap.square
+      ..strokeCap = StrokeCap.butt
       ..style = PaintingStyle.stroke;
 
     double progress = (1.0 - animation.value) * 2 * math.pi;

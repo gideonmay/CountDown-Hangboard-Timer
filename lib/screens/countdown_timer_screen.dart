@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../models/duration_status_list.dart';
 import '../models/timer_durations_dto.dart';
 import '../widgets/countdown_timer.dart';
 

@@ -27,76 +27,76 @@ class _TimerDetailsState extends State<TimerDetails> {
     return '$minutes:${(seconds).toString().padLeft(2, '0')}';
   }
 
+  /// A widget containing the current rep and set status info
+  Widget _setRepStatus() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(6.0),
+          child: Text(
+              'Set ${widget.currentSet}/${widget.timerDurations.sets.toInt()}',
+              style: const TextStyle(fontSize: 24.0)),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(6.0),
+          child: Text(
+              'Rep ${widget.currentRep}/${widget.timerDurations.reps.toInt()}',
+              style: const TextStyle(fontSize: 24.0)),
+        ),
+      ],
+    );
+  }
+
+  /// A widget containing information about the work, rest, and break durations
+  Widget _timerDurationInfo() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(6.0),
+          child: Text(
+              'Work ${durationString(widget.timerDurations.workDuration)}',
+              style: const TextStyle(fontSize: 16.0)),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(6.0),
+          child: Text(
+              'Rest ${durationString(widget.timerDurations.restDuration)}',
+              style: const TextStyle(fontSize: 16.0)),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(6.0),
+          child: Text(
+              'Break ${durationString(widget.timerDurations.breakDuration)}',
+              style: const TextStyle(fontSize: 16.0)),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Row(
       children: [
         Expanded(
-          child: Row(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(6.0),
-                  child: TimerDetailsTile(
-                    color: Colors.grey,
-                    text:
-                        'Work ${durationString(widget.timerDurations.workDuration)}',
-                    fontSize: 16.0,
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(6.0),
-                  child: TimerDetailsTile(
-                    color: Colors.grey,
-                    text:
-                        'Rest ${durationString(widget.timerDurations.restDuration)}',
-                    fontSize: 16.0,
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(6.0),
-                  child: TimerDetailsTile(
-                    color: Colors.grey,
-                    text:
-                        'Break ${durationString(widget.timerDurations.breakDuration)}',
-                    fontSize: 16.0,
-                  ),
-                ),
-              )
-            ],
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TimerDetailsTile(
+              color: Theme.of(context).colorScheme.secondary,
+              fontSize: 24.0,
+              child: _setRepStatus(),
+            ),
           ),
         ),
         Expanded(
-          child: Row(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(6.0),
-                  child: TimerDetailsTile(
-                    color: Theme.of(context).colorScheme.secondary,
-                    text:
-                        'Set ${widget.currentSet}/${widget.timerDurations.sets.toInt()}',
-                    fontSize: 20.0,
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(6.0),
-                  child: TimerDetailsTile(
-                    color: Theme.of(context).colorScheme.secondary,
-                    text:
-                        'Rep ${widget.currentRep}/${widget.timerDurations.reps.toInt()}',
-                    fontSize: 20.0,
-                  ),
-                ),
-              ),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TimerDetailsTile(
+              color: Colors.grey,
+              fontSize: 16.0,
+              child: _timerDurationInfo(),
+            ),
           ),
         ),
       ],

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+/// A widget that contains the Start, Reset, and Skip buttons that can change
+/// depending on the state of the timer
 class TimerControlButtons extends StatefulWidget {
   final bool hasStarted;
   final bool isPaused;

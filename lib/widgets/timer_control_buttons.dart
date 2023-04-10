@@ -32,7 +32,7 @@ class _TimerControlButtonsState extends State<TimerControlButtons> {
       children: [
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
             child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,
@@ -45,7 +45,7 @@ class _TimerControlButtonsState extends State<TimerControlButtons> {
         ),
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
             child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
@@ -66,10 +66,10 @@ class _TimerControlButtonsState extends State<TimerControlButtons> {
     if (widget.hasStarted) {
       if (widget.isPaused) {
         return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
               child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green,
@@ -85,10 +85,10 @@ class _TimerControlButtonsState extends State<TimerControlButtons> {
         );
       } else {
         return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
               child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.yellow.shade700,
@@ -105,7 +105,7 @@ class _TimerControlButtonsState extends State<TimerControlButtons> {
     } else {
       return Center(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
           child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                   minimumSize: const Size.fromHeight(40)),

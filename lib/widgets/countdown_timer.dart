@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import '../extensions/duration_ceil_extension.dart';
-import '../models/duration_status.dart';
 import '../models/duration_status_list.dart';
 import '../models/timer_durations_dto.dart';
 import '../widgets/timer_control_buttons.dart';
@@ -82,8 +81,15 @@ class _CountdownTimerState extends State<CountdownTimer>
         _controller.duration = _durationStatusList[_durationIndex].duration;
         _controller.reset();
 
+        // Continue animation if timer not currently paused
         if (!_isPaused) {
           _controller.forward();
+        }
+
+        // Restore buttons to initial state if last duration has been reached
+        if (_durationIndex == _durationStatusList.length - 1) {
+          _hasStarted = false;
+          _isPaused = false;
         }
       }
     });

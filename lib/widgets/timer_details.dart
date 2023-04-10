@@ -32,18 +32,12 @@ class _TimerDetailsState extends State<TimerDetails> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        Padding(
-          padding: const EdgeInsets.all(6.0),
-          child: Text(
-              'Set ${widget.currentSet}/${widget.timerDurations.sets.toInt()}',
-              style: const TextStyle(fontSize: 24.0)),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(6.0),
-          child: Text(
-              'Rep ${widget.currentRep}/${widget.timerDurations.reps.toInt()}',
-              style: const TextStyle(fontSize: 24.0)),
-        ),
+        Text(
+            'Set ${widget.currentSet}/${widget.timerDurations.sets.toInt()}',
+            style: const TextStyle(fontSize: 20.0)),
+        Text(
+            'Rep ${widget.currentRep}/${widget.timerDurations.reps.toInt()}',
+            style: const TextStyle(fontSize: 20.0)),
       ],
     );
   }
@@ -53,24 +47,15 @@ class _TimerDetailsState extends State<TimerDetails> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        Padding(
-          padding: const EdgeInsets.all(6.0),
-          child: Text(
-              'Work ${durationString(widget.timerDurations.workDuration)}',
-              style: const TextStyle(fontSize: 16.0)),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(6.0),
-          child: Text(
-              'Rest ${durationString(widget.timerDurations.restDuration)}',
-              style: const TextStyle(fontSize: 16.0)),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(6.0),
-          child: Text(
-              'Break ${durationString(widget.timerDurations.breakDuration)}',
-              style: const TextStyle(fontSize: 16.0)),
-        ),
+        Text(
+            'Work ${durationString(widget.timerDurations.workDuration)}',
+            style: const TextStyle(fontSize: 16.0)),
+        Text(
+            'Rest ${durationString(widget.timerDurations.restDuration)}',
+            style: const TextStyle(fontSize: 16.0)),
+        Text(
+            'Break ${durationString(widget.timerDurations.breakDuration)}',
+            style: const TextStyle(fontSize: 16.0)),
       ],
     );
   }

@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import '../extensions/duration_ceil_extension.dart';
+import '../models/audio_pool.dart';
 import '../models/duration_status_list.dart';
 import '../models/timer_durations_dto.dart';
 import '../widgets/timer_control_buttons.dart';
@@ -31,7 +32,99 @@ class _CountdownTimerState extends State<CountdownTimer>
 
   /// Indicates if timer is currently paused
   bool _isPaused = false;
+
+  /// Indicates if audio has already played at 1, 2 and 3 second marks
+  final Map<int, bool> _hasPlayedAtSecond = {1: false, 2: false, 3: false};
+
+  late int _lowBeepIndex;
+  late int _highBeepIndex;
+  final _audioPool = AudioPool();
   late final AnimationController _controller;
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadAudio();
+
+    // Initialize DurationStatusList
+    _durationStatusList = DurationStatusList(
+        sets: widget.timerDurations.sets.toInt(),
+        reps: widget.timerDurations.reps.toInt(),
+        workDuration: widget.timerDurations.workDuration,
+        restDuration: widget.timerDurations.restDuration,
+        breakDuration: widget.timerDurations.breakDuration,
+        includePrepare: true);
+
+    // Initialize AnimationController and associated listeners
+    _controller = AnimationController(
+      duration: _durationStatusList[_durationIndex].duration,
+      vsync: this,
+    )
+      ..addStatusListener((status) {
+        // Reset low beep statuses and play high beep when a countdown completes
+        if (status == AnimationStatus.completed) {
+          _hasPlayedAtSecond[3] = false;
+          _hasPlayedAtSecond[2] = false;
+          _hasPlayedAtSecond[1] = false;
+          _audioPool.play(_highBeepIndex);
+        }
+
+        if (status == AnimationStatus.completed &&
+            _durationIndex == _durationStatusList.length - 1) {
+          // Mark timer as completed and reset buttons to start point
+          setState(() {
+            _hasStarted = false; // Changes buttons to initial starting state
+          });
+        } else if (status == AnimationStatus.completed &&
+            _durationIndex < _durationStatusList.length - 1) {
+          // Move timer to next DurationStatus if there are any left
+          setState(() {
+            _durationIndex++;
+            _controller.duration = _durationStatusList[_durationIndex].duration;
+            _controller.reset();
+            _controller.forward();
+          });
+        }
+      })
+      ..addListener(() {
+        // Play low beeps at 3, 2, and 1 seconds left
+        if (!_hasPlayedAtSecond[3]! && timerString == '0:03') {
+          // Do not play the beep if the current duration is 3 seconds long
+          if (_durationStatusList[_durationIndex].duration.inSeconds != 3) {
+            _hasPlayedAtSecond[3] = true;
+            _audioPool.play(_lowBeepIndex);
+          }
+        }
+
+        if (!_hasPlayedAtSecond[2]! && timerString == '0:02') {
+          // Do not play the beep if the current duration is 2 seconds long
+          if (_durationStatusList[_durationIndex].duration.inSeconds != 2) {
+            _hasPlayedAtSecond[2] = true;
+            _audioPool.play(_lowBeepIndex);
+          }
+        }
+
+        if (!_hasPlayedAtSecond[1]! && timerString == '0:01') {
+          // Do not play the beep if the current duration is 3 seconds long
+          if (_durationStatusList[_durationIndex].duration.inSeconds != 1) {
+            _hasPlayedAtSecond[1] = true;
+            _audioPool.play(_lowBeepIndex);
+          }
+        }
+      });
+  }
+
+  /// Loads audio assets into memory
+  void _loadAudio() {
+    _lowBeepIndex = _audioPool.addAsset('assets/audio/beep_low.wav');
+    _highBeepIndex = _audioPool.addAsset('assets/audio/beep_high.wav');
+  }
 
   /// Starts the countdown timer
   void startTimer() {
@@ -95,51 +188,8 @@ class _CountdownTimerState extends State<CountdownTimer>
     });
   }
 
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    // Initialize DurationStatusList
-    _durationStatusList = DurationStatusList(
-        sets: widget.timerDurations.sets.toInt(),
-        reps: widget.timerDurations.reps.toInt(),
-        workDuration: widget.timerDurations.workDuration,
-        restDuration: widget.timerDurations.restDuration,
-        breakDuration: widget.timerDurations.breakDuration,
-        includePrepare: true);
-
-    // Initialize AnimationController and associated listeners
-    _controller = AnimationController(
-      duration: _durationStatusList[_durationIndex].duration,
-      vsync: this,
-    )..addStatusListener((status) {
-        if (status == AnimationStatus.completed &&
-            _durationIndex == _durationStatusList.length - 1) {
-          // Mark timer as completed and reset buttons to start point
-          setState(() {
-            _hasStarted = false; // Changes buttons to initial starting state
-          });
-        } else if (status == AnimationStatus.completed &&
-            _durationIndex < _durationStatusList.length - 1) {
-          // Move timer to next DurationStatus if there are any left
-          setState(() {
-            _durationIndex++;
-            _controller.duration = _durationStatusList[_durationIndex].duration;
-            _controller.reset();
-            _controller.forward();
-          });
-        }
-      });
-  }
-
   /// Returns a Duration object representing the time left in the countdown
-  Duration get timeLeft {
+  Duration get _timeLeft {
     return _controller.duration! - (_controller.duration! * _controller.value);
   }
 
@@ -153,12 +203,12 @@ class _CountdownTimerState extends State<CountdownTimer>
     /// Only show a time of zero on the very last countdown. This prevents
     /// animation jank where zero flashes very briefly before starting next
     /// countdown.
-    if (timeLeft == Duration.zero &&
+    if (_timeLeft == Duration.zero &&
         _durationIndex < _durationStatusList.length - 1) {
       timeLeftCeil = const Duration(seconds: 1);
     }
 
-    timeLeftCeil = timeLeft.ceil(const Duration(seconds: 1));
+    timeLeftCeil = _timeLeft.ceil(const Duration(seconds: 1));
     return _durationString(timeLeftCeil);
   }
 

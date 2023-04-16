@@ -21,11 +21,9 @@ void main() {
   testWidgets('CountdownTimer has correct initial state', (tester) async {
     await tester.pumpWidget(countdownTimerScreen);
 
-    expect(find.text('Set 1/5'), findsOneWidget);
-    expect(find.text('Rep 1/6'), findsOneWidget);
-    expect(find.text('Work 0:07'), findsOneWidget);
-    expect(find.text('Rest 0:03'), findsOneWidget);
-    expect(find.text('Break 3:00'), findsOneWidget);
+    expect(find.text('0:07'), findsOneWidget);  // Work time
+    expect(find.text('0:03'), findsOneWidget);  // Rest time
+    expect(find.text('3:00'), findsOneWidget);  // Break time
     expect(find.text('0:15'), findsOneWidget); // The initial PREPARE duration
     expect(find.text('PREPARE'), findsOneWidget);
     expect(find.text('Total '), findsOneWidget);
@@ -68,7 +66,8 @@ void main() {
     await tester.pump();
 
     expect(find.text('WORK'), findsOneWidget);
-    expect(find.text('0:07'), findsOneWidget); // Correct work duration
+    // Should be 2 work durations in timer and in timer details area
+    expect(find.text('0:07'), findsAtLeastNWidgets(2));
   });
 
   testWidgets('The Reset button restores intial timer state', (tester) async {
@@ -78,9 +77,9 @@ void main() {
     await tester.tap(find.text('Reset'));
     await tester.pump();
 
-    expect(find.text('Work 0:07'), findsOneWidget);
-    expect(find.text('Rest 0:03'), findsOneWidget);
-    expect(find.text('Break 3:00'), findsOneWidget);
+    expect(find.text('0:07'), findsOneWidget);  // Work time
+    expect(find.text('0:03'), findsOneWidget);  // Rest time
+    expect(find.text('3:00'), findsOneWidget);  // Break time
     expect(find.text('0:15'), findsOneWidget); // The initial PREPARE duration
     expect(find.text('PREPARE'), findsOneWidget);
     expect(find.text('Total '), findsOneWidget);

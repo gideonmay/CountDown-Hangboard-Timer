@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/timer_durations_dto.dart';
 import '../widgets/progress_counter.dart';
-import '../widgets/timer_details_tile.dart';
 import '../widgets/time_text_row.dart';
 
 /// Displays details about the timer's current work, rest, and break durations,
@@ -31,50 +30,54 @@ class _TimerDetailsState extends State<TimerDetails> {
 
   /// A widget containing the current rep and set status info
   Widget _setRepStatus() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        ProgressCounter(
-            completed: widget.currentSet - 1,
-            total: widget.timerDurations.sets.toInt(),
-            title: 'Sets ',
-            fontSize: 20.0),
-        ProgressCounter(
-            completed: widget.currentRep - 1,
-            total: widget.timerDurations.reps.toInt(),
-            title: 'Reps ',
-            fontSize: 20.0),
-      ],
-    );
+    return LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          ProgressCounter(
+              completed: widget.currentSet - 1,
+              total: widget.timerDurations.sets.toInt(),
+              title: 'Sets ',
+              fontSize: constraints.maxHeight / 5),
+          ProgressCounter(
+              completed: widget.currentRep - 1,
+              total: widget.timerDurations.reps.toInt(),
+              title: 'Reps ',
+              fontSize: constraints.maxHeight / 5),
+        ],
+      );
+    });
   }
 
   /// A widget containing information about the work, rest, and break durations
   Widget _timerDurationInfo() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        TimeTextRow(
-          title: 'Work ',
-          durationString: durationString(widget.timerDurations.workDuration),
-          fontSize: 16.0,
-          titleWidth: 50.0
-        ),
-        TimeTextRow(
-          title: 'Rest ',
-          durationString: durationString(widget.timerDurations.restDuration),
-          fontSize: 16.0,
-          titleWidth: 50.0
-        ),
-        TimeTextRow(
-          title: 'Break ',
-          durationString: durationString(widget.timerDurations.breakDuration),
-          fontSize: 16.0,
-          titleWidth: 50.0
-        ),
-      ],
-    );
+    return LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          TimeTextRow(
+              title: 'Work ',
+              durationString:
+                  durationString(widget.timerDurations.workDuration),
+              fontSize: constraints.maxHeight / 6,
+              titleWidth: 50.0),
+          TimeTextRow(
+              title: 'Rest ',
+              durationString:
+                  durationString(widget.timerDurations.restDuration),
+              fontSize: constraints.maxHeight / 6,
+              titleWidth: 50.0),
+          TimeTextRow(
+              title: 'Break ',
+              durationString:
+                  durationString(widget.timerDurations.breakDuration),
+              fontSize: constraints.maxHeight / 6,
+              titleWidth: 50.0),
+        ],
+      );
+    });
   }
 
   @override
@@ -84,10 +87,7 @@ class _TimerDetailsState extends State<TimerDetails> {
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: TimerDetailsTile(
-            fontSize: 16.0,
-            child: _timerDurationInfo(),
-          ),
+          child: _timerDurationInfo(),
         ),
         const VerticalDivider(
           thickness: 1.5,
@@ -97,11 +97,7 @@ class _TimerDetailsState extends State<TimerDetails> {
         Expanded(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: TimerDetailsTile(
-              color: null,
-              fontSize: 24.0,
-              child: _setRepStatus(),
-            ),
+            child: _setRepStatus(),
           ),
         ),
       ],

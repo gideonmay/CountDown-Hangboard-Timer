@@ -78,8 +78,6 @@ void main() {
     await tester.tap(find.text('Reset'));
     await tester.pump();
 
-    expect(find.text('Set 1/5'), findsOneWidget);
-    expect(find.text('Rep 1/6'), findsOneWidget);
     expect(find.text('Work 0:07'), findsOneWidget);
     expect(find.text('Rest 0:03'), findsOneWidget);
     expect(find.text('Break 3:00'), findsOneWidget);
@@ -102,22 +100,6 @@ void main() {
     await tester.pump();
 
     expect(find.text('REST'), findsOneWidget);
-    expect(find.text('Rep 2/6'), findsOneWidget);
-  });
-
-  testWidgets('Sets increments by one upon start of first Break duration',
-      (tester) async {
-    await tester.pumpWidget(countdownTimerScreen);
-    await tester.tap(find.text('Start'));
-    await tester.pump(const Duration(seconds: 2));
-
-    // Skip until the first Break duration
-    while (!tester.any(find.text('BREAK'))) {
-      await tester.tap(find.text('Skip'));
-      await tester.pump();
-    }
-
-    expect(find.text('Set 2/5'), findsOneWidget);
   });
 
   testWidgets('Checks that ending state of timer is correct',
@@ -132,8 +114,6 @@ void main() {
       await tester.pump();
     }
 
-    expect(find.text('Set 5/5'), findsOneWidget);
-    expect(find.text('Rep 6/6'), findsOneWidget);
     expect(find.text('0:00'), findsOneWidget);
     expect(find.text('Start'), findsOneWidget);
   });

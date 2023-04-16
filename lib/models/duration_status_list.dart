@@ -5,7 +5,7 @@ import 'status_value.dart';
 // These colors correspond to different status values
 Color workColor = Colors.green;
 Color restColor = Colors.yellow.shade700;
-Color breakColor = Colors.orange.shade900;
+Color breakColor = Colors.red;
 Color prepareColor = Colors.blue;
 
 /// Represents a list of DurationStatus objects that can be 'fed' into the
@@ -73,11 +73,10 @@ class DurationStatusList {
             currRep: currRep));
 
         _totalSeconds += workDuration.inSeconds;
+        currRep += 1;
       }
 
-      while (currRep < reps) {
-        currRep += 1;
-
+      while (currRep <= reps) {
         _durationStatusList.add(DurationStatus(
             duration: restDuration,
             statusValue: StatusValue.isResting(),
@@ -96,10 +95,11 @@ class DurationStatusList {
             currRep: currRep));
 
         _totalSeconds += workDuration.inSeconds;
+        currRep += 1;
       }
 
       currSet += 1;
-  
+      
       // Add break duration after all but last set
       if (currSet <= sets) {
         _durationStatusList.add(DurationStatus(
@@ -108,11 +108,10 @@ class DurationStatusList {
             statusColor: breakColor,
             startTime: Duration(seconds: _totalSeconds),
             currSet: currSet,
-            currRep: 1));  // Always 1 because break marks start of new set/rep
+            currRep: currRep));
 
         _totalSeconds += breakDuration.inSeconds;
       }
-
     }
 
     // Add final zero duration to mark timer as complete
@@ -121,7 +120,7 @@ class DurationStatusList {
         statusValue: StatusValue.isComplete(),
         statusColor: prepareColor,
         startTime: Duration(seconds: _totalSeconds),
-            currSet: sets,
-            currRep: reps));
+        currSet: sets + 1,
+        currRep: reps + 1));
   }
 }

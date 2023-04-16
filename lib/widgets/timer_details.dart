@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import '../widgets/timer_details_tile.dart';
 import '../models/timer_durations_dto.dart';
+import '../widgets/progress_counter.dart';
+import '../widgets/timer_details_tile.dart';
+import '../widgets/time_text_row.dart';
 
 /// Displays details about the timer's current work, rest, and break durations,
 /// and the number of sets and reps left
@@ -31,13 +33,18 @@ class _TimerDetailsState extends State<TimerDetails> {
   Widget _setRepStatus() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-            'Set ${widget.currentSet}/${widget.timerDurations.sets.toInt()}',
-            style: const TextStyle(fontSize: 20.0)),
-        Text(
-            'Rep ${widget.currentRep}/${widget.timerDurations.reps.toInt()}',
-            style: const TextStyle(fontSize: 20.0)),
+        ProgressCounter(
+            completed: widget.currentSet - 1,
+            total: widget.timerDurations.sets.toInt(),
+            title: 'Sets ',
+            fontSize: 20.0),
+        ProgressCounter(
+            completed: widget.currentRep - 1,
+            total: widget.timerDurations.reps.toInt(),
+            title: 'Reps ',
+            fontSize: 20.0),
       ],
     );
   }
@@ -46,16 +53,26 @@ class _TimerDetailsState extends State<TimerDetails> {
   Widget _timerDurationInfo() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-            'Work ${durationString(widget.timerDurations.workDuration)}',
-            style: const TextStyle(fontSize: 16.0)),
-        Text(
-            'Rest ${durationString(widget.timerDurations.restDuration)}',
-            style: const TextStyle(fontSize: 16.0)),
-        Text(
-            'Break ${durationString(widget.timerDurations.breakDuration)}',
-            style: const TextStyle(fontSize: 16.0)),
+        TimeTextRow(
+          title: 'Work ',
+          durationString: durationString(widget.timerDurations.workDuration),
+          fontSize: 16.0,
+          titleWidth: 50.0
+        ),
+        TimeTextRow(
+          title: 'Rest ',
+          durationString: durationString(widget.timerDurations.restDuration),
+          fontSize: 16.0,
+          titleWidth: 50.0
+        ),
+        TimeTextRow(
+          title: 'Break ',
+          durationString: durationString(widget.timerDurations.breakDuration),
+          fontSize: 16.0,
+          titleWidth: 50.0
+        ),
       ],
     );
   }
@@ -63,24 +80,27 @@ class _TimerDetailsState extends State<TimerDetails> {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TimerDetailsTile(
-              color: Theme.of(context).colorScheme.secondary,
-              fontSize: 24.0,
-              child: _setRepStatus(),
-            ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: TimerDetailsTile(
+            fontSize: 16.0,
+            child: _timerDurationInfo(),
           ),
+        ),
+        const VerticalDivider(
+          thickness: 1.5,
+          indent: 5.0,
+          endIndent: 5.0,
         ),
         Expanded(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: TimerDetailsTile(
-              color: Colors.grey,
-              fontSize: 16.0,
-              child: _timerDurationInfo(),
+              color: null,
+              fontSize: 24.0,
+              child: _setRepStatus(),
             ),
           ),
         ),

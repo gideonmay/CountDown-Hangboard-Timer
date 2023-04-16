@@ -111,7 +111,7 @@ class _CountdownTimerState extends State<CountdownTimer>
         }
 
         if (!_hasPlayedAtSecond[1]! && timerString == '0:01') {
-          // Do not play the beep if the current duration is 3 seconds long
+          // Do not play the beep if the current duration is 1 second long
           if (_durationStatusList[_durationIndex].duration.inSeconds != 1) {
             _hasPlayedAtSecond[1] = true;
             _audioPool.play(_lowBeepIndex);
@@ -311,13 +311,17 @@ class _CountdownTimerState extends State<CountdownTimer>
                                     title: 'Total ',
                                     durationString: _durationString(Duration(
                                         seconds:
-                                            _durationStatusList.totalSeconds))),
+                                            _durationStatusList.totalSeconds)),
+                                    fontSize: 20.0,
+                                    titleWidth: 78.0),
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(3.0),
                                 child: TimeTextRow(
                                     title: 'Elapsed ',
-                                    durationString: _elapsedDurationString()),
+                                    durationString: _elapsedDurationString(),
+                                    fontSize: 20.0,
+                                    titleWidth: 78.0),
                               ),
                             ],
                           )),
@@ -356,17 +360,25 @@ class ArcPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    Paint paint = Paint()
+    // Draw circle
+    Offset center = Offset(size.width / 2, size.height / 2);
+    Paint circlePaint = Paint()
+      ..color = Colors.grey.shade300
+      ..strokeWidth = 20.0
+      ..style = PaintingStyle.stroke;
+
+    canvas.drawCircle(center, width / 2, circlePaint);
+
+    // Draw progress arc on top of circle
+    Paint arcPaint = Paint()
       ..color = color
       ..strokeWidth = 20.0
       ..strokeCap = StrokeCap.butt
       ..style = PaintingStyle.stroke;
 
     double progress = (1.0 - animation.value) * 2 * math.pi;
-    Offset center = Offset(size.width / 2, size.height / 2);
     Rect rect = Rect.fromCenter(center: center, width: width, height: width);
-
-    canvas.drawArc(rect, math.pi * 3 / 2, progress, false, paint);
+    canvas.drawArc(rect, math.pi * 3 / 2, progress, false, arcPaint);
   }
 
   @override

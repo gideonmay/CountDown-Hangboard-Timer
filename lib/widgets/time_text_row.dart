@@ -5,21 +5,32 @@ import 'package:flutter/material.dart';
 class TimeTextRow extends StatelessWidget {
   final String title;
   final String durationString;
+  final double fontSize;
+
+  /// The width that the title text will take up
+  final double titleWidth;
 
   const TimeTextRow(
-      {super.key, required this.title, required this.durationString});
+      {super.key,
+      required this.title,
+      required this.durationString,
+      required this.fontSize,
+      required this.titleWidth});
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Text(
-          title,
-          style: TextStyle(color: Colors.grey.shade700, fontSize: 20.0),
+        SizedBox(
+          width: titleWidth,
+          child: Text(
+            title,
+            style: TextStyle(color: Colors.grey.shade700, fontSize: fontSize),
+          ),
         ),
         Text(
           durationString,
-          style: const TextStyle(fontSize: 20.0),
+          style: TextStyle(fontSize: fontSize),
         )
       ],
     );

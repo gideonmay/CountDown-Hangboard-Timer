@@ -183,6 +183,7 @@ class _CountdownTimerState extends State<CountdownTimer>
         if (_durationIndex == _durationStatusList.length - 1) {
           _hasStarted = false;
           _isPaused = false;
+          _controller.forward();
         }
       }
     });
@@ -355,8 +356,7 @@ class ArcPainter extends CustomPainter {
   final double width;
 
   ArcPainter(
-      {required this.color, required this.animation, required this.width})
-      : super();
+      {required this.color, required this.animation, required this.width});
 
   @override
   void paint(Canvas canvas, Size size) {

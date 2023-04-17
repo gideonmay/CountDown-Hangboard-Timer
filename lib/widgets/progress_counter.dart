@@ -21,7 +21,7 @@ class ProgressCounter extends StatelessWidget {
     return Row(
       children: [
         SizedBox(
-          width: 50,
+          width: 48,
           child: Text(
             title,
             style: TextStyle(color: Colors.grey.shade700, fontSize: fontSize),
@@ -32,6 +32,7 @@ class ProgressCounter extends StatelessWidget {
             totalSteps: total,
             currentStep: completed,
             size: 20,
+            padding: 1.0,
             selectedColor: Theme.of(context).colorScheme.secondary,
             unselectedColor: Colors.grey.shade300,
             customStep: (index, color, _) {
@@ -40,9 +41,11 @@ class ProgressCounter extends StatelessWidget {
                     borderRadius: const BorderRadius.all(Radius.circular(3.0)),
                     color: color),
                 child: Center(
-                    child: Text(
-                  '${index + 1}',
-                  style: const TextStyle(color: Colors.white),
+                    child: FittedBox(
+                  child: Text(
+                    '${index + 1}',
+                    style: const TextStyle(color: Colors.white),
+                  ),
                 )),
               );
             },

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import '../widgets/settings_list_view.dart';
 
+/// The screen that allows the user to changed settings such as sound on,
+/// vibration on, and dark mode on
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
 
@@ -14,16 +17,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       appBar: AppBar(
         title: const Text('Settings'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const <Widget>[
-            Text(
-              'Settings Screen',
-            ),
-          ],
-        ),
-      ),
+      body: const SettingsListView(),
     );
   }
 }

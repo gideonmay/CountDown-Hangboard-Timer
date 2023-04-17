@@ -26,7 +26,7 @@ class _DurationsPickerFormState extends State<DurationsPickerForm> {
           child: SpinBox(
             value: timerDurations.sets,
             min: 1,
-            max: 50,
+            max: 20,
             onChanged: (value) {
               setState(() {
                 timerDurations.sets = value;
@@ -41,7 +41,7 @@ class _DurationsPickerFormState extends State<DurationsPickerForm> {
           child: SpinBox(
             value: timerDurations.reps,
             min: 1,
-            max: 50,
+            max: 20,
             onChanged: (value) {
               setState(() {
                 timerDurations.reps = value;

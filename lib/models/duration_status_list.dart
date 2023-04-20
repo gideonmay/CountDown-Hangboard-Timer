@@ -108,7 +108,7 @@ class DurationStatusList {
             statusColor: breakColor,
             startTime: Duration(seconds: _totalSeconds),
             currSet: currSet,
-            currRep: currRep));
+            currRep: 1));
 
         _totalSeconds += breakDuration.inSeconds;
       }

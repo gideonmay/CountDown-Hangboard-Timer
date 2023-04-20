@@ -29,7 +29,12 @@ class _DurationsPickerFormState extends State<DurationsPickerForm> {
             max: 20,
             onChanged: (value) {
               setState(() {
-                timerDurations.sets = value;
+                // Do not allow value of zero or lower
+                if (value <= 0) {
+                  timerDurations.sets = 1;
+                } else {
+                  timerDurations.sets = value;
+                }
               });
             },
             decoration: const InputDecoration(
@@ -44,7 +49,12 @@ class _DurationsPickerFormState extends State<DurationsPickerForm> {
             max: 20,
             onChanged: (value) {
               setState(() {
-                timerDurations.reps = value;
+                // Do not allow value of zero or lower
+                if (value <= 0) {
+                  timerDurations.reps = 1;
+                } else {
+                  timerDurations.reps = value;
+                }
               });
             },
             decoration: const InputDecoration(

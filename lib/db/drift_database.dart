@@ -12,7 +12,7 @@ class GripTypes extends Table {
   TextColumn get name => text().withLength(min: 1, max: 40)();
 }
 
-/// A grip that is performed for a certain number of reps and sets, and with a 
+/// A grip that is performed for a certain number of reps and sets, and with a
 /// specific duration for work, rest, and break times
 class Grips extends Table {
   IntColumn get id => integer().autoIncrement()();
@@ -35,12 +35,13 @@ class Workouts extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get name => text().withLength(min: 1, max: 40)();
   TextColumn get description => text().withLength(min: 1, max: 100)();
-  DateTimeColumn get createdDate => 
+  DateTimeColumn get createdDate =>
       dateTime().withDefault(Constant(DateTime.now()))();
-  DateTimeColumn get lastUsedDate => dateTime().nullable()(); // Current timestamp
+  DateTimeColumn get lastUsedDate =>
+      dateTime().nullable()(); // Current timestamp
 }
 
-/// An intersection table that assignes a particular Grip to a Workout with a 
+/// An intersection table that assignes a particular Grip to a Workout with a
 /// sequence number that specifies the order of the Grip in that Workout
 class WorkoutGrips extends Table {
   IntColumn get id => integer().autoIncrement()();
@@ -60,6 +61,11 @@ class AppDatabase extends _$AppDatabase {
 
   /// Returns a stream of workouts any time the workouts table is changed
   Stream<List<Workout>> watchAllWorkouts() => select(workouts).watch();
+
+  /// Inserts a new workout in the database
+  Future<int> addWorkout(WorkoutsCompanion entry) {
+    return into(workouts).insert(entry);
+  }
 }
 
 LazyDatabase _openConnection() {

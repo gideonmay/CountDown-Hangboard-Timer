@@ -1,15 +1,25 @@
 import 'package:countdown_app/db/drift_database.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'create_workout_screen.dart';
 
-class WorkoutScreen extends StatefulWidget {
-  const WorkoutScreen({super.key});
+/// A screen that lists all of the workouts available in the database
+class MyWorkoutsScreen extends StatefulWidget {
+  const MyWorkoutsScreen({super.key});
 
   @override
-  State<WorkoutScreen> createState() => _WorkoutScreenState();
+  State<MyWorkoutsScreen> createState() => _MyWorkoutsScreenState();
 }
 
-class _WorkoutScreenState extends State<WorkoutScreen> {
+class _MyWorkoutsScreenState extends State<MyWorkoutsScreen> {
+  /// Navigates to the countdown timer screen
+  static navigateToBuildWorkout(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const CreateWorkoutScreen()),
+    );
+  }
+
   /// Returns a ListView widget that lists each workout in the database. If the
   /// data changes, then a new widget is returned with fresh data.
   StreamBuilder<List<Workout>> _buildWorkoutList(BuildContext context) {
@@ -47,7 +57,9 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
       ),
       body: _buildWorkoutList(context),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          navigateToBuildWorkout(context);
+        },
         tooltip: 'Add Workout',
         child: const Icon(Icons.add),
       ),

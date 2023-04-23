@@ -3,10 +3,9 @@ import 'package:provider/provider.dart';
 import './db/drift_database.dart';
 import 'screens/settings_screen.dart';
 import 'screens/durations_picker_screen.dart';
-import 'screens/workout_screen.dart';
+import 'screens/my_workouts_screen.dart';
 
 void main() {
-  final database = AppDatabase();
   runApp(const App());
 }
 
@@ -17,7 +16,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return Provider(
       create: (context) => AppDatabase(),
-      dispose:(context, db) => db.close(),
+      dispose: (context, db) => db.close(),
       child: MaterialApp(
           title: 'Flutter Demo',
           theme: ThemeData(
@@ -39,7 +38,7 @@ class _AppScaffoldState extends State<AppScaffold> {
   int _selectedIndex = 0;
 
   static const List<Widget> _screenOptions = <Widget>[
-    WorkoutScreen(),
+    MyWorkoutsScreen(),
     DurationsPickerScreen(),
     SettingsScreen()
   ];

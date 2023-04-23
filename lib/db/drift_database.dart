@@ -62,10 +62,13 @@ class AppDatabase extends _$AppDatabase {
   /// Returns a stream of workouts any time the workouts table is changed
   Stream<List<Workout>> watchAllWorkouts() => select(workouts).watch();
 
-  /// Inserts a new workout in the database
+  /// Creates a new workout
   Future<int> addWorkout(WorkoutsCompanion entry) {
     return into(workouts).insert(entry);
   }
+
+  /// Deletes the given workout
+  Future<int> deleteWorkout(Workout workout) => delete(workouts).delete(workout);
 }
 
 LazyDatabase _openConnection() {

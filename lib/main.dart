@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import './db/drift_database.dart';
 import 'screens/settings_screen.dart';
 import 'screens/durations_picker_screen.dart';
 import 'screens/workout_screen.dart';
 
 void main() {
+  final database = AppDatabase();
   runApp(const App());
 }
 
@@ -12,12 +15,16 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-            colorScheme: ColorScheme.fromSwatch()
-                .copyWith(primary: Colors.blue, secondary: Colors.blue.shade300)),
-        home: const AppScaffold());
+    return Provider(
+      create: (context) => AppDatabase(),
+      dispose:(context, db) => db.close(),
+      child: MaterialApp(
+          title: 'Flutter Demo',
+          theme: ThemeData(
+              colorScheme: ColorScheme.fromSwatch().copyWith(
+                  primary: Colors.blue, secondary: Colors.blue.shade300)),
+          home: const AppScaffold()),
+    );
   }
 }
 

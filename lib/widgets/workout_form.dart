@@ -38,7 +38,8 @@ class _WorkoutFormState extends State<WorkoutForm> {
               widget.onFormSaved();
             }
           },
-          child: Text(widget.buttonText, style: TextStyle(fontSize: 20.0))),
+          child:
+              Text(widget.buttonText, style: const TextStyle(fontSize: 20.0))),
     );
   }
 
@@ -51,6 +52,7 @@ class _WorkoutFormState extends State<WorkoutForm> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextFormField(
+              initialValue: widget.workoutDTO.name,
               decoration: const InputDecoration(labelText: 'Name'),
               maxLength: 40,
               onSaved: (newValue) {
@@ -67,6 +69,7 @@ class _WorkoutFormState extends State<WorkoutForm> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextFormField(
+              initialValue: widget.workoutDTO.description,
               decoration: const InputDecoration(labelText: 'Description'),
               maxLength: 100,
               onSaved: (newValue) {

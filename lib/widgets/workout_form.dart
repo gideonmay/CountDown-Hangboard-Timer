@@ -1,24 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../db/drift_database.dart';
+import '../models/workout_dto.dart';
 
-/// Provides a form to allow users to create a new workout. Once created, the
-/// user is navigated back to the My Workouts page.
-class CreateWorkoutForm extends StatefulWidget {
-  const CreateWorkoutForm({super.key});
+/// Provides a form to allow users to enter workout information then submit the
+/// information by tapping a button
+class WorkoutForm extends StatefulWidget {
+  final WorkoutDTO workoutDTO;
+
+  /// Function to be executed when form is saved. Should write to the database.
+  final Function onFormSaved;
+
+  /// The text to display in the submission button
+  final String buttonText;
+
+  const WorkoutForm(
+      {super.key,
+      required this.workoutDTO,
+      required this.onFormSaved,
+      required this.buttonText});
 
   @override
-  State<CreateWorkoutForm> createState() => _CreateWorkoutFormState();
+  State<WorkoutForm> createState() => _WorkoutFormState();
 }
 
-class _CreateWorkoutFormState extends State<CreateWorkoutForm> {
+class _WorkoutFormState extends State<WorkoutForm> {
   final _formKey = GlobalKey<FormState>();
-  String? _workoutName;
-  String? _workoutDescription;
 
-  Widget submitButton(BuildContext context) {
-    final db = Provider.of<AppDatabase>(context);
-
+  Widget _submitButton(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ElevatedButton(
@@ -28,16 +35,10 @@ class _CreateWorkoutFormState extends State<CreateWorkoutForm> {
           onPressed: () async {
             if (_formKey.currentState!.validate()) {
               _formKey.currentState!.save();
-              await db.addWorkout(WorkoutsCompanion.insert(
-                  name: _workoutName!, description: _workoutDescription!));
-
-              // Navigate back to My Workouts page
-              if (context.mounted) {
-                Navigator.pop(context);
-              }
+              widget.onFormSaved();
             }
           },
-          child: const Text('Submit', style: TextStyle(fontSize: 20.0))),
+          child: Text(widget.buttonText, style: TextStyle(fontSize: 20.0))),
     );
   }
 
@@ -53,7 +54,7 @@ class _CreateWorkoutFormState extends State<CreateWorkoutForm> {
               decoration: const InputDecoration(labelText: 'Name'),
               maxLength: 40,
               onSaved: (newValue) {
-                _workoutName = newValue;
+                widget.workoutDTO.name = newValue;
               },
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -69,7 +70,7 @@ class _CreateWorkoutFormState extends State<CreateWorkoutForm> {
               decoration: const InputDecoration(labelText: 'Description'),
               maxLength: 100,
               onSaved: (newValue) {
-                _workoutDescription = newValue;
+                widget.workoutDTO.description = newValue;
               },
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -79,11 +80,11 @@ class _CreateWorkoutFormState extends State<CreateWorkoutForm> {
               },
             ),
           ),
-          submitButton(context),
+          _submitButton(context),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Text(
-              'Once created, you can add exercises and begin the workout by tapping on it from the My Workouts screen',
+              'Once created, you can add grips and begin the workout by tapping on it from the My Workouts screen',
               style: TextStyle(color: Colors.grey.shade600),
               textAlign: TextAlign.center,
             ),

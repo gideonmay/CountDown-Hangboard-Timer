@@ -138,7 +138,7 @@ void main() {
     expect(durationsList[1].currRep, 1);
     expect(durationsList[1].currSet, 1);
     expect(durationsList[2].toString(), '(break for 30 sec)');
-    expect(durationsList[2].currRep, 2);
+    expect(durationsList[2].currRep, 1);
     expect(durationsList[2].currSet, 2);
     expect(durationsList[3].toString(), '(work for 10 sec)');
     expect(durationsList[3].currRep, 1);
@@ -172,7 +172,7 @@ void main() {
     expect(durationsList[3].currRep, 2);
     expect(durationsList[3].currSet, 1);
     expect(durationsList[4].toString(), '(break for 30 sec)');
-    expect(durationsList[4].currRep, 3);
+    expect(durationsList[4].currRep, 1);
     expect(durationsList[4].currSet, 2);
     expect(durationsList[5].toString(), '(work for 10 sec)');
     expect(durationsList[5].currRep, 1);

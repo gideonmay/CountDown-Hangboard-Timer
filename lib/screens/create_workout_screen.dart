@@ -15,18 +15,6 @@ class CreateWorkoutScreen extends StatefulWidget {
 class _CreateWorkoutScreenState extends State<CreateWorkoutScreen> {
   final _workoutDTO = WorkoutDTO.blank();
 
-  /// Adds the workout to the database then navigates back to My Workouts screen
-  void _createWorkout() async {
-    final db = Provider.of<AppDatabase>(context, listen: false);
-    await db.addWorkout(WorkoutsCompanion.insert(
-        name: _workoutDTO.name!, description: _workoutDTO.description!));
-
-    // Navigate back to My Workouts page
-    if (context.mounted) {
-      Navigator.pop(context);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,5 +38,17 @@ class _CreateWorkoutScreenState extends State<CreateWorkoutScreen> {
         ],
       ),
     );
+  }
+
+  /// Adds the workout to the database then navigates back to My Workouts screen
+  void _createWorkout() async {
+    final db = Provider.of<AppDatabase>(context, listen: false);
+    await db.addWorkout(WorkoutsCompanion.insert(
+        name: _workoutDTO.name!, description: _workoutDTO.description!));
+
+    // Navigate back to My Workouts page
+    if (context.mounted) {
+      Navigator.pop(context);
+    }
   }
 }

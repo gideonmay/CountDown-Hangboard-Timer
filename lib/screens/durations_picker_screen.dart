@@ -13,6 +13,15 @@ class DurationsPickerScreen extends StatefulWidget {
 }
 
 class _DurationsPickerScreenState extends State<DurationsPickerScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text('Configure Timer'),
+        ),
+        body: const DurationsPickerForm(onStartPressed: navigateToTimer));
+  }
+
   /// Navigates to the countdown timer screen
   static navigateToTimer(
       BuildContext context, TimerDurationsDTO timerDurations) {
@@ -22,14 +31,5 @@ class _DurationsPickerScreenState extends State<DurationsPickerScreen> {
           builder: (context) =>
               CountdownTimerScreen(timerDurations: timerDurations)),
     );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text('Configure Timer'),
-        ),
-        body: const DurationsPickerForm(onStartPressed: navigateToTimer));
   }
 }

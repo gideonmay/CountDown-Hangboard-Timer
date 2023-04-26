@@ -26,40 +26,6 @@ class TimerControlButtons extends StatefulWidget {
 }
 
 class _TimerControlButtonsState extends State<TimerControlButtons> {
-  /// Defines a Widget containing the Reset and Skip buttons
-  Widget resetAndSkipButtons() {
-    return Row(
-      children: [
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-            child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
-                    minimumSize: const Size.fromHeight(40)),
-                onPressed: () {
-                  widget.resetTimer();
-                },
-                child: const Text('Reset', style: TextStyle(fontSize: 20.0))),
-          ),
-        ),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-            child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    minimumSize: const Size.fromHeight(40)),
-                onPressed: () {
-                  widget.skipDuration();
-                },
-                child: const Text('Skip', style: TextStyle(fontSize: 20.0))),
-          ),
-        ),
-      ],
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     // Only show Start button if timer has not started yet
@@ -116,5 +82,39 @@ class _TimerControlButtonsState extends State<TimerControlButtons> {
         ),
       );
     }
+  }
+
+  /// Defines a Widget containing the Reset and Skip buttons
+  Widget resetAndSkipButtons() {
+    return Row(
+      children: [
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+            child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    minimumSize: const Size.fromHeight(40)),
+                onPressed: () {
+                  widget.resetTimer();
+                },
+                child: const Text('Reset', style: TextStyle(fontSize: 20.0))),
+          ),
+        ),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+            child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    minimumSize: const Size.fromHeight(40)),
+                onPressed: () {
+                  widget.skipDuration();
+                },
+                child: const Text('Skip', style: TextStyle(fontSize: 20.0))),
+          ),
+        ),
+      ],
+    );
   }
 }

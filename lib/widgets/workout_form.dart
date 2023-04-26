@@ -25,24 +25,6 @@ class WorkoutForm extends StatefulWidget {
 class _WorkoutFormState extends State<WorkoutForm> {
   final _formKey = GlobalKey<FormState>();
 
-  Widget _submitButton(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-              backgroundColor: Theme.of(context).colorScheme.primary,
-              minimumSize: const Size.fromHeight(40)),
-          onPressed: () async {
-            if (_formKey.currentState!.validate()) {
-              _formKey.currentState!.save();
-              widget.onFormSaved();
-            }
-          },
-          child:
-              Text(widget.buttonText, style: const TextStyle(fontSize: 20.0))),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -86,6 +68,24 @@ class _WorkoutFormState extends State<WorkoutForm> {
           _submitButton(context),
         ],
       ),
+    );
+  }
+
+  Widget _submitButton(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              minimumSize: const Size.fromHeight(40)),
+          onPressed: () async {
+            if (_formKey.currentState!.validate()) {
+              _formKey.currentState!.save();
+              widget.onFormSaved();
+            }
+          },
+          child:
+              Text(widget.buttonText, style: const TextStyle(fontSize: 20.0))),
     );
   }
 }

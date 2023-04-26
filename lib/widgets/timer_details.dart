@@ -21,11 +21,28 @@ class TimerDetails extends StatefulWidget {
 }
 
 class _TimerDetailsState extends State<TimerDetails> {
-  /// Converts the given duration into a string with format 'M:SS'
-  String durationString(Duration duration) {
-    int minutes = duration.inMinutes;
-    int seconds = duration.inSeconds % 60;
-    return '$minutes:${(seconds).toString().padLeft(2, '0')}';
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: _timerDurationInfo(),
+        ),
+        const VerticalDivider(
+          thickness: 1.5,
+          indent: 5.0,
+          endIndent: 5.0,
+        ),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: _setRepStatus(),
+          ),
+        ),
+      ],
+    );
   }
 
   /// A widget containing the current rep and set status info
@@ -80,27 +97,10 @@ class _TimerDetailsState extends State<TimerDetails> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: _timerDurationInfo(),
-        ),
-        const VerticalDivider(
-          thickness: 1.5,
-          indent: 5.0,
-          endIndent: 5.0,
-        ),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: _setRepStatus(),
-          ),
-        ),
-      ],
-    );
+  /// Converts the given duration into a string with format 'M:SS'
+  String durationString(Duration duration) {
+    int minutes = duration.inMinutes;
+    int seconds = duration.inSeconds % 60;
+    return '$minutes:${(seconds).toString().padLeft(2, '0')}';
   }
 }

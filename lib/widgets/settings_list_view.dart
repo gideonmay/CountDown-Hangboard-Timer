@@ -32,30 +32,6 @@ class _SettingsListViewState extends State<SettingsListView> {
     });
   }
 
-  /// Set sound on or off
-  Future<void> _setSound(bool newValue) async {
-    setState(() {
-      _soundOn = newValue;
-      prefService.setSoundOn(newValue);
-    });
-  }
-
-  /// Set vibration on or off
-  Future<void> _setVibration(bool newValue) async {
-    setState(() {
-      _vibrationOn = newValue;
-      prefService.setVibrationOn(newValue);
-    });
-  }
-
-  /// Set dark mode on or off
-  Future<void> _setDarkMode(bool newValue) async {
-    setState(() {
-      _darkModeOn = newValue;
-      prefService.setDarkModeOn(newValue);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -85,5 +61,29 @@ class _SettingsListViewState extends State<SettingsListView> {
         const Divider(thickness: 1.0),
       ],
     );
+  }
+
+  /// Set sound on or off
+  Future<void> _setSound(bool newValue) async {
+    setState(() {
+      _soundOn = newValue;
+      prefService.setSoundOn(newValue);
+    });
+  }
+
+  /// Set vibration on or off
+  Future<void> _setVibration(bool newValue) async {
+    setState(() {
+      _vibrationOn = newValue;
+      prefService.setVibrationOn(newValue);
+    });
+  }
+
+  /// Set dark mode on or off
+  Future<void> _setDarkMode(bool newValue) async {
+    setState(() {
+      _darkModeOn = newValue;
+      prefService.setDarkModeOn(newValue);
+    });
   }
 }

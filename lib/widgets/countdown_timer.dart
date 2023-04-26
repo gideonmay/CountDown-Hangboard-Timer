@@ -126,69 +126,6 @@ class _CountdownTimerState extends State<CountdownTimer>
     _highBeepIndex = _audioPool.addAsset('assets/audio/beep_high.wav');
   }
 
-  /// Starts the countdown timer
-  void startTimer() {
-    setState(() {
-      _durationIndex = 0;
-      _controller.duration = _durationStatusList[_durationIndex].duration;
-      _controller.reset();
-      _controller.forward();
-      _hasStarted = true;
-    });
-  }
-
-  /// Pauses timer operation
-  void pauseTimer() {
-    setState(() {
-      _controller.stop();
-      _isPaused = true;
-    });
-  }
-
-  /// Resumes timer operation
-  void resumeTimer() {
-    setState(() {
-      _controller.forward();
-      _isPaused = false;
-    });
-  }
-
-  /// Resets timer to initial state
-  void resetTimer() {
-    setState(() {
-      _durationIndex = 0;
-      _controller.duration = _durationStatusList[_durationIndex].duration;
-      _controller.reset();
-      _hasStarted = false;
-      _isPaused = false;
-    });
-  }
-
-  /// Skips to next element
-  void skipDuration() {
-    setState(() {
-      // Do not skip if already at last element
-      if (_durationIndex < _durationStatusList.length - 1) {
-        _controller.stop();
-        _durationIndex++;
-        _controller.duration = _durationStatusList[_durationIndex].duration;
-        _controller.reset();
-
-        // Continue animation if timer not currently paused
-        if (!_isPaused) {
-          _controller.forward();
-        }
-
-        // Restore buttons to initial state if last duration has been reached
-        if (_durationIndex == _durationStatusList.length - 1) {
-          _hasStarted = false;
-          _isPaused = false;
-          _controller.forward();
-        }
-      }
-    });
-  }
-
   /// Returns a Duration object representing the time left in the countdown
   Duration get _timeLeft {
     return _controller.duration! - (_controller.duration! * _controller.value);
@@ -222,34 +159,6 @@ class _CountdownTimerState extends State<CountdownTimer>
     int minutesLeft = duration.inMinutes;
     int secondsLeft = duration.inSeconds % 60;
     return '$minutesLeft:${(secondsLeft).toString().padLeft(2, '0')}';
-  }
-
-  /// Returns a String representing the total duration that has passed during
-  /// this workout
-  String _elapsedDurationString() {
-    return _durationString(_elapsedDuration());
-  }
-
-  /// Returns the total duration that has passed during the current countdown
-  Duration _elapsedDuration() {
-    Duration startDuration = _durationStatusList[_durationIndex].startTime;
-
-    // Get duration of current countdown
-    Duration? elapsedDuration = _controller.duration;
-
-    if (elapsedDuration != null) {
-      // elapsedDuration * value gives duration passed for current countdown
-      return startDuration + (elapsedDuration * _controller.value);
-    }
-
-    return startDuration;
-  }
-
-  /// Returns the minimum between the widgets current width and height. This
-  /// ensures that the timer animation never exceeds that available space.
-  double getTimerWidth(BoxConstraints constraints) {
-    double width = math.min(constraints.maxWidth, constraints.maxHeight);
-    return width * 0.87; // 0.87 arbitrarily chosen based on what looks good
   }
 
   @override
@@ -343,6 +252,97 @@ class _CountdownTimerState extends State<CountdownTimer>
           )
         ],
       );
+    });
+  }
+
+  /// Returns the minimum between the widgets current width and height. This
+  /// ensures that the timer animation never exceeds that available space.
+  double getTimerWidth(BoxConstraints constraints) {
+    double width = math.min(constraints.maxWidth, constraints.maxHeight);
+    return width * 0.87; // 0.87 arbitrarily chosen based on what looks good
+  }
+
+  /// Returns a String representing the total duration that has passed during
+  /// this workout
+  String _elapsedDurationString() {
+    return _durationString(_elapsedDuration());
+  }
+
+  /// Returns the total duration that has passed during the current countdown
+  Duration _elapsedDuration() {
+    Duration startDuration = _durationStatusList[_durationIndex].startTime;
+
+    // Get duration of current countdown
+    Duration? elapsedDuration = _controller.duration;
+
+    if (elapsedDuration != null) {
+      // elapsedDuration * value gives duration passed for current countdown
+      return startDuration + (elapsedDuration * _controller.value);
+    }
+
+    return startDuration;
+  }
+
+  /// Starts the countdown timer
+  void startTimer() {
+    setState(() {
+      _durationIndex = 0;
+      _controller.duration = _durationStatusList[_durationIndex].duration;
+      _controller.reset();
+      _controller.forward();
+      _hasStarted = true;
+    });
+  }
+
+  /// Pauses timer operation
+  void pauseTimer() {
+    setState(() {
+      _controller.stop();
+      _isPaused = true;
+    });
+  }
+
+  /// Resumes timer operation
+  void resumeTimer() {
+    setState(() {
+      _controller.forward();
+      _isPaused = false;
+    });
+  }
+
+  /// Resets timer to initial state
+  void resetTimer() {
+    setState(() {
+      _durationIndex = 0;
+      _controller.duration = _durationStatusList[_durationIndex].duration;
+      _controller.reset();
+      _hasStarted = false;
+      _isPaused = false;
+    });
+  }
+
+  /// Skips to next element
+  void skipDuration() {
+    setState(() {
+      // Do not skip if already at last element
+      if (_durationIndex < _durationStatusList.length - 1) {
+        _controller.stop();
+        _durationIndex++;
+        _controller.duration = _durationStatusList[_durationIndex].duration;
+        _controller.reset();
+
+        // Continue animation if timer not currently paused
+        if (!_isPaused) {
+          _controller.forward();
+        }
+
+        // Restore buttons to initial state if last duration has been reached
+        if (_durationIndex == _durationStatusList.length - 1) {
+          _hasStarted = false;
+          _isPaused = false;
+          _controller.forward();
+        }
+      }
     });
   }
 }

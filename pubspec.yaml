@@ -31,6 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
   drift: ^2.7.0
+  flutter_slidable: ^3.0.0
   flutter_spinbox: ^0.13.0
   intl: ^0.18.1
   just_audio: ^0.9.32
@@ -38,7 +39,6 @@ dependencies:
   path: ^1.8.2
   provider: ^6.0.5
   shared_preferences: ^2.1.0
-  flutter_slidable: ^3.0.0
   step_progress_indicator: ^1.0.2
   sqlite3_flutter_libs: ^0.5.0
 

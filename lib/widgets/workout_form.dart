@@ -84,14 +84,6 @@ class _WorkoutFormState extends State<WorkoutForm> {
             ),
           ),
           _submitButton(context),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              'Once created, you can add grips and begin the workout by tapping on it from the My Workouts screen',
-              style: TextStyle(color: Colors.grey.shade600),
-              textAlign: TextAlign.center,
-            ),
-          ),
         ],
       ),
     );

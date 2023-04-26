@@ -14,28 +14,29 @@ class MyWorkoutsScreen extends StatefulWidget {
 }
 
 class _MyWorkoutsScreenState extends State<MyWorkoutsScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('My Workouts'),
+      ),
+      body: _buildWorkoutList(context),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _navigateToBuildWorkout(context);
+        },
+        tooltip: 'Add Workout',
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
+
   /// Navigates to the countdown timer screen
   static _navigateToBuildWorkout(BuildContext context) {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const CreateWorkoutScreen()),
     );
-  }
-
-  /// Returns the given datetime formatted as 'MM/DD/YYYY'. If dateTime is null,
-  /// then returns 'Never'
-  String _getFormattedDate(DateTime? dateTime) {
-    if (dateTime == null) {
-      return 'Never';
-    }
-
-    return DateFormat('MM/dd/yyyy').format(dateTime);
-  }
-
-  /// Deletes the given workout from the database
-  void _deleteWorkout(BuildContext context, Workout workout) async {
-    final db = Provider.of<AppDatabase>(context, listen: false);
-    await db.deleteWorkout(workout);
   }
 
   /// Returns a ListView widget that lists each workout in the database. If the
@@ -77,9 +78,10 @@ class _MyWorkoutsScreenState extends State<MyWorkoutsScreen> {
           label: 'Edit',
         ),
         SlidableAction(
-          onPressed: (context) {
-            _deleteWorkout(context, workout);
-          },
+          onPressed: (context) => _dialogBuilder(context, workout),
+          // onPressed: (context) {
+          //   _deleteWorkout(context, workout);
+          // },
           backgroundColor: const Color(0xFFFE4A49),
           foregroundColor: Colors.white,
           icon: Icons.delete,
@@ -95,20 +97,53 @@ class _MyWorkoutsScreenState extends State<MyWorkoutsScreen> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('My Workouts'),
-      ),
-      body: _buildWorkoutList(context),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _navigateToBuildWorkout(context);
-        },
-        tooltip: 'Add Workout',
-        child: const Icon(Icons.add),
-      ),
+  /// Shows a dialog box to confirm workout deletion. Adapted example from:
+  /// https://api.flutter.dev/flutter/material/showDialog.html
+  Future<void> _dialogBuilder(BuildContext context, Workout workout) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Are you sure?'),
+          content: Text(
+              'The workout \'${workout.name}\' will be permanently deleted.'),
+          actions: <Widget>[
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+              child: const Text('Delete'),
+              onPressed: () {
+                _deleteWorkout(context, workout);
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
+  }
+
+  /// Returns the given datetime formatted as 'MM/DD/YYYY'. If dateTime is null,
+  /// then returns 'Never'
+  String _getFormattedDate(DateTime? dateTime) {
+    if (dateTime == null) {
+      return 'Never';
+    }
+
+    return DateFormat('MM/dd/yyyy').format(dateTime);
+  }
+
+  /// Deletes the given workout from the database
+  void _deleteWorkout(BuildContext context, Workout workout) async {
+    final db = Provider.of<AppDatabase>(context, listen: false);
+    await db.deleteWorkout(workout);
   }
 }

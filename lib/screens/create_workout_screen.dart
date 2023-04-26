@@ -33,10 +33,22 @@ class _CreateWorkoutScreenState extends State<CreateWorkoutScreen> {
       appBar: AppBar(
         title: const Text('Create a Workout'),
       ),
-      body: WorkoutForm(
-          workoutDTO: _workoutDTO,
-          onFormSaved: _createWorkout,
-          buttonText: 'Submit'),
+      body: Column(
+        children: [
+          WorkoutForm(
+              workoutDTO: _workoutDTO,
+              onFormSaved: _createWorkout,
+              buttonText: 'Submit'),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              'Once created, you can add grips and begin the workout by tapping on it from the My Workouts screen',
+              style: TextStyle(color: Colors.grey.shade600),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

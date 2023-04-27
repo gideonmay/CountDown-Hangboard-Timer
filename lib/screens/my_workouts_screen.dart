@@ -4,6 +4,8 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'create_workout_screen.dart';
+import 'edit_workout_screen.dart';
+import '../models/workout_dto.dart';
 
 /// A screen that lists all of the workouts available in the database
 class MyWorkoutsScreen extends StatefulWidget {
@@ -23,7 +25,7 @@ class _MyWorkoutsScreenState extends State<MyWorkoutsScreen> {
       body: _buildWorkoutList(context),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          _navigateToBuildWorkout(context);
+          _navigateToCreateWorkout(context);
         },
         tooltip: 'Add Workout',
         child: const Icon(Icons.add),
@@ -31,8 +33,8 @@ class _MyWorkoutsScreenState extends State<MyWorkoutsScreen> {
     );
   }
 
-  /// Navigates to the countdown timer screen
-  static _navigateToBuildWorkout(BuildContext context) {
+  /// Navigates to the CreateWorkoutScreen widget
+  static _navigateToCreateWorkout(BuildContext context) {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const CreateWorkoutScreen()),
@@ -71,7 +73,7 @@ class _MyWorkoutsScreenState extends State<MyWorkoutsScreen> {
     return Slidable(
       endActionPane: ActionPane(motion: const ScrollMotion(), children: [
         SlidableAction(
-          onPressed: (context) {},
+          onPressed: (context) => _navigateToEditWorkout(context, workout),
           backgroundColor: Colors.indigo,
           foregroundColor: Colors.white,
           icon: Icons.edit_outlined,
@@ -79,9 +81,6 @@ class _MyWorkoutsScreenState extends State<MyWorkoutsScreen> {
         ),
         SlidableAction(
           onPressed: (context) => _dialogBuilder(context, workout),
-          // onPressed: (context) {
-          //   _deleteWorkout(context, workout);
-          // },
           backgroundColor: const Color(0xFFFE4A49),
           foregroundColor: Colors.white,
           icon: Icons.delete,
@@ -94,6 +93,18 @@ class _MyWorkoutsScreenState extends State<MyWorkoutsScreen> {
             maxLines: 1, overflow: TextOverflow.ellipsis),
         trailing: Text('Last Used: ${_getFormattedDate(workout.lastUsedDate)}'),
       ),
+    );
+  }
+
+  /// Navigates to the EditWorkoutScreen widget
+  static _navigateToEditWorkout(BuildContext context, Workout workout) {
+    final workoutDTO = WorkoutDTO(
+        id: workout.id, name: workout.name, description: workout.description);
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => EditWorkoutScreen(workoutDTO: workoutDTO)),
     );
   }
 

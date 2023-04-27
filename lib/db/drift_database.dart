@@ -67,8 +67,19 @@ class AppDatabase extends _$AppDatabase {
     return into(workouts).insert(entry);
   }
 
+  /// Edits the workout with the given id using the given name and description
+  Future<int> updateWorkout(int workoutID, String name, String description) {
+    return (update(workouts)
+        ..where((w) => w.id.equals(workoutID))
+      ).write(WorkoutsCompanion(
+        name: Value(name),
+        description: Value(description)
+      ));
+  }
+
   /// Deletes the given workout
-  Future<int> deleteWorkout(Workout workout) => delete(workouts).delete(workout);
+  Future<int> deleteWorkout(Workout workout) =>
+      delete(workouts).delete(workout);
 }
 
 LazyDatabase _openConnection() {

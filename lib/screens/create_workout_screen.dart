@@ -4,7 +4,7 @@ import '../db/drift_database.dart';
 import '../widgets/workout_form.dart';
 import '../models/workout_dto.dart';
 
-/// Provides a layout with a form to allow users to create new workouts
+/// A layout with a form to allow users to create new workouts
 class CreateWorkoutScreen extends StatefulWidget {
   const CreateWorkoutScreen({super.key});
 
@@ -19,7 +19,7 @@ class _CreateWorkoutScreenState extends State<CreateWorkoutScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create a Workout'),
+        title: const Text('Edit Workout'),
       ),
       body: Column(
         children: [

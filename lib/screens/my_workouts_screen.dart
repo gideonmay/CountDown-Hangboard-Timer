@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'create_workout_screen.dart';
 import 'edit_workout_screen.dart';
+import 'start_workout_screen.dart';
 import '../models/workout_dto.dart';
 
 /// A screen that lists all of the workouts available in the database
@@ -49,11 +50,17 @@ class _MyWorkoutsScreenState extends State<MyWorkoutsScreen> {
     return StreamBuilder(
       stream: db.watchAllWorkouts(),
       builder: (context, AsyncSnapshot<List<Workout>> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+
         final workouts = snapshot.data ?? List.empty();
 
         if (workouts.isEmpty) {
           return const Center(
-            child: Text('Created workouts will show up here'),
+            child: Text('Add a workout to begin'),
           );
         }
 
@@ -92,6 +99,7 @@ class _MyWorkoutsScreenState extends State<MyWorkoutsScreen> {
         subtitle: Text(workout.description,
             maxLines: 1, overflow: TextOverflow.ellipsis),
         trailing: Text('Last Used: ${_getFormattedDate(workout.lastUsedDate)}'),
+        onTap: () => _navigateToStartWorkout(context, workout),
       ),
     );
   }
@@ -105,6 +113,15 @@ class _MyWorkoutsScreenState extends State<MyWorkoutsScreen> {
       context,
       MaterialPageRoute(
           builder: (context) => EditWorkoutScreen(workoutDTO: workoutDTO)),
+    );
+  }
+
+  /// Navigates to the StartWorkoutScreen widget
+  static _navigateToStartWorkout(BuildContext context, Workout workout) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => StartWorkoutScreen(workout: workout)),
     );
   }
 

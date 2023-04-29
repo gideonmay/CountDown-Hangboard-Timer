@@ -13,9 +13,11 @@ class GripTypes extends Table {
 }
 
 /// A grip that is performed for a certain number of reps and sets, and with a
-/// specific duration for work, rest, and break times
+/// specific duration for work, rest, and break times. Each grip is associated
+/// with one workout.
 class Grips extends Table {
   IntColumn get id => integer().autoIncrement()();
+  IntColumn get workout => integer().references(Workouts, #id)();
   IntColumn get gripType => integer().references(GripTypes, #id)();
   IntColumn get setCount => integer().check(setCount.isBetweenValues(1, 30))();
   IntColumn get repCount => integer().check(repCount.isBetweenValues(1, 30))();
@@ -27,6 +29,8 @@ class Grips extends Table {
       integer().check(breakMinutes.isBetweenValues(0, 30))();
   IntColumn get breakSeconds =>
       integer().check(breakSeconds.isBetweenValues(0, 60))();
+  IntColumn get sequenceNum =>
+      integer().check(sequenceNum.isBiggerOrEqualValue(0))();
 }
 
 /// A workout that has a name, description, a creation date, and a date on which
@@ -41,18 +45,8 @@ class Workouts extends Table {
       dateTime().nullable()(); // Current timestamp
 }
 
-/// An intersection table that assignes a particular Grip to a Workout with a
-/// sequence number that specifies the order of the Grip in that Workout
-class WorkoutGrips extends Table {
-  IntColumn get id => integer().autoIncrement()();
-  IntColumn get grip => integer().references(Grips, #id)();
-  IntColumn get workout => integer().references(Workouts, #id)();
-  IntColumn get sequenceNum =>
-      integer().check(sequenceNum.isBiggerOrEqualValue(0))();
-}
-
 /// The Drift database object for the app
-@DriftDatabase(tables: [GripTypes, Grips, Workouts, WorkoutGrips])
+@DriftDatabase(tables: [GripTypes, Grips, Workouts])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
@@ -69,12 +63,8 @@ class AppDatabase extends _$AppDatabase {
 
   /// Edits the workout with the given id using the given name and description
   Future<int> updateWorkout(int workoutID, String name, String description) {
-    return (update(workouts)
-        ..where((w) => w.id.equals(workoutID))
-      ).write(WorkoutsCompanion(
-        name: Value(name),
-        description: Value(description)
-      ));
+    return (update(workouts)..where((w) => w.id.equals(workoutID))).write(
+        WorkoutsCompanion(name: Value(name), description: Value(description)));
   }
 
   /// Deletes the given workout

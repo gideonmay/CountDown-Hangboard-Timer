@@ -1,8 +1,8 @@
 import 'package:countdown_app/db/drift_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'create_workout_screen.dart';
 import 'edit_workout_screen.dart';
 import 'start_workout_screen.dart';

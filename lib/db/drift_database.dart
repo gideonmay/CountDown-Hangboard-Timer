@@ -56,6 +56,12 @@ class AppDatabase extends _$AppDatabase {
   /// Returns a stream of workouts any time the workouts table is changed
   Stream<List<Workout>> watchAllWorkouts() => select(workouts).watch();
 
+  /// Returns a stream of grips for a given workout ID
+  Stream<List<Grip>> watchGripsForWorkout(int workoutID) => (select(grips)
+        ..where((g) => g.workout.equals(workoutID))
+        ..orderBy([(g) => OrderingTerm.asc(g.sequenceNum)]))
+      .watch();
+
   /// Creates a new workout
   Future<int> addWorkout(WorkoutsCompanion entry) {
     return into(workouts).insert(entry);

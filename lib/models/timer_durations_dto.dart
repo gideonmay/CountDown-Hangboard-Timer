@@ -33,7 +33,7 @@ class TimerDurationsDTO {
   /// Returns a Duration object with restSeconds duration
   Duration get restDuration => Duration(seconds: restSeconds.toInt());
 
-  /// Returns a Duration object with restSeconds duration
+  /// Returns a Duration object with breakMinutes + breakSeconds duration
   Duration get breakDuration =>
       Duration(minutes: breakMinutes.toInt(), seconds: breakSeconds.toInt());
 }

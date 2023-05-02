@@ -42,7 +42,7 @@ class _DurationsPickerFormState extends State<DurationsPickerForm> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16.0),
           child: SpinBox(
             value: timerDurations.reps,
             min: 1,
@@ -62,7 +62,7 @@ class _DurationsPickerFormState extends State<DurationsPickerForm> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16.0),
           child: SpinBox(
             value: timerDurations.workSeconds,
             min: 1,
@@ -77,7 +77,7 @@ class _DurationsPickerFormState extends State<DurationsPickerForm> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16.0),
           child: SpinBox(
             value: timerDurations.restSeconds,
             min: 1,

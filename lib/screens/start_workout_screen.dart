@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../db/drift_database.dart';
+import '../screens/add_grip_screen.dart';
 import '../widgets/grip_sequencer.dart';
 import '../widgets/workout_details_row.dart';
 
@@ -59,12 +60,20 @@ class StartWorkoutScreen extends StatelessWidget {
                 child: ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).colorScheme.primary),
-                    onPressed: () {},
+                    onPressed: () => _navigateToAddGrip(context, workout),
                     icon: const Icon(Icons.add),
                     label: const Text('Add Grip'))),
           ],
         ),
       ),
+    );
+  }
+
+  /// Navigates to the AddGripScreen widget
+  static _navigateToAddGrip(BuildContext context, Workout workout) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => AddGripScreen(workout: workout)),
     );
   }
 }

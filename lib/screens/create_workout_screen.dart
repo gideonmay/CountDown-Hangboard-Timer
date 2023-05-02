@@ -19,7 +19,7 @@ class _CreateWorkoutScreenState extends State<CreateWorkoutScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Edit Workout'),
+        title: const Text('Create a Workout'),
       ),
       body: Column(
         children: [

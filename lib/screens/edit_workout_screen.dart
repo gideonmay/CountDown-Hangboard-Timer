@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../db/drift_database.dart';
-import '../widgets/workout_form.dart';
+import '../forms/workout_form.dart';
 import '../models/workout_dto.dart';
 
 /// A layout with a form that allows the details of a workout to be edited

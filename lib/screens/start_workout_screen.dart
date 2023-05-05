@@ -4,6 +4,8 @@ import '../screens/add_grip_screen.dart';
 import '../widgets/grip_sequencer.dart';
 import '../widgets/workout_details_row.dart';
 
+/// A screen that displays the details of a workout and allows the user to
+/// add, edit, and organize grips for their workout
 class StartWorkoutScreen extends StatelessWidget {
   final Workout workout;
 

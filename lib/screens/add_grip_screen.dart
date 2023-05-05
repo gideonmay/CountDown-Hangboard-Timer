@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../db/drift_database.dart';
 import '../models/grip_dto.dart';
-import '../widgets/add_grip_form.dart';
+import '../forms/add_grip_form.dart';
 
 /// A screen that allows the user to add a new grip to the workout
 class AddGripScreen extends StatefulWidget {

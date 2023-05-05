@@ -29,6 +29,14 @@ class Grips extends Table {
       integer().check(breakMinutes.isBetweenValues(0, 30))();
   IntColumn get breakSeconds =>
       integer().check(breakSeconds.isBetweenValues(0, 60))();
+
+  /// The break minutes that occur after this grip is complete
+  IntColumn get lastBreakMinutes =>
+      integer().check(lastBreakMinutes.isBetweenValues(0, 30))();
+
+  /// The break seconds that occur after this grip is complete
+  IntColumn get lastBreakSeconds =>
+      integer().check(lastBreakSeconds.isBetweenValues(0, 60))();
   IntColumn get sequenceNum =>
       integer().check(sequenceNum.isBiggerOrEqualValue(0))();
 }
@@ -56,6 +64,10 @@ class AppDatabase extends _$AppDatabase {
   /// Returns a stream of workouts any time the workouts table is changed
   Stream<List<Workout>> watchAllWorkouts() => select(workouts).watch();
 
+  /// Returns a stream of all grip types sorted by grip name in ascending order
+  Stream<List<GripType>> watchAllGripTypes() =>
+      (select(gripTypes)..orderBy([(g) => OrderingTerm.asc(g.name)])).watch();
+
   /// Returns a stream of grips for a given workout ID
   Stream<List<Grip>> watchGripsForWorkout(int workoutID) => (select(grips)
         ..where((g) => g.workout.equals(workoutID))
@@ -65,6 +77,11 @@ class AppDatabase extends _$AppDatabase {
   /// Creates a new workout
   Future<int> addWorkout(WorkoutsCompanion entry) {
     return into(workouts).insert(entry);
+  }
+
+  /// Creates a new grip type
+  Future<int> addGripType(GripTypesCompanion entry) {
+    return into(gripTypes).insert(entry);
   }
 
   /// Edits the workout with the given id using the given name and description

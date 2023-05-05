@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:countdown_app/widgets/workout_form.dart';
+import 'package:countdown_app/forms/workout_form.dart';
 import 'package:countdown_app/models/workout_dto.dart';
 
 void main() {

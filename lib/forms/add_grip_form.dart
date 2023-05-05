@@ -1,6 +1,8 @@
+import 'package:countdown_app/extensions/string_casing_extension.dart';
 import 'package:countdown_app/models/grip_dto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinbox/flutter_spinbox.dart';
+import 'package:provider/provider.dart';
 import '../db/drift_database.dart';
 import '../screens/add_grip_type_screen.dart';
 
@@ -80,33 +82,7 @@ class _AddGripFormState extends State<AddGripForm> {
         children: [
           Flexible(
             flex: 75,
-            child: DropdownButtonFormField(
-              value: widget.gripDTO.gripTypeID,
-              hint: const Text('Choose a grip type'),
-              items: gripTypes.map((Map gripType) {
-                return DropdownMenuItem(
-                    value: gripType['id'], child: Text(gripType['name']));
-              }).toList(),
-              validator: (value) {
-                if (value == null) {
-                  return 'Please choose a grip type';
-                }
-                return null;
-              },
-              onChanged: (value) {
-                setState(() {
-                  widget.gripDTO.gripTypeID = value as int;
-                });
-              },
-              onSaved: (value) {
-                setState(() {
-                  widget.gripDTO.gripTypeID = value as int;
-                });
-              },
-              decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelStyle: TextStyle(fontSize: 24.0)),
-            ),
+            child: _buildDropdownFormField(context),
           ),
           Flexible(
               flex: 25,
@@ -115,12 +91,59 @@ class _AddGripFormState extends State<AddGripForm> {
                     onPressed: () => _navigateToAddGripType(context),
                     style: ElevatedButton.styleFrom(
                         shape: const CircleBorder(),
-                        backgroundColor: Theme.of(context).colorScheme.secondary,
+                        backgroundColor:
+                            Theme.of(context).colorScheme.secondary,
                         fixedSize: const Size(50, 50)),
                     child: const Icon(Icons.add)),
               )),
         ],
       ),
+    );
+  }
+
+  /// Returns a List of DropdownMenuItems for each grip type in the database
+  StreamBuilder<List<GripType>> _buildDropdownFormField(BuildContext context) {
+    final db = Provider.of<AppDatabase>(context);
+
+    return StreamBuilder(
+      stream: db.watchAllGripTypes(),
+      builder: (context, AsyncSnapshot<List<GripType>> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+
+        final gripTypes = snapshot.data ?? List.empty();
+
+        return DropdownButtonFormField(
+          value: widget.gripDTO.gripTypeID,
+          hint: const Text('Choose a grip type'),
+          items: gripTypes.map((GripType gripType) {
+            return DropdownMenuItem(
+                value: gripType.id, child: Text(gripType.name.toTitleCase()));
+          }).toList(),
+          validator: (value) {
+            if (value == null) {
+              return 'Please choose a grip type';
+            }
+            return null;
+          },
+          onChanged: (value) {
+            setState(() {
+              widget.gripDTO.gripTypeID = value as int;
+            });
+          },
+          onSaved: (value) {
+            setState(() {
+              widget.gripDTO.gripTypeID = value as int;
+            });
+          },
+          decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              labelStyle: TextStyle(fontSize: 24.0)),
+        );
+      },
     );
   }
 

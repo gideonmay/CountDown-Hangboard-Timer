@@ -555,6 +555,22 @@ class $GripsTable extends Grips with TableInfo<$GripsTable, Grip> {
       check: () => breakSeconds.isBetweenValues(0, 60),
       type: DriftSqlType.int,
       requiredDuringInsert: true);
+  static const VerificationMeta _lastBreakMinutesMeta =
+      const VerificationMeta('lastBreakMinutes');
+  @override
+  late final GeneratedColumn<int> lastBreakMinutes = GeneratedColumn<int>(
+      'last_break_minutes', aliasedName, false,
+      check: () => lastBreakMinutes.isBetweenValues(0, 30),
+      type: DriftSqlType.int,
+      requiredDuringInsert: true);
+  static const VerificationMeta _lastBreakSecondsMeta =
+      const VerificationMeta('lastBreakSeconds');
+  @override
+  late final GeneratedColumn<int> lastBreakSeconds = GeneratedColumn<int>(
+      'last_break_seconds', aliasedName, false,
+      check: () => lastBreakSeconds.isBetweenValues(0, 60),
+      type: DriftSqlType.int,
+      requiredDuringInsert: true);
   static const VerificationMeta _sequenceNumMeta =
       const VerificationMeta('sequenceNum');
   @override
@@ -574,6 +590,8 @@ class $GripsTable extends Grips with TableInfo<$GripsTable, Grip> {
         restSeconds,
         breakMinutes,
         breakSeconds,
+        lastBreakMinutes,
+        lastBreakSeconds,
         sequenceNum
       ];
   @override
@@ -644,6 +662,22 @@ class $GripsTable extends Grips with TableInfo<$GripsTable, Grip> {
     } else if (isInserting) {
       context.missing(_breakSecondsMeta);
     }
+    if (data.containsKey('last_break_minutes')) {
+      context.handle(
+          _lastBreakMinutesMeta,
+          lastBreakMinutes.isAcceptableOrUnknown(
+              data['last_break_minutes']!, _lastBreakMinutesMeta));
+    } else if (isInserting) {
+      context.missing(_lastBreakMinutesMeta);
+    }
+    if (data.containsKey('last_break_seconds')) {
+      context.handle(
+          _lastBreakSecondsMeta,
+          lastBreakSeconds.isAcceptableOrUnknown(
+              data['last_break_seconds']!, _lastBreakSecondsMeta));
+    } else if (isInserting) {
+      context.missing(_lastBreakSecondsMeta);
+    }
     if (data.containsKey('sequence_num')) {
       context.handle(
           _sequenceNumMeta,
@@ -679,6 +713,10 @@ class $GripsTable extends Grips with TableInfo<$GripsTable, Grip> {
           .read(DriftSqlType.int, data['${effectivePrefix}break_minutes'])!,
       breakSeconds: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}break_seconds'])!,
+      lastBreakMinutes: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}last_break_minutes'])!,
+      lastBreakSeconds: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}last_break_seconds'])!,
       sequenceNum: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}sequence_num'])!,
     );
@@ -700,6 +738,12 @@ class Grip extends DataClass implements Insertable<Grip> {
   final int restSeconds;
   final int breakMinutes;
   final int breakSeconds;
+
+  /// The break minutes that occur after this grip is complete
+  final int lastBreakMinutes;
+
+  /// The break seconds that occur after this grip is complete
+  final int lastBreakSeconds;
   final int sequenceNum;
   const Grip(
       {required this.id,
@@ -711,6 +755,8 @@ class Grip extends DataClass implements Insertable<Grip> {
       required this.restSeconds,
       required this.breakMinutes,
       required this.breakSeconds,
+      required this.lastBreakMinutes,
+      required this.lastBreakSeconds,
       required this.sequenceNum});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -724,6 +770,8 @@ class Grip extends DataClass implements Insertable<Grip> {
     map['rest_seconds'] = Variable<int>(restSeconds);
     map['break_minutes'] = Variable<int>(breakMinutes);
     map['break_seconds'] = Variable<int>(breakSeconds);
+    map['last_break_minutes'] = Variable<int>(lastBreakMinutes);
+    map['last_break_seconds'] = Variable<int>(lastBreakSeconds);
     map['sequence_num'] = Variable<int>(sequenceNum);
     return map;
   }
@@ -739,6 +787,8 @@ class Grip extends DataClass implements Insertable<Grip> {
       restSeconds: Value(restSeconds),
       breakMinutes: Value(breakMinutes),
       breakSeconds: Value(breakSeconds),
+      lastBreakMinutes: Value(lastBreakMinutes),
+      lastBreakSeconds: Value(lastBreakSeconds),
       sequenceNum: Value(sequenceNum),
     );
   }
@@ -756,6 +806,8 @@ class Grip extends DataClass implements Insertable<Grip> {
       restSeconds: serializer.fromJson<int>(json['restSeconds']),
       breakMinutes: serializer.fromJson<int>(json['breakMinutes']),
       breakSeconds: serializer.fromJson<int>(json['breakSeconds']),
+      lastBreakMinutes: serializer.fromJson<int>(json['lastBreakMinutes']),
+      lastBreakSeconds: serializer.fromJson<int>(json['lastBreakSeconds']),
       sequenceNum: serializer.fromJson<int>(json['sequenceNum']),
     );
   }
@@ -772,6 +824,8 @@ class Grip extends DataClass implements Insertable<Grip> {
       'restSeconds': serializer.toJson<int>(restSeconds),
       'breakMinutes': serializer.toJson<int>(breakMinutes),
       'breakSeconds': serializer.toJson<int>(breakSeconds),
+      'lastBreakMinutes': serializer.toJson<int>(lastBreakMinutes),
+      'lastBreakSeconds': serializer.toJson<int>(lastBreakSeconds),
       'sequenceNum': serializer.toJson<int>(sequenceNum),
     };
   }
@@ -786,6 +840,8 @@ class Grip extends DataClass implements Insertable<Grip> {
           int? restSeconds,
           int? breakMinutes,
           int? breakSeconds,
+          int? lastBreakMinutes,
+          int? lastBreakSeconds,
           int? sequenceNum}) =>
       Grip(
         id: id ?? this.id,
@@ -797,6 +853,8 @@ class Grip extends DataClass implements Insertable<Grip> {
         restSeconds: restSeconds ?? this.restSeconds,
         breakMinutes: breakMinutes ?? this.breakMinutes,
         breakSeconds: breakSeconds ?? this.breakSeconds,
+        lastBreakMinutes: lastBreakMinutes ?? this.lastBreakMinutes,
+        lastBreakSeconds: lastBreakSeconds ?? this.lastBreakSeconds,
         sequenceNum: sequenceNum ?? this.sequenceNum,
       );
   @override
@@ -811,14 +869,27 @@ class Grip extends DataClass implements Insertable<Grip> {
           ..write('restSeconds: $restSeconds, ')
           ..write('breakMinutes: $breakMinutes, ')
           ..write('breakSeconds: $breakSeconds, ')
+          ..write('lastBreakMinutes: $lastBreakMinutes, ')
+          ..write('lastBreakSeconds: $lastBreakSeconds, ')
           ..write('sequenceNum: $sequenceNum')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, workout, gripType, setCount, repCount,
-      workSeconds, restSeconds, breakMinutes, breakSeconds, sequenceNum);
+  int get hashCode => Object.hash(
+      id,
+      workout,
+      gripType,
+      setCount,
+      repCount,
+      workSeconds,
+      restSeconds,
+      breakMinutes,
+      breakSeconds,
+      lastBreakMinutes,
+      lastBreakSeconds,
+      sequenceNum);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -832,6 +903,8 @@ class Grip extends DataClass implements Insertable<Grip> {
           other.restSeconds == this.restSeconds &&
           other.breakMinutes == this.breakMinutes &&
           other.breakSeconds == this.breakSeconds &&
+          other.lastBreakMinutes == this.lastBreakMinutes &&
+          other.lastBreakSeconds == this.lastBreakSeconds &&
           other.sequenceNum == this.sequenceNum);
 }
 
@@ -845,6 +918,8 @@ class GripsCompanion extends UpdateCompanion<Grip> {
   final Value<int> restSeconds;
   final Value<int> breakMinutes;
   final Value<int> breakSeconds;
+  final Value<int> lastBreakMinutes;
+  final Value<int> lastBreakSeconds;
   final Value<int> sequenceNum;
   const GripsCompanion({
     this.id = const Value.absent(),
@@ -856,6 +931,8 @@ class GripsCompanion extends UpdateCompanion<Grip> {
     this.restSeconds = const Value.absent(),
     this.breakMinutes = const Value.absent(),
     this.breakSeconds = const Value.absent(),
+    this.lastBreakMinutes = const Value.absent(),
+    this.lastBreakSeconds = const Value.absent(),
     this.sequenceNum = const Value.absent(),
   });
   GripsCompanion.insert({
@@ -868,6 +945,8 @@ class GripsCompanion extends UpdateCompanion<Grip> {
     required int restSeconds,
     required int breakMinutes,
     required int breakSeconds,
+    required int lastBreakMinutes,
+    required int lastBreakSeconds,
     required int sequenceNum,
   })  : workout = Value(workout),
         gripType = Value(gripType),
@@ -877,6 +956,8 @@ class GripsCompanion extends UpdateCompanion<Grip> {
         restSeconds = Value(restSeconds),
         breakMinutes = Value(breakMinutes),
         breakSeconds = Value(breakSeconds),
+        lastBreakMinutes = Value(lastBreakMinutes),
+        lastBreakSeconds = Value(lastBreakSeconds),
         sequenceNum = Value(sequenceNum);
   static Insertable<Grip> custom({
     Expression<int>? id,
@@ -888,6 +969,8 @@ class GripsCompanion extends UpdateCompanion<Grip> {
     Expression<int>? restSeconds,
     Expression<int>? breakMinutes,
     Expression<int>? breakSeconds,
+    Expression<int>? lastBreakMinutes,
+    Expression<int>? lastBreakSeconds,
     Expression<int>? sequenceNum,
   }) {
     return RawValuesInsertable({
@@ -900,6 +983,8 @@ class GripsCompanion extends UpdateCompanion<Grip> {
       if (restSeconds != null) 'rest_seconds': restSeconds,
       if (breakMinutes != null) 'break_minutes': breakMinutes,
       if (breakSeconds != null) 'break_seconds': breakSeconds,
+      if (lastBreakMinutes != null) 'last_break_minutes': lastBreakMinutes,
+      if (lastBreakSeconds != null) 'last_break_seconds': lastBreakSeconds,
       if (sequenceNum != null) 'sequence_num': sequenceNum,
     });
   }
@@ -914,6 +999,8 @@ class GripsCompanion extends UpdateCompanion<Grip> {
       Value<int>? restSeconds,
       Value<int>? breakMinutes,
       Value<int>? breakSeconds,
+      Value<int>? lastBreakMinutes,
+      Value<int>? lastBreakSeconds,
       Value<int>? sequenceNum}) {
     return GripsCompanion(
       id: id ?? this.id,
@@ -925,6 +1012,8 @@ class GripsCompanion extends UpdateCompanion<Grip> {
       restSeconds: restSeconds ?? this.restSeconds,
       breakMinutes: breakMinutes ?? this.breakMinutes,
       breakSeconds: breakSeconds ?? this.breakSeconds,
+      lastBreakMinutes: lastBreakMinutes ?? this.lastBreakMinutes,
+      lastBreakSeconds: lastBreakSeconds ?? this.lastBreakSeconds,
       sequenceNum: sequenceNum ?? this.sequenceNum,
     );
   }
@@ -959,6 +1048,12 @@ class GripsCompanion extends UpdateCompanion<Grip> {
     if (breakSeconds.present) {
       map['break_seconds'] = Variable<int>(breakSeconds.value);
     }
+    if (lastBreakMinutes.present) {
+      map['last_break_minutes'] = Variable<int>(lastBreakMinutes.value);
+    }
+    if (lastBreakSeconds.present) {
+      map['last_break_seconds'] = Variable<int>(lastBreakSeconds.value);
+    }
     if (sequenceNum.present) {
       map['sequence_num'] = Variable<int>(sequenceNum.value);
     }
@@ -977,6 +1072,8 @@ class GripsCompanion extends UpdateCompanion<Grip> {
           ..write('restSeconds: $restSeconds, ')
           ..write('breakMinutes: $breakMinutes, ')
           ..write('breakSeconds: $breakSeconds, ')
+          ..write('lastBreakMinutes: $lastBreakMinutes, ')
+          ..write('lastBreakSeconds: $lastBreakSeconds, ')
           ..write('sequenceNum: $sequenceNum')
           ..write(')'))
         .toString();

@@ -10,7 +10,11 @@ import '../screens/add_grip_type_screen.dart';
 class AddGripForm extends StatefulWidget {
   final GripDTO gripDTO;
 
-  const AddGripForm({super.key, required this.gripDTO});
+  /// Function to be executed when form is saved to write grip to database
+  final Function onFormSaved;
+
+  const AddGripForm(
+      {super.key, required this.gripDTO, required this.onFormSaved});
 
   @override
   State<AddGripForm> createState() => _AddGripFormState();
@@ -52,16 +56,7 @@ class _AddGripFormState extends State<AddGripForm> {
                   'Specify the break duration between this grip and the next'),
             ),
             _lastBreakSpinBoxes(),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
-              child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).colorScheme.primary,
-                      minimumSize: const Size.fromHeight(40)),
-                  onPressed: () {},
-                  child:
-                      const Text('Submit', style: TextStyle(fontSize: 20.0))),
-            ),
+            _submitButton(),
           ],
         ),
       ),
@@ -150,7 +145,7 @@ class _AddGripFormState extends State<AddGripForm> {
     );
   }
 
-  /// Spin box that allow user to choose number of sets
+  /// Spin box that allows user to choose number of sets
   Widget _setsSpinBox() {
     return Padding(
       padding: const EdgeInsets.all(16.0),
@@ -174,7 +169,7 @@ class _AddGripFormState extends State<AddGripForm> {
     );
   }
 
-  /// Spin box that allow user to choose number of sets
+  /// Spin box that allows user to choose number of sets
   Widget _repsSpinBox() {
     return Padding(
       padding: const EdgeInsets.all(16.0),
@@ -236,7 +231,7 @@ class _AddGripFormState extends State<AddGripForm> {
     );
   }
 
-  /// Spin boxes that allow user to choose break minutes and seconds
+  /// Spin boxes that allows user to choose break minutes and seconds
   Widget _breakSpinBoxes() {
     return Row(
       children: [
@@ -322,6 +317,23 @@ class _AddGripFormState extends State<AddGripForm> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _submitButton() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
+      child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              minimumSize: const Size.fromHeight(40)),
+          onPressed: () {
+            if (_formKey.currentState!.validate()) {
+              _formKey.currentState!.save();
+              widget.onFormSaved();
+            }
+          },
+          child: const Text('Submit', style: TextStyle(fontSize: 20.0))),
     );
   }
 }

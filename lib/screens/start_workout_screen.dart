@@ -50,7 +50,7 @@ class StartWorkoutScreen extends StatelessWidget {
             const Padding(
               padding: EdgeInsets.all(8.0),
               child: Text(
-                  'Use this area to add and organize grips for your workout'),
+                  'Use this area to add and sequence grips for your workout'),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),

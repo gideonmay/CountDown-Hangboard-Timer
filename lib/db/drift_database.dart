@@ -53,6 +53,14 @@ class Workouts extends Table {
       dateTime().nullable()(); // Current timestamp
 }
 
+/// A grip with a grip type
+class GripWithGripType {
+  final Grip entry;
+  final GripType gripType;
+
+  GripWithGripType(this.entry, this.gripType);
+}
+
 /// The Drift database object for the app
 @DriftDatabase(tables: [GripTypes, Grips, Workouts])
 class AppDatabase extends _$AppDatabase {
@@ -74,9 +82,28 @@ class AppDatabase extends _$AppDatabase {
         ..orderBy([(g) => OrderingTerm.asc(g.sequenceNum)]))
       .watch();
 
+  /// Returns a stream of grips with grip type included
+  Stream<List<GripWithGripType>> watchAllGripsWithType(int workoutID) {
+    final query = select(grips).join(
+        [leftOuterJoin(gripTypes, gripTypes.id.equalsExp(grips.gripType))])
+      ..where(grips.workout.equals(workoutID))
+      ..orderBy([OrderingTerm.asc(grips.sequenceNum)]);
+
+    return query.watch().map((rows) {
+      return rows.map((row) {
+        return GripWithGripType(row.readTable(grips), row.readTable(gripTypes));
+      }).toList();
+    });
+  }
+
   /// Creates a new workout
   Future<int> addWorkout(WorkoutsCompanion entry) {
     return into(workouts).insert(entry);
+  }
+
+  /// Creates a new grip
+  Future<int> addGrip(GripsCompanion entry) {
+    return into(grips).insert(entry);
   }
 
   /// Creates a new grip type

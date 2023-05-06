@@ -23,6 +23,8 @@ class _AddGripScreenState extends State<AddGripScreen> {
         appBar: AppBar(
           title: const Text('Add Grip'),
         ),
-        body: SingleChildScrollView(child: AddGripForm(gripDTO: gripDTO)));
+        body: SafeArea(
+            child:
+                SingleChildScrollView(child: AddGripForm(gripDTO: gripDTO))));
   }
 }

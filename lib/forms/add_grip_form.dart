@@ -19,11 +19,6 @@ class AddGripForm extends StatefulWidget {
 class _AddGripFormState extends State<AddGripForm> {
   final _formKey = GlobalKey<FormState>();
 
-  final List<Map> gripTypes = [
-    {'id': 1, 'name': 'full crimp'},
-    {'id': 2, 'name': 'half crimp'}
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Center(

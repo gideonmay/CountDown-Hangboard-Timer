@@ -20,17 +20,19 @@ class _CountdownTimerScreenState extends State<CountdownTimerScreen> {
       appBar: AppBar(
         title: const Text('Timer'),
       ),
-      body: SizedBox.expand(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Flexible(
-              flex: 88,
-              child: CountdownTimer(
-                timerDurations: widget.timerDurations,
+      body: SafeArea(
+        child: SizedBox.expand(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Flexible(
+                flex: 88,
+                child: CountdownTimer(
+                  timerDurations: widget.timerDurations,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

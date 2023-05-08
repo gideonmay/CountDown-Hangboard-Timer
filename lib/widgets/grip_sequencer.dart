@@ -1,6 +1,5 @@
 import 'package:countdown_app/extensions/string_casing_extension.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 import '../db/drift_database.dart';
 
@@ -54,16 +53,17 @@ class _GripSequencerState extends State<GripSequencer> {
             shrinkWrap: true,
             children: <Widget>[
               for (int index = 0; index < grips.length; index++)
-                _slideableListTile(index, grips[index])
+                _listTileWithDivider(index, grips[index])
             ],
             onReorder: (oldIndex, newIndex) {
-              setState(() {
-                if (oldIndex < newIndex) {
-                  newIndex -= 1;
-                }
-                final item = grips.removeAt(oldIndex);
-                grips.insert(newIndex, item);
-              });
+              if (oldIndex < newIndex) {
+                newIndex -= 1;
+              }
+              final item = grips.removeAt(oldIndex);
+              grips.insert(newIndex, item);
+
+              // Modify sequenceNum for all grips that were reordered
+              db.updateMultipleGripSeqNum(grips);
             });
       },
     );
@@ -72,46 +72,32 @@ class _GripSequencerState extends State<GripSequencer> {
   /// Specifies details about the given grip
   Text _subitleText(GripWithGripType grip) {
     return Text(
-        'Work: ${grip.entry.workSeconds}, Rest: ${grip.entry.restSeconds}');
+        'Work: ${grip.entry.workSeconds}s, Rest: ${grip.entry.restSeconds}s, Break: ${grip.entry.breakMinutes}m${grip.entry.breakSeconds}s');
   }
 
-  /// A tile that slides left to reveal copy and delete buttons
-  Widget _slideableListTile(int index, GripWithGripType grip) {
+  /// A ListTile with a divider
+  Widget _listTileWithDivider(int index, GripWithGripType grip) {
     return Column(
       key: Key('$index'),
       children: [
-        Slidable(
-          endActionPane: ActionPane(motion: const ScrollMotion(), children: [
-            SlidableAction(
-              onPressed:
-                  (context) {}, //(context) => _navigateToEditWorkout(context, workout),
-              backgroundColor: Colors.indigo,
-              foregroundColor: Colors.white,
-              icon: Icons.edit_outlined,
-              label: 'Copy',
-            ),
-            SlidableAction(
-              onPressed:
-                  (context) {}, //(context) => _dialogBuilder(context, workout),
-              backgroundColor: const Color(0xFFFE4A49),
-              foregroundColor: Colors.white,
-              icon: Icons.delete,
-              label: 'Delete',
-            ),
-          ]),
-          child: ListTile(
-            leading: Text(grip.entry.sequenceNum.toString()),
-            title: Text(grip.gripType.name.toTitleCase(),
-                overflow: TextOverflow.ellipsis),
-            subtitle: _subitleText(grip),
-            trailing: const Icon(Icons.drag_handle),
+        ListTile(
+          visualDensity: const VisualDensity(horizontal: 0, vertical: -4.0),
+          leading: Text(
+            (grip.entry.sequenceNum + 1).toString(),
+            style: const TextStyle(fontSize: 20.0),
           ),
+          title: Text(grip.gripType.name.toTitleCase(),
+              overflow: TextOverflow.ellipsis),
+          subtitle: _subitleText(grip),
+          trailing: ReorderableDragStartListener(
+              index: index, child: const Icon(Icons.drag_handle)),
         ),
         const Divider(
           indent: 70,
           endIndent: 5,
           thickness: 1.0,
-        )
+          height: 1,
+        ),
       ],
     );
   }

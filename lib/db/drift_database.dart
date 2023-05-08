@@ -117,6 +117,28 @@ class AppDatabase extends _$AppDatabase {
         WorkoutsCompanion(name: Value(name), description: Value(description)));
   }
 
+  /// Updates the sequence number for a given grip
+  Future<int> updateGripSeqNum(int gripID, int newSeqNum) {
+    return (update(grips)..where((g) => g.id.equals(gripID)))
+        .write(GripsCompanion(sequenceNum: Value(newSeqNum)));
+  }
+
+  /// Updates the sequence number for any grips in the given list that have
+  /// been reordered. Uses a single transaction to improve performance when
+  /// many grips must be updated.
+  Future<void> updateMultipleGripSeqNum(
+      List<GripWithGripType> gripsList) async {
+    await transaction(() async {
+      for (int index = 0; index < gripsList.length; index++) {
+        if (gripsList[index].entry.sequenceNum != index) {
+          await (update(grips)
+                ..where((g) => g.id.equals(gripsList[index].entry.id)))
+              .write(GripsCompanion(sequenceNum: Value(index)));
+        }
+      }
+    });
+  }
+
   /// Deletes the given workout
   Future<int> deleteWorkout(Workout workout) =>
       delete(workouts).delete(workout);

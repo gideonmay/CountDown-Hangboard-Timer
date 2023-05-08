@@ -37,8 +37,7 @@ class StartWorkoutScreen extends StatelessWidget {
                       backgroundColor: Theme.of(context).colorScheme.primary,
                       minimumSize: const Size.fromHeight(40)),
                   onPressed: () {},
-                  child: const Text('Start',
-                      style: TextStyle(fontSize: 20.0))),
+                  child: const Text('Start', style: TextStyle(fontSize: 20.0))),
             ),
             const Divider(thickness: 1.0, indent: 5.0, endIndent: 5.0),
             Padding(
@@ -50,7 +49,7 @@ class StartWorkoutScreen extends StatelessWidget {
             const Padding(
               padding: EdgeInsets.all(8.0),
               child: Text(
-                  'Use this area to add and sequence grips for your workout'),
+                  'Use this area to add and order grips for your workout. Drag to reorder grips. Tap to edit, delete, or duplicate.'),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -60,8 +59,14 @@ class StartWorkoutScreen extends StatelessWidget {
             ),
             Center(
                 child: ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).colorScheme.primary),
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(
+                            Theme.of(context).colorScheme.primary),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                        ))),
                     onPressed: () => _navigateToAddGrip(context, workout),
                     icon: const Icon(Icons.add),
                     label: const Text('Add Grip'))),

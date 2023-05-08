@@ -127,8 +127,8 @@ class AppDatabase extends _$AppDatabase {
   /// been reordered. Uses a single transaction to improve performance when
   /// many grips must be updated.
   Future<void> updateMultipleGripSeqNum(
-      List<GripWithGripType> gripsList) async {
-    await transaction(() async {
+      List<GripWithGripType> gripsList) {
+    return transaction(() async {
       for (int index = 0; index < gripsList.length; index++) {
         if (gripsList[index].entry.sequenceNum != index) {
           await (update(grips)

@@ -96,6 +96,13 @@ class AppDatabase extends _$AppDatabase {
     });
   }
 
+  /// Returns the number of grips present in a given workout
+  Future<int?> getGripCount(int workoutID) async {
+    final gripsCount = grips.id.count();
+    final query = selectOnly(grips)..addColumns([gripsCount]);
+    return query.map((row) => row.read(gripsCount)).getSingle();
+  }
+
   /// Creates a new workout
   Future<int> addWorkout(WorkoutsCompanion entry) {
     return into(workouts).insert(entry);
@@ -126,8 +133,7 @@ class AppDatabase extends _$AppDatabase {
   /// Updates the sequence number for any grips in the given list that have
   /// been reordered. Uses a single transaction to improve performance when
   /// many grips must be updated.
-  Future<void> updateMultipleGripSeqNum(
-      List<GripWithGripType> gripsList) {
+  Future<void> updateMultipleGripSeqNum(List<GripWithGripType> gripsList) {
     return transaction(() async {
       for (int index = 0; index < gripsList.length; index++) {
         if (gripsList[index].entry.sequenceNum != index) {

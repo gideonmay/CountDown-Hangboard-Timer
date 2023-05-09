@@ -94,12 +94,23 @@ class _MyWorkoutsScreenState extends State<MyWorkoutsScreen> {
           label: 'Delete',
         ),
       ]),
-      child: ListTile(
-        title: Text(workout.name, overflow: TextOverflow.ellipsis),
-        subtitle: Text(workout.description,
-            maxLines: 1, overflow: TextOverflow.ellipsis),
-        trailing: Text('Last Used: ${_getFormattedDate(workout.lastUsedDate)}'),
-        onTap: () => _navigateToStartWorkout(context, workout),
+      child: Column(
+        children: [
+          ListTile(
+            title: Text(workout.name, overflow: TextOverflow.ellipsis),
+            subtitle: Text(workout.description,
+                maxLines: 1, overflow: TextOverflow.ellipsis),
+            trailing:
+                Text('Last Used: ${_getFormattedDate(workout.lastUsedDate)}'),
+            onTap: () => _navigateToStartWorkout(context, workout),
+          ),
+          const Divider(
+            indent: 5,
+            endIndent: 5,
+            thickness: 1.0,
+            height: 1,
+          ),
+        ],
       ),
     );
   }

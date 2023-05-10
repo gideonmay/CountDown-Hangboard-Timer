@@ -37,7 +37,7 @@ class ProgressCounter extends StatelessWidget {
             unselectedColor: Colors.grey.shade300,
             customStep: (index, color, _) {
               return Container(
-                decoration: _getCustomDecoration(index, color),
+                decoration: _getCustomDecoration(index, color, context),
                 child: Center(
                     child: FittedBox(
                   fit: BoxFit.fitWidth,
@@ -52,11 +52,12 @@ class ProgressCounter extends StatelessWidget {
   }
 
   /// Returns the approprate Box Decoration based on the current index
-  BoxDecoration _getCustomDecoration(int index, Color color) {
+  BoxDecoration _getCustomDecoration(
+      int index, Color color, BuildContext context) {
     if (completed == index) {
       return BoxDecoration(
           border: Border.all(
-              color: Colors.green,
+              color: Theme.of(context).colorScheme.primary,
               width: 2.0,
               strokeAlign: BorderSide.strokeAlignCenter),
           borderRadius: const BorderRadius.all(Radius.circular(3.0)),

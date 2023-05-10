@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_spinbox/flutter_spinbox.dart';
 import '../models/timer_durations_dto.dart';
+import '../widgets/number_picker.dart';
 
 /// A form widget that allows the user to pick the number of sets and reps, and
 /// the work, rest, and break durations for the countdown timer.
@@ -21,127 +21,80 @@ class _DurationsPickerFormState extends State<DurationsPickerForm> {
   Widget build(BuildContext context) {
     return ListView(
       children: [
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: SpinBox(
-            value: timerDurations.sets,
-            min: 1,
-            max: 20,
-            onChanged: (value) {
-              setState(() {
-                // Do not allow value of zero or lower
-                if (value <= 0) {
-                  timerDurations.sets = 1;
-                } else {
-                  timerDurations.sets = value;
-                }
-              });
-            },
-            decoration: const InputDecoration(
-                labelText: 'Sets', labelStyle: TextStyle(fontSize: 24.0)),
-          ),
+        NumberPicker(
+          title: 'Sets',
+          titleWidth: 60.0,
+          initialValue: timerDurations.sets.toInt(),
+          min: 1,
+          max: 20,
+          onItemChanged: (newValue) {
+            timerDurations.sets = newValue.toDouble();
+          },
         ),
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: SpinBox(
-            value: timerDurations.reps,
-            min: 1,
-            max: 20,
-            onChanged: (value) {
-              setState(() {
-                // Do not allow value of zero or lower
-                if (value <= 0) {
-                  timerDurations.reps = 1;
-                } else {
-                  timerDurations.reps = value;
-                }
-              });
-            },
-            decoration: const InputDecoration(
-                labelText: 'Reps', labelStyle: TextStyle(fontSize: 24.0)),
-          ),
+        NumberPicker(
+          title: 'Reps',
+          titleWidth: 60.0,
+          initialValue: timerDurations.reps.toInt(),
+          min: 1,
+          max: 20,
+          onItemChanged: (newValue) {
+            timerDurations.reps = newValue.toDouble();
+          },
         ),
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: SpinBox(
-            value: timerDurations.workSeconds,
-            min: 1,
-            max: 60,
-            onChanged: (value) {
-              setState(() {
-                timerDurations.workSeconds = value;
-              });
-            },
-            decoration: const InputDecoration(
-                labelText: 'Work (sec)', labelStyle: TextStyle(fontSize: 24.0)),
-          ),
+        NumberPicker(
+          title: 'Work',
+          subtitle: '(sec)',
+          titleWidth: 60.0,
+          initialValue: timerDurations.workSeconds.toInt(),
+          min: 1,
+          max: 60,
+          onItemChanged: (newValue) {
+            timerDurations.workSeconds = newValue.toDouble();
+          },
         ),
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: SpinBox(
-            value: timerDurations.restSeconds,
-            min: 1,
-            max: 60,
-            onChanged: (value) {
-              setState(() {
-                timerDurations.restSeconds = value;
-              });
-            },
-            decoration: const InputDecoration(
-                labelText: 'Rest (sec)', labelStyle: TextStyle(fontSize: 24.0)),
-          ),
+        NumberPicker(
+          title: 'Rest',
+          subtitle: '(sec)',
+          titleWidth: 60.0,
+          initialValue: timerDurations.restSeconds.toInt(),
+          min: 1,
+          max: 60,
+          onItemChanged: (newValue) {
+            timerDurations.restSeconds = newValue.toDouble();
+          },
         ),
-        Row(
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(16.0, 16.0, 8.0, 16.0),
-                child: SpinBox(
-                  value: timerDurations.breakMinutes,
-                  min: 0,
-                  max: 30,
-                  onChanged: (value) {
-                    setState(() {
-                      timerDurations.breakMinutes = value;
-                    });
-                  },
-                  decoration: const InputDecoration(
-                      labelText: 'Break (min)',
-                      labelStyle: TextStyle(fontSize: 24.0)),
-                ),
-              ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(8.0, 16.0, 16.0, 16.0),
-                child: SpinBox(
-                  value: timerDurations.breakSeconds,
-                  min: 0,
-                  max: 60,
-                  onChanged: (value) {
-                    setState(() {
-                      timerDurations.breakSeconds = value;
-                    });
-                  },
-                  decoration: const InputDecoration(
-                      labelText: 'Break (sec)',
-                      labelStyle: TextStyle(fontSize: 24.0)),
-                ),
-              ),
-            ),
-          ],
+        NumberPicker(
+          title: 'Break',
+          subtitle: '(min)',
+          titleWidth: 60.0,
+          initialValue: timerDurations.breakMinutes.toInt(),
+          min: 1,
+          max: 30,
+          onItemChanged: (newValue) {
+            timerDurations.breakMinutes = newValue.toDouble();
+          },
+        ),
+        NumberPicker(
+          title: 'Break',
+          subtitle: '(sec)',
+          titleWidth: 60.0,
+          initialValue: timerDurations.breakSeconds.toInt(),
+          min: 1,
+          max: 60,
+          onItemChanged: (newValue) {
+            timerDurations.breakSeconds = newValue.toDouble();
+          },
         ),
         Padding(
           padding: const EdgeInsets.all(16.0),
           child: ElevatedButton(
-            onPressed: () {
-              widget.onStartPressed(context, timerDurations);
-            },
-            child: const Text(
-              'Start',
-              style: TextStyle(fontSize: 20.0),
-            )
-          ),
+              onPressed: () {
+                widget.onStartPressed(context, timerDurations);
+              },
+              child: const Text(
+                'Start',
+                style: TextStyle(fontSize: 20.0),
+              )),
         ),
       ],
     );

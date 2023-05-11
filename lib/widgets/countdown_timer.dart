@@ -200,11 +200,11 @@ class _CountdownTimerState extends State<CountdownTimer>
                         ),
                       ),
                       Positioned(
-                        top: constraints.maxHeight / 2 - 240,
+                        top: constraints.maxHeight / 2 - 230,
                         child: Text(
                           _durationStatusList[_durationIndex].status,
                           style: TextStyle(
-                            fontSize: 40.0,
+                            fontSize: 38.0,
                             color:
                                 _durationStatusList[_durationIndex].statusColor,
                           ),

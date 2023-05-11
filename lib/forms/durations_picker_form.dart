@@ -43,7 +43,7 @@ class _DurationsPickerFormState extends State<DurationsPickerForm> {
         ),
         NumberPicker(
           title: 'Work',
-          subtitle: '(sec)',
+          unit: 'sec.',
           titleWidth: 60.0,
           initialValue: timerDurations.workSeconds.toInt(),
           min: 1,
@@ -54,7 +54,7 @@ class _DurationsPickerFormState extends State<DurationsPickerForm> {
         ),
         NumberPicker(
           title: 'Rest',
-          subtitle: '(sec)',
+          unit: 'sec.',
           titleWidth: 60.0,
           initialValue: timerDurations.restSeconds.toInt(),
           min: 1,
@@ -65,10 +65,10 @@ class _DurationsPickerFormState extends State<DurationsPickerForm> {
         ),
         NumberPicker(
           title: 'Break',
-          subtitle: '(min)',
+          unit: 'min.',
           titleWidth: 60.0,
           initialValue: timerDurations.breakMinutes.toInt(),
-          min: 1,
+          min: 0,
           max: 30,
           onItemChanged: (newValue) {
             timerDurations.breakMinutes = newValue.toDouble();
@@ -76,7 +76,7 @@ class _DurationsPickerFormState extends State<DurationsPickerForm> {
         ),
         NumberPicker(
           title: 'Break',
-          subtitle: '(sec)',
+          unit: 'sec.',
           titleWidth: 60.0,
           initialValue: timerDurations.breakSeconds.toInt(),
           min: 1,

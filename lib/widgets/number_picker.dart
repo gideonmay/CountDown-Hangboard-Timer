@@ -4,7 +4,9 @@ import 'package:flutter/cupertino.dart';
 /// and max. The scroll wheel is preprended with the given title and subtitle.
 class NumberPicker extends StatelessWidget {
   final String title;
-  final String? subtitle;
+
+  /// Unit of measure to display (ex. 'hour', 'min.', 'sec.')
+  final String? unit;
 
   /// The width that the title text will take up
   final double titleWidth;
@@ -21,7 +23,7 @@ class NumberPicker extends StatelessWidget {
       required this.max,
       required this.onItemChanged,
       required this.titleWidth,
-      this.subtitle});
+      this.unit});
 
   @override
   Widget build(BuildContext context) {
@@ -33,15 +35,9 @@ class NumberPicker extends StatelessWidget {
           children: [
             SizedBox(
               width: titleWidth,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    title,
-                    style: const TextStyle(fontSize: 20.0),
-                  ),
-                  getSubtitle(),
-                ],
+              child: Text(
+                title,
+                style: const TextStyle(fontSize: 20.0),
               ),
             ),
             Expanded(
@@ -51,11 +47,18 @@ class NumberPicker extends StatelessWidget {
                 useMagnifier: true,
                 itemExtent: 35.0,
                 onSelectedItemChanged: (int selectedItem) {
-                  onItemChanged(selectedItem + 1);
+                  // selectedItem + min equals the index/value of selected item
+                  onItemChanged(selectedItem + min);
                 },
+                selectionOverlay: selectionOverlayWithUnit(context),
                 scrollController: FixedExtentScrollController(
-                  initialItem: initialValue - 1
-                ),
+                    /*
+                     * Subtracting by min gives index of initial value. Example:
+                     * if initial=1 and min=0, then initialItem will be 1, which
+                     * shows a 1 on the picker
+                     */
+                    initialItem: initialValue - min),
+                // Generate a list from min to max (inclusive)
                 children: List<Widget>.generate(max - min + 1, (int index) {
                   return Center(
                     child: Text(
@@ -71,12 +74,23 @@ class NumberPicker extends StatelessWidget {
     );
   }
 
-  /// Returns a Text widget for the subtitle or null if subtitle does not exist
-  Widget getSubtitle() {
-    if (subtitle != null) {
-      return Text(subtitle!, style: const TextStyle(fontSize: 12.0));
+  /// Returns a CupertinoPickerDefaultSelectionOverlay with Text added
+  /// specifying a particular unit of measure (ex. mins, secs, hours). If no
+  /// unit was specified then returns CupertinoPickerDefaultSelectionOverlay.
+  Widget selectionOverlayWithUnit(BuildContext context) {
+    if (unit == null) {
+      return const CupertinoPickerDefaultSelectionOverlay();
     }
 
-    return Container();
+    return Stack(children: [
+      const CupertinoPickerDefaultSelectionOverlay(),
+      Positioned(
+          top: 11.5,
+          right: MediaQuery.of(context).size.width / 2 - 105.0,
+          child: Text(
+            unit!,
+            style: const TextStyle(fontSize: 20.0),
+          ))
+    ]);
   }
 }

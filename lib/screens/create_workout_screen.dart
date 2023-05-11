@@ -37,6 +37,7 @@ class _CreateWorkoutScreenState extends State<CreateWorkoutScreen> {
           ),
         ],
       ),
+      resizeToAvoidBottomInset: false,
     );
   }
 

@@ -24,20 +24,24 @@ class _GripTypeDropdownState extends State<GripTypeDropdown> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Flexible(
-            flex: 75,
+            flex: 70,
             child: _buildDropdownFormField(context),
           ),
           Flexible(
-              flex: 25,
+              flex: 30,
               child: Center(
-                child: ElevatedButton(
+                child: ElevatedButton.icon(
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(
+                            Theme.of(context).colorScheme.secondary),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                        ))),
                     onPressed: () => _navigateToAddGripType(context),
-                    style: ElevatedButton.styleFrom(
-                        shape: const CircleBorder(),
-                        backgroundColor:
-                            Theme.of(context).colorScheme.secondary,
-                        fixedSize: const Size(50, 50)),
-                    child: const Icon(Icons.add)),
+                    icon: const Icon(Icons.add),
+                    label: const Text('Add')),
               )),
         ],
       ),
@@ -61,10 +65,15 @@ class _GripTypeDropdownState extends State<GripTypeDropdown> {
 
         return DropdownButtonFormField(
           value: widget.gripDTO.gripTypeID,
-          hint: const Text('Choose a grip type'),
+          hint: Text(getHintText(gripTypes)),
+          isDense: true,
+          isExpanded: true,
           items: gripTypes.map((GripType gripType) {
             return DropdownMenuItem(
-                value: gripType.id, child: Text(gripType.name.toTitleCase()));
+                value: gripType.id,
+                child: Text(
+                  gripType.name,
+                ));
           }).toList(),
           validator: (value) {
             if (value == null) {
@@ -82,12 +91,19 @@ class _GripTypeDropdownState extends State<GripTypeDropdown> {
               widget.gripDTO.gripTypeID = value as int;
             });
           },
-          decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              labelStyle: TextStyle(fontSize: 24.0)),
+          decoration: const InputDecoration(filled: true),
         );
       },
     );
+  }
+
+  /// Returns a hint String based on the length of the gripTypes list
+  String getHintText(List<GripType> gripTypes) {
+    if (gripTypes.isEmpty) {
+      return 'No grip types added';
+    }
+
+    return 'Choose a grip type';
   }
 
   /// Navigates to the AddGripType widget

@@ -50,10 +50,9 @@ class _AddGripScreenState extends State<AddGripScreen> {
           title: const Text('Add Grip'),
         ),
         body: SafeArea(
-            child: SingleChildScrollView(
-                child: AddGripForm(
+            child: AddGripForm(
           gripDTO: gripDTO,
           onFormSaved: _createGrip,
-        ))));
+        )));
   }
 }

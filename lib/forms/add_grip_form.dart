@@ -1,6 +1,6 @@
 import 'package:countdown_app/models/grip_dto.dart';
 import 'package:flutter/material.dart';
-import '../widgets/grip_details_spin_boxes.dart';
+import '../widgets/grip_details_pickers.dart';
 import '../widgets/grip_type_dropdown.dart';
 
 /// A form that allows user to input grip information
@@ -25,17 +25,10 @@ class _AddGripFormState extends State<AddGripForm> {
     return Center(
       child: Form(
         key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: ListView(
           children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
-              child: Text('Grip Details',
-                  style:
-                      TextStyle(color: Colors.grey.shade600, fontSize: 20.0)),
-            ),
             GripTypeDropdown(gripDTO: widget.gripDTO),
-            GripDetailsSpinBoxes(gripDTO: widget.gripDTO),
+            GripDetailsPickers(gripDTO: widget.gripDTO),
             _submitButton(),
           ],
         ),

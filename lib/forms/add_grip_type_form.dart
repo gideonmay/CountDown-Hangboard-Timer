@@ -28,9 +28,8 @@ class _AddGripTypeFormState extends State<AddGripTypeForm> {
               decoration: const InputDecoration(labelText: 'Grip Name'),
               maxLength: 40,
               onSaved: (newValue) {
-                // Convert to lowercase chars if newValue is not null
                 if (newValue != null) {
-                  _gripTypeName = newValue.toLowerCase();
+                  _gripTypeName = newValue;
                 } else {
                   _gripTypeName = newValue;
                 }

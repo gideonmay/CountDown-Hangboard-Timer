@@ -44,7 +44,7 @@ class _ReorderableGripListState extends State<ReorderableGripList> {
   /// Specifies details about the given grip
   Text _subitleText(GripWithGripType grip) {
     return Text(
-      'Sets: ${grip.entry.setCount}, Reps: ${grip.entry.repCount}, W: ${grip.entry.workSeconds}s, R: ${grip.entry.restSeconds}s, B: ${grip.entry.breakMinutes}m${grip.entry.breakSeconds}s',
+      'Sets ${grip.entry.setCount} | Reps ${grip.entry.repCount} | W ${grip.entry.workSeconds}s | R ${grip.entry.restSeconds}s | B ${grip.entry.breakMinutes}m${grip.entry.breakSeconds}s',
       style: const TextStyle(fontSize: 12.0),
     );
   }
@@ -68,7 +68,7 @@ class _ReorderableGripListState extends State<ReorderableGripList> {
               index: index, child: const Icon(Icons.drag_handle)),
         ),
         const Divider(
-          indent: 70,
+          indent: 45,
           endIndent: 5,
           thickness: 1.0,
           height: 1,

@@ -1,4 +1,3 @@
-import 'package:countdown_app/extensions/string_casing_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../db/drift_database.dart';
@@ -61,8 +60,7 @@ class _ReorderableGripListState extends State<ReorderableGripList> {
             (grip.entry.sequenceNum + 1).toString(),
             style: const TextStyle(fontSize: 20.0),
           ),
-          title: Text(grip.gripType.name.toTitleCase(),
-              overflow: TextOverflow.ellipsis),
+          title: Text(grip.gripType.name),
           subtitle: _subitleText(grip),
           trailing: ReorderableDragStartListener(
               index: index, child: const Icon(Icons.drag_handle)),

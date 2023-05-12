@@ -51,9 +51,7 @@ class _MyWorkoutsScreenState extends State<MyWorkoutsScreen> {
       stream: db.watchAllWorkouts(),
       builder: (context, AsyncSnapshot<List<Workout>> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+          return Container();
         }
 
         final workouts = snapshot.data ?? List.empty();

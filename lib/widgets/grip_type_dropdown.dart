@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../extensions/string_casing_extension.dart';
 import '../db/drift_database.dart';
 import '../models/grip_dto.dart';
 import '../screens/add_grip_type_screen.dart';

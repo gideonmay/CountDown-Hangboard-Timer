@@ -17,8 +17,10 @@ class GripTypes extends Table {
 /// with one workout.
 class Grips extends Table {
   IntColumn get id => integer().autoIncrement()();
-  IntColumn get workout => integer().references(Workouts, #id)();
-  IntColumn get gripType => integer().references(GripTypes, #id)();
+  IntColumn get workout =>
+      integer().references(Workouts, #id, onDelete: KeyAction.cascade)();
+  IntColumn get gripType =>
+      integer().references(GripTypes, #id, onDelete: KeyAction.cascade)();
   IntColumn get setCount => integer().check(setCount.isBetweenValues(1, 30))();
   IntColumn get repCount => integer().check(repCount.isBetweenValues(1, 30))();
   IntColumn get workSeconds =>
@@ -68,6 +70,15 @@ class AppDatabase extends _$AppDatabase {
 
   @override
   int get schemaVersion => 1;
+
+  @override
+  MigrationStrategy get migration {
+    return MigrationStrategy(
+        // Must manually enable foreign key constrains for SQLite db
+        beforeOpen: (details) async {
+      await customStatement('PRAGMA foreign_keys = ON;');
+    });
+  }
 
   /// Returns a stream of workouts any time the workouts table is changed
   Stream<List<Workout>> watchAllWorkouts() => select(workouts).watch();
@@ -148,6 +159,10 @@ class AppDatabase extends _$AppDatabase {
   /// Deletes the given workout
   Future<int> deleteWorkout(Workout workout) =>
       delete(workouts).delete(workout);
+
+  /// Delete the given grip type
+  Future<int> deleteGripType(GripType gripType) =>
+      delete(gripTypes).delete(gripType);
 }
 
 LazyDatabase _openConnection() {

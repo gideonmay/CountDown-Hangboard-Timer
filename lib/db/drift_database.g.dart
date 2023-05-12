@@ -496,8 +496,8 @@ class $GripsTable extends Grips with TableInfo<$GripsTable, Grip> {
       'workout', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('REFERENCES workouts (id)'));
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES workouts (id) ON DELETE CASCADE'));
   static const VerificationMeta _gripTypeMeta =
       const VerificationMeta('gripType');
   @override
@@ -505,8 +505,8 @@ class $GripsTable extends Grips with TableInfo<$GripsTable, Grip> {
       'grip_type', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('REFERENCES grip_types (id)'));
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES grip_types (id) ON DELETE CASCADE'));
   static const VerificationMeta _setCountMeta =
       const VerificationMeta('setCount');
   @override
@@ -1091,4 +1091,23 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities =>
       [gripTypes, workouts, grips];
+  @override
+  StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules(
+        [
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('workouts',
+                limitUpdateKind: UpdateKind.delete),
+            result: [
+              TableUpdate('grips', kind: UpdateKind.delete),
+            ],
+          ),
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('grip_types',
+                limitUpdateKind: UpdateKind.delete),
+            result: [
+              TableUpdate('grips', kind: UpdateKind.delete),
+            ],
+          ),
+        ],
+      );
 }

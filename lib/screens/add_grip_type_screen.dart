@@ -40,7 +40,7 @@ class _AddGripTypeScreenState extends State<AddGripTypeScreen> {
           final gripTypes = snapshot.data ?? List.empty();
 
           if (gripTypes.isEmpty) {
-            return Container();
+            return AddGripTypeForm(gripTypes: gripTypes);
           }
 
           return Column(children: [

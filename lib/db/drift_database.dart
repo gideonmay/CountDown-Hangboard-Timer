@@ -143,11 +143,11 @@ class AppDatabase extends _$AppDatabase {
     }).watch();
   }
 
-  /// Returns the number of grips present in a given workout
-  Future<int?> getGripCount(int workoutID) async {
-    final gripsCount = grips.id.count();
-    final query = selectOnly(grips)..addColumns([gripsCount]);
-    return query.map((row) => row.read(gripsCount)).getSingle();
+  /// Returns the largest sequenc number among all grips in a given workout
+  Future<int?> getMaxGripSeqNum(int workoutID) async {
+    final maxSeqNum = grips.sequenceNum.max();
+    final query = selectOnly(grips)..addColumns([maxSeqNum]);
+    return query.map((row) => row.read(maxSeqNum)).getSingle();
   }
 
   /// Creates a new workout

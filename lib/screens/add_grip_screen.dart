@@ -21,8 +21,8 @@ class _AddGripScreenState extends State<AddGripScreen> {
   /// Adds the grip defined by the gripDTO to the database
   void _createGrip() async {
     final db = Provider.of<AppDatabase>(context, listen: false);
-    // Get the total count of grips for the current workout
-    int gripCount = await db.getGripCount(widget.workout.id) ?? 0;
+    // Get the maximum sequence number for all grips in the curent workout
+    int maxSeqNum = await db.getMaxGripSeqNum(widget.workout.id) ?? 0;
 
     await db.addGrip(GripsCompanion.insert(
         workout: widget.workout.id,
@@ -35,7 +35,7 @@ class _AddGripScreenState extends State<AddGripScreen> {
         breakSeconds: gripDTO.breakSeconds.toInt(),
         lastBreakMinutes: gripDTO.lastBreakMinutes.toInt(),
         lastBreakSeconds: gripDTO.lastBreakSeconds.toInt(),
-        sequenceNum: gripCount));
+        sequenceNum: maxSeqNum + 1)); // Add 1 so new grip has largest seq num
 
     // Navigate back to Start Workout page
     if (context.mounted) {

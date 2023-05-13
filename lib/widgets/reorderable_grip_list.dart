@@ -57,7 +57,7 @@ class _ReorderableGripListState extends State<ReorderableGripList> {
           minLeadingWidth: 15.0,
           visualDensity: const VisualDensity(horizontal: 0, vertical: -4.0),
           leading: Text(
-            (grip.entry.sequenceNum + 1).toString(),
+            (index + 1).toString(),
             style: const TextStyle(fontSize: 20.0),
           ),
           title: Text(grip.gripType.name),

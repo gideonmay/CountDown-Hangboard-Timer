@@ -63,6 +63,21 @@ class GripWithGripType {
   GripWithGripType(this.entry, this.gripType);
 }
 
+/// A grip type with the count of grips that use the grip type
+class GripTypeWithGripCount {
+  final GripType entry;
+
+  /// The number of grips this grip type is associated with
+  final int? gripCount;
+
+  GripTypeWithGripCount(this.entry, this.gripCount);
+
+  @override
+  String toString() {
+    return '${entry.toString()} gripCount: $gripCount';
+  }
+}
+
 /// The Drift database object for the app
 @DriftDatabase(tables: [GripTypes, Grips, Workouts])
 class AppDatabase extends _$AppDatabase {
@@ -105,6 +120,27 @@ class AppDatabase extends _$AppDatabase {
         return GripWithGripType(row.readTable(grips), row.readTable(gripTypes));
       }).toList();
     });
+  }
+
+  /// Returns a stream of grip types with a count of the number of grips that
+  /// grip type is used by
+  Stream<List<GripTypeWithGripCount>> watchAllGripTypesWithCount() {
+    final gripCounts = grips.id.count();
+
+    final query = select(gripTypes).join([
+      leftOuterJoin(grips, grips.gripType.equalsExp(gripTypes.id),
+          useColumns: false)
+    ])
+      ..orderBy([OrderingTerm.asc(gripTypes.name)]);
+
+    query
+      ..addColumns([gripCounts])
+      ..groupBy([gripTypes.id]);
+
+    return query.map((row) {
+      return GripTypeWithGripCount(
+          row.readTable(gripTypes), row.read(gripCounts));
+    }).watch();
   }
 
   /// Returns the number of grips present in a given workout
@@ -161,8 +197,9 @@ class AppDatabase extends _$AppDatabase {
       delete(workouts).delete(workout);
 
   /// Delete the given grip type
-  Future<int> deleteGripType(GripType gripType) =>
-      delete(gripTypes).delete(gripType);
+  Future<int> deleteGripType(GripType gripType) {
+    return delete(gripTypes).delete(gripType);
+  }
 }
 
 LazyDatabase _openConnection() {

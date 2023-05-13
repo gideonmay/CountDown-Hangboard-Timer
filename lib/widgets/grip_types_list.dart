@@ -12,12 +12,14 @@ class GripTypesList extends StatelessWidget {
   }
 
   /// Returns a ListView displaying all grip types
-  StreamBuilder<List<GripType>> _buildGripTypeList(BuildContext context) {
+  StreamBuilder<List<GripTypeWithGripCount>> _buildGripTypeList(
+      BuildContext context) {
     final db = Provider.of<AppDatabase>(context);
 
     return StreamBuilder(
-        stream: db.watchAllGripTypes(),
-        builder: (context, AsyncSnapshot<List<GripType>> snapshot) {
+        stream: db.watchAllGripTypesWithCount(),
+        builder:
+            (context, AsyncSnapshot<List<GripTypeWithGripCount>> snapshot) {
           final gripTypes = snapshot.data ?? List.empty();
 
           if (gripTypes.isEmpty) {
@@ -33,8 +35,8 @@ class GripTypesList extends StatelessWidget {
               return Column(
                 children: [
                   ListTile(
-                    title: Text(gripType.name),
-                    subtitle: Text('Used by XX workouts'),
+                    title: Text(gripType.entry.name),
+                    subtitle: Text('Used with ${gripType.gripCount} grips'),
                     trailing: IconButton(
                       icon: const Icon(Icons.delete),
                       onPressed: () => _dialogBuilder(context, gripType),
@@ -56,14 +58,14 @@ class GripTypesList extends StatelessWidget {
 
   /// Shows a dialog box to confirm workout deletion. Adapted example from:
   /// https://api.flutter.dev/flutter/material/showDialog.html
-  Future<void> _dialogBuilder(BuildContext context, GripType gripType) {
+  Future<void> _dialogBuilder(
+      BuildContext context, GripTypeWithGripCount gripType) {
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Are you sure?'),
-          content: Text(
-              'The grip type \'${gripType.name}\' will be permanently deleted along with any grips that use this grip type.'),
+          content: Text(_dialogText(gripType)),
           actions: <Widget>[
             TextButton(
               style: TextButton.styleFrom(
@@ -78,7 +80,7 @@ class GripTypesList extends StatelessWidget {
               style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
               child: const Text('Delete'),
               onPressed: () {
-                _deleteGripType(context, gripType);
+                _deleteGripType(context, gripType.entry);
                 Navigator.of(context).pop();
               },
             ),
@@ -86,6 +88,23 @@ class GripTypesList extends StatelessWidget {
         );
       },
     );
+  }
+
+  /// Returns dialog text with the correct pluralization
+  String _dialogText(GripTypeWithGripCount gripType) {
+    String text =
+        'The grip type \'${gripType.entry.name}\' will be permanently deleted';
+    int? gripCount = gripType.gripCount;
+
+    if (gripCount != null && gripCount != 0) {
+      if (gripType.gripCount == 1) {
+        text += ' along with the $gripCount grip that it is used on';
+      } else {
+        text += ' along with the $gripCount grips that it is used on';
+      }
+    }
+
+    return text;
   }
 
   /// Deletes the given grip type from the database

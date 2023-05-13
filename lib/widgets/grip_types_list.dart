@@ -4,56 +4,44 @@ import '../db/drift_database.dart';
 
 /// A widget to view and delete any grip type in the database
 class GripTypesList extends StatelessWidget {
-  const GripTypesList({super.key});
+  final List<GripTypeWithGripCount> gripTypes;
+
+  const GripTypesList({super.key, required this.gripTypes});
 
   @override
   Widget build(BuildContext context) {
-    return _buildGripTypeList(context);
+    return _buildGripTypeListView(context);
   }
 
   /// Returns a ListView displaying all grip types
-  StreamBuilder<List<GripTypeWithGripCount>> _buildGripTypeList(
-      BuildContext context) {
-    final db = Provider.of<AppDatabase>(context);
-
-    return StreamBuilder(
-        stream: db.watchAllGripTypesWithCount(),
-        builder:
-            (context, AsyncSnapshot<List<GripTypeWithGripCount>> snapshot) {
-          final gripTypes = snapshot.data ?? List.empty();
-
-          if (gripTypes.isEmpty) {
-            return Container();
-          }
-
-          return ListView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            itemCount: gripTypes.length,
-            itemBuilder: (context, index) {
-              final gripType = gripTypes[index];
-              return Column(
-                children: [
-                  ListTile(
-                    title: Text(gripType.entry.name),
-                    subtitle: Text('Used with ${gripType.gripCount} grips'),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () => _dialogBuilder(context, gripType),
-                    ),
-                    horizontalTitleGap: 5.0,
-                  ),
-                  const Divider(
-                    indent: 15,
-                    endIndent: 5,
-                    thickness: 1.0,
-                    height: 1,
-                  ),
-                ],
-              );
-            },
-          );
-        });
+  ListView _buildGripTypeListView(BuildContext context) {
+    return ListView.builder(
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: gripTypes.length,
+      itemBuilder: (context, index) {
+        final gripType = gripTypes[index];
+        return Column(
+          children: [
+            ListTile(
+              title: Text(gripType.entry.name),
+              subtitle: Text('Used with ${gripType.gripCount} grips'),
+              trailing: IconButton(
+                icon: const Icon(Icons.delete),
+                onPressed: () => _dialogBuilder(context, gripType),
+              ),
+              horizontalTitleGap: 5.0,
+            ),
+            const Divider(
+              indent: 15,
+              endIndent: 5,
+              thickness: 1.0,
+              height: 1,
+            ),
+          ],
+        );
+      },
+    );
   }
 
   /// Shows a dialog box to confirm workout deletion. Adapted example from:

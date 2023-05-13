@@ -38,7 +38,17 @@ class _GripTypeDropdownState extends State<GripTypeDropdown> {
                                 RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(18.0),
                         ))),
-                    onPressed: () => _navigateToAddGripType(context),
+                    onPressed: () {
+                      /*
+                       * Set chosen gripType to null before navigating to new 
+                       * screen. If the chosen gripType is deleted while it is
+                       * currently selected by the dropdown, an error occurs.
+                       */
+                      setState(() {
+                        widget.gripDTO.gripTypeID = null;
+                      });
+                      _navigateToAddGripType(context);
+                    },
                     icon: const Icon(Icons.add),
                     label: const Text('Add')),
               )),
@@ -54,12 +64,6 @@ class _GripTypeDropdownState extends State<GripTypeDropdown> {
     return StreamBuilder(
       stream: db.watchAllGripTypes(),
       builder: (context, AsyncSnapshot<List<GripType>> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-
         final gripTypes = snapshot.data ?? List.empty();
 
         return DropdownButtonFormField(

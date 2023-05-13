@@ -5,8 +5,9 @@ import '../db/drift_database.dart';
 /// A form that allows the user to enter a grip type name and save it to the
 /// database
 class AddGripTypeForm extends StatefulWidget {
-  // final List<GripType> gripTypeList;
-  const AddGripTypeForm({super.key});
+  final List<GripTypeWithGripCount> gripTypes;
+
+  const AddGripTypeForm({super.key, required this.gripTypes});
 
   @override
   State<AddGripTypeForm> createState() => _AddGripTypeFormState();
@@ -29,7 +30,7 @@ class _AddGripTypeFormState extends State<AddGripTypeForm> {
               maxLength: 40,
               onSaved: (newValue) {
                 if (newValue != null) {
-                  _gripTypeName = newValue;
+                  _gripTypeName = newValue.trim();
                 } else {
                   _gripTypeName = newValue;
                 }
@@ -38,6 +39,12 @@ class _AddGripTypeFormState extends State<AddGripTypeForm> {
                 if (value == null || value.isEmpty) {
                   return 'Please enter a grip name';
                 }
+
+                // Check if grip type name already exists
+                if (_isDuplicate(value.trim())) {
+                  return 'This grip type already exists';
+                }
+
                 return null;
               },
             ),
@@ -50,7 +57,15 @@ class _AddGripTypeFormState extends State<AddGripTypeForm> {
 
   /// Returns true if the grip type name does already exists in the database and
   /// false otherwise
-  // bool _isDuplicate() {}
+  bool _isDuplicate(String gripTypeName) {
+    for (var gripType in widget.gripTypes) {
+      if (gripType.entry.name == gripTypeName) {
+        return true;
+      }
+    }
+
+    return false;
+  }
 
   Widget _submitButton(BuildContext context) {
     return Padding(

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../db/drift_database.dart';
 import '../forms/add_grip_type_form.dart';
 import '../widgets/app_header.dart';
+import '../widgets/app_divider.dart';
 import '../widgets/grip_types_list.dart';
 
 /// A screen that allows the user to create new grip types and delete existing
@@ -46,7 +47,7 @@ class _AddGripTypeScreenState extends State<AddGripTypeScreen> {
 
           return Column(children: [
             AddGripTypeForm(gripTypes: gripTypes),
-            const Divider(thickness: 1.0, indent: 5.0, endIndent: 5.0),
+            const AppDivider(),
             const AppHeader(title: 'Grip Types'),
             const Padding(
               padding: EdgeInsets.all(8.0),

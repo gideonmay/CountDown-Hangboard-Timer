@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../db/drift_database.dart';
 import '../screens/add_grip_screen.dart';
+import '../widgets/app_divider.dart';
 import '../widgets/app_header.dart';
 import '../widgets/grip_sequencer.dart';
 import '../widgets/workout_details_row.dart';
@@ -38,7 +39,7 @@ class StartWorkoutScreen extends StatelessWidget {
                     child:
                         const Text('Start', style: TextStyle(fontSize: 20.0))),
               ),
-              const Divider(thickness: 1.0, indent: 5.0, endIndent: 5.0),
+              const AppDivider(),
               const AppHeader(title: 'Grip Sequence'),
               const Padding(
                 padding: EdgeInsets.all(8.0),

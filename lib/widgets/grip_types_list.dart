@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../db/drift_database.dart';
+import '../widgets/app_divider.dart';
 
 /// A widget to view and delete any grip type in the database
 class GripTypesList extends StatelessWidget {
@@ -32,12 +33,7 @@ class GripTypesList extends StatelessWidget {
               ),
               horizontalTitleGap: 5.0,
             ),
-            const Divider(
-              indent: 15,
-              endIndent: 5,
-              thickness: 1.0,
-              height: 1,
-            ),
+            const AppDivider(indent: 15.0, height: 1.0)
           ],
         );
       },

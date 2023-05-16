@@ -7,6 +7,7 @@ import 'create_workout_screen.dart';
 import 'edit_workout_screen.dart';
 import 'start_workout_screen.dart';
 import '../models/workout_dto.dart';
+import '../widgets/app_divider.dart';
 
 /// A screen that lists all of the workouts available in the database
 class MyWorkoutsScreen extends StatefulWidget {
@@ -102,12 +103,7 @@ class _MyWorkoutsScreenState extends State<MyWorkoutsScreen> {
                 Text('Last Used: ${_getFormattedDate(workout.lastUsedDate)}'),
             onTap: () => _navigateToStartWorkout(context, workout),
           ),
-          const Divider(
-            indent: 5,
-            endIndent: 5,
-            thickness: 1.0,
-            height: 1,
-          ),
+          const AppDivider(height: 1.0),
         ],
       ),
     );

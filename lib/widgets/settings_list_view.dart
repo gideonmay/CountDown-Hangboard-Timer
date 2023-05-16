@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../services/shared_preferences_service.dart';
+import '../widgets/app_divider.dart';
 
 /// A ListView that lists all of the settings available for the user to change
 class SettingsListView extends StatefulWidget {
@@ -42,7 +43,7 @@ class _SettingsListViewState extends State<SettingsListView> {
           trailing: Switch(
               value: _soundOn, onChanged: (bool value) => _setSound(value)),
         ),
-        const Divider(thickness: 1.0),
+        const AppDivider(),
         ListTile(
           leading: const Icon(Icons.vibration),
           title: const Text('Timer Vibration'),
@@ -50,7 +51,7 @@ class _SettingsListViewState extends State<SettingsListView> {
               value: _vibrationOn,
               onChanged: (bool value) => _setVibration(value)),
         ),
-        const Divider(thickness: 1.0),
+        const AppDivider(),
         ListTile(
           leading: const Icon(Icons.dark_mode),
           title: const Text('Dark Mode'),
@@ -58,7 +59,7 @@ class _SettingsListViewState extends State<SettingsListView> {
               value: _darkModeOn,
               onChanged: (bool value) => _setDarkMode(value)),
         ),
-        const Divider(thickness: 1.0),
+        const AppDivider(),
       ],
     );
   }

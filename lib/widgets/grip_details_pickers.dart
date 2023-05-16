@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/grip_dto.dart';
+import '../widgets/app_header.dart';
 import '../widgets/number_picker.dart';
 import '../widgets/number_picker_title.dart';
 
@@ -26,11 +27,7 @@ class _GripDetailsPickersState extends State<GripDetailsPickers> {
         _restSpinBox(),
         _breakSpinBoxes(),
         const Divider(thickness: 1.0, indent: 5.0, endIndent: 5.0),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
-          child: Text('Post-Grip Break',
-              style: TextStyle(color: Colors.grey.shade600, fontSize: 20.0)),
-        ),
+        const AppHeader(title: 'Post-Grip Break'),
         const Padding(
           padding: EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
           child:

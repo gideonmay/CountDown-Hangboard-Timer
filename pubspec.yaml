@@ -32,7 +32,6 @@ dependencies:
     sdk: flutter
   drift: ^2.7.0
   flutter_slidable: ^3.0.0
-  flutter_spinbox: ^0.13.0
   intl: ^0.18.1
   just_audio: ^0.9.32
   path_provider: ^2.0.0

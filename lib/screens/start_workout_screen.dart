@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import '../db/drift_database.dart';
-import '../screens/add_grip_screen.dart';
-import '../widgets/app_divider.dart';
-import '../widgets/app_header.dart';
-import '../widgets/grip_sequencer.dart';
-import '../widgets/workout_details_row.dart';
+import '../widgets/edit_grips_tab.dart';
+import '../widgets/start_workout_tab.dart';
 
 /// A screen that displays the details of a workout and allows the user to
 /// add, edit, and organize grips for their workout
@@ -15,68 +12,20 @@ class StartWorkoutScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Start Workout'),
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const AppHeader(title: 'Workout Details'),
-              WorkoutDetailsRow(title: 'Name', body: workout.name),
-              WorkoutDetailsRow(
-                  title: 'Description', body: workout.description),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).colorScheme.primary,
-                        minimumSize: const Size.fromHeight(40)),
-                    onPressed: () {},
-                    child:
-                        const Text('Start', style: TextStyle(fontSize: 20.0))),
-              ),
-              const AppDivider(),
-              const AppHeader(title: 'Grip Sequence'),
-              const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                    'Use this area to add and order grips for your workout. Drag to reorder grips. Tap to edit, delete, or duplicate.'),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: GripSequencer(
-                  workout: workout,
-                ),
-              ),
-              Center(
-                  child: ElevatedButton.icon(
-                      style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(
-                              Theme.of(context).colorScheme.primary),
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                          ))),
-                      onPressed: () => _navigateToAddGrip(context, workout),
-                      icon: const Icon(Icons.add),
-                      label: const Text('Add Grip'))),
-            ],
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(workout.name),
+          bottom: const TabBar(
+            tabs: [Tab(text: 'Start Workout'), Tab(text: 'Edit Grips')],
           ),
         ),
+        body: TabBarView(children: [
+          StartWorkoutTab(workout: workout),
+          EditGripsTab(workout: workout),
+        ]),
       ),
-    );
-  }
-
-  /// Navigates to the AddGripScreen widget
-  static _navigateToAddGrip(BuildContext context, Workout workout) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => AddGripScreen(workout: workout)),
     );
   }
 }

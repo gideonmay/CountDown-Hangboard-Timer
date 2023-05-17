@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../db/drift_database.dart';
@@ -29,7 +30,7 @@ class GripTypesList extends StatelessWidget {
               subtitle: Text('Used with ${gripType.gripCount} grips'),
               trailing: IconButton(
                 icon: const Icon(Icons.delete),
-                onPressed: () => _dialogBuilder(context, gripType),
+                onPressed: () => _showAlertDialog(context, gripType),
               ),
               horizontalTitleGap: 5.0,
             ),
@@ -40,37 +41,32 @@ class GripTypesList extends StatelessWidget {
     );
   }
 
-  /// Shows a dialog box to confirm workout deletion. Adapted example from:
-  /// https://api.flutter.dev/flutter/material/showDialog.html
-  Future<void> _dialogBuilder(
+  // Shows a dialog box to confirm grip type deletion
+  Future<void> _showAlertDialog(
       BuildContext context, GripTypeWithGripCount gripType) {
-    return showDialog<void>(
+    return showCupertinoModalPopup<void>(
       context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Are you sure?'),
-          content: Text(_dialogText(gripType)),
-          actions: <Widget>[
-            TextButton(
-              style: TextButton.styleFrom(
-                textStyle: Theme.of(context).textTheme.labelLarge,
-              ),
-              child: const Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-              child: const Text('Delete'),
-              onPressed: () {
-                _deleteGripType(context, gripType.entry);
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
+      builder: (BuildContext context) => CupertinoAlertDialog(
+        title: const Text('Are you sure?'),
+        content: Text(_dialogText(gripType)),
+        actions: <CupertinoDialogAction>[
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('No'),
+          ),
+          CupertinoDialogAction(
+            isDestructiveAction: true,
+            onPressed: () {
+              _deleteGripType(context, gripType.entry);
+              Navigator.of(context).pop();
+            },
+            child: const Text('Yes'),
+          ),
+        ],
+      ),
     );
   }
 

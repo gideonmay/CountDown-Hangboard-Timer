@@ -1,4 +1,4 @@
-import 'package:countdown_app/db/drift_database.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'create_workout_screen.dart';
 import 'edit_workout_screen.dart';
 import 'start_workout_screen.dart';
+import '../db/drift_database.dart';
 import '../models/workout_dto.dart';
 import '../widgets/app_divider.dart';
 
@@ -86,7 +87,7 @@ class _MyWorkoutsScreenState extends State<MyWorkoutsScreen> {
           label: 'Edit',
         ),
         SlidableAction(
-          onPressed: (context) => _dialogBuilder(context, workout),
+          onPressed: (context) => _showAlertDialog(context, workout),
           backgroundColor: const Color(0xFFFE4A49),
           foregroundColor: Colors.white,
           icon: Icons.delete,
@@ -130,37 +131,32 @@ class _MyWorkoutsScreenState extends State<MyWorkoutsScreen> {
     );
   }
 
-  /// Shows a dialog box to confirm workout deletion. Adapted example from:
-  /// https://api.flutter.dev/flutter/material/showDialog.html
-  Future<void> _dialogBuilder(BuildContext context, Workout workout) {
-    return showDialog<void>(
+  /// Shows a dialog box to confirm workout deletion
+  Future<void> _showAlertDialog(BuildContext context, Workout workout) {
+    return showCupertinoModalPopup<void>(
       context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Are you sure?'),
-          content: Text(
+      builder: (BuildContext context) => CupertinoAlertDialog(
+        title: const Text('Are you sure?'),
+        content: Text(
               'The workout \'${workout.name}\' will be permanently deleted.'),
-          actions: <Widget>[
-            TextButton(
-              style: TextButton.styleFrom(
-                textStyle: Theme.of(context).textTheme.labelLarge,
-              ),
-              child: const Text('Cancel'),
-              onPressed: () {
+        actions: <CupertinoDialogAction>[
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('No'),
+          ),
+          CupertinoDialogAction(
+            isDestructiveAction: true,
+            onPressed: () {
+              _deleteWorkout(context, workout);
                 Navigator.of(context).pop();
-              },
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-              child: const Text('Delete'),
-              onPressed: () {
-                _deleteWorkout(context, workout);
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
+            },
+            child: const Text('Yes'),
+          ),
+        ],
+      ),
     );
   }
 

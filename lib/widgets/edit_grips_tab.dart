@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'reorderable_grip_list.dart';
 import '../db/drift_database.dart';
 import '../screens/add_grip_screen.dart';
-import '../widgets/app_header.dart';
 
 /// A ListView that displays the sequence of grips for a given workout. Allows
 /// the user to add, edit, remove, and re-sequence grips for their workout.
@@ -23,15 +22,8 @@ class _EditGripsTabState extends State<EditGripsTab> {
       child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const AppHeader(title: 'Grip Sequence'),
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                'Use this area to add and order grips for your workout. Drag to reorder grips. Tap to edit, delete, or duplicate.',
-                textAlign: TextAlign.center,
-              ),
-            ),
             _buildGripList(context),
             Center(
                 child: ElevatedButton.icon(
@@ -75,7 +67,7 @@ class _EditGripsTabState extends State<EditGripsTab> {
         if (grips.isEmpty) {
           return const Center(
             child: Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: EdgeInsets.all(16.0),
               child: Text('Start adding grips to build your workout'),
             ),
           );

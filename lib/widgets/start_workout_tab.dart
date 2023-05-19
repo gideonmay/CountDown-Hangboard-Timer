@@ -24,7 +24,8 @@ class StartWorkoutTab extends StatelessWidget {
                   backgroundColor: Theme.of(context).colorScheme.primary,
                   minimumSize: const Size.fromHeight(40)),
               onPressed: () {},
-              child: const Text('Start', style: TextStyle(fontSize: 20.0))),
+              child: const Text('Start Workout',
+                  style: TextStyle(fontSize: 20.0))),
         ),
       ],
     );

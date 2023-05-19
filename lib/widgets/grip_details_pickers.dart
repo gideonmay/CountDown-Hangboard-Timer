@@ -89,7 +89,7 @@ class _GripDetailsPickersState extends State<GripDetailsPickers> {
             unit: 'sec.',
             initialValue: widget.gripDTO.workSeconds.toInt(),
             min: 1,
-            max: 20,
+            max: 60,
             padding: const EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
             onItemChanged: (newValue) {
               widget.gripDTO.workSeconds = newValue.toDouble();
@@ -110,7 +110,7 @@ class _GripDetailsPickersState extends State<GripDetailsPickers> {
             unit: 'sec.',
             initialValue: widget.gripDTO.restSeconds.toInt(),
             min: 1,
-            max: 20,
+            max: 60,
             padding: const EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
             onItemChanged: (newValue) {
               widget.gripDTO.restSeconds = newValue.toDouble();

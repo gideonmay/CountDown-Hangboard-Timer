@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../db/drift_database.dart';
 import '../models/grip_dto.dart';
-import '../screens/add_grip_type_screen.dart';
+import '../screens/grip_types_screen.dart';
 
 /// A dropdowm menu that enables the user to choose a grip type
 class GripTypeDropdown extends StatefulWidget {
@@ -113,7 +113,7 @@ class _GripTypeDropdownState extends State<GripTypeDropdown> {
   static _navigateToAddGripType(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const AddGripTypeScreen()),
+      MaterialPageRoute(builder: (context) => const GripTypesScreen()),
     );
   }
 }

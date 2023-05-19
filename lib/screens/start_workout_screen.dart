@@ -17,8 +17,33 @@ class StartWorkoutScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Text(workout.name),
-          bottom: const TabBar(
-            tabs: [Tab(text: 'Start Workout'), Tab(text: 'Edit Grips')],
+          bottom: TabBar(
+            tabs: [
+              Tab(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Padding(
+                      padding: EdgeInsets.all(3.0),
+                      child: Icon(Icons.play_arrow),
+                    ),
+                    Text('Start')
+                  ],
+                ),
+              ),
+              Tab(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Padding(
+                      padding: EdgeInsets.all(3.0),
+                      child: Icon(Icons.edit_outlined),
+                    ),
+                    Text('Edit Grips')
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
         body: TabBarView(children: [

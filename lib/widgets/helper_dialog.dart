@@ -5,13 +5,13 @@ import 'package:flutter/material.dart';
 class HelperDialog extends StatelessWidget {
   final String title;
   final String body;
-  final Image image;
+  final Image? image;
 
   const HelperDialog(
       {super.key,
       required this.title,
       required this.body,
-      required this.image});
+      this.image});
 
   @override
   Widget build(BuildContext context) {

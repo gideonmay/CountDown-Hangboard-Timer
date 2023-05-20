@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'grip_types_list.dart';
-import 'app_header.dart';
+import '../widgets/grip_types_list.dart';
 import '../db/drift_database.dart';
 
 /// A tab containing a list of existing grip types
@@ -11,18 +10,18 @@ class ViewGripTypesTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (gripTypes.isEmpty) {
+      return const Center(
+          child: Text(
+        'Any grip types you create will appear here',
+        style: TextStyle(fontSize: 16.0),
+      ));
+    }
+
     return SafeArea(
       child: SingleChildScrollView(
         child: Column(
           children: [
-            const AppHeader(title: 'Grip Types'),
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                'All grip types can be viewed and delete here',
-                textAlign: TextAlign.center,
-              ),
-            ),
             GripTypesList(gripTypes: gripTypes),
           ],
         ),

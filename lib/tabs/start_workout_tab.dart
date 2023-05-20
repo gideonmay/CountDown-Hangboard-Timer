@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../db/drift_database.dart';
-import 'app_header.dart';
-import 'workout_details_row.dart';
+import '../widgets/app_header.dart';
+import '../widgets/workout_details_row.dart';
 
 /// A tab that enables the user to view workout details and begin their workout
 class StartWorkoutTab extends StatelessWidget {

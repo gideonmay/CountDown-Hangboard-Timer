@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'reorderable_grip_list.dart';
+import '../widgets/reorderable_grip_list.dart';
 import '../db/drift_database.dart';
 import '../screens/add_grip_screen.dart';
 

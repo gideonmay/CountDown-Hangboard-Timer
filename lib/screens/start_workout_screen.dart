@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import '../db/drift_database.dart';
-import '../widgets/edit_grips_tab.dart';
-import '../widgets/start_workout_tab.dart';
+import '../tabs/edit_grips_tab.dart';
+import '../tabs/start_workout_tab.dart';
+import '../widgets/helper_dialog.dart';
 
 /// A screen that displays the details of a workout and allows the user to
 /// add, edit, and organize grips for their workout
@@ -17,6 +18,11 @@ class StartWorkoutScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Text(workout.name),
+          actions: [
+            IconButton(
+                onPressed: () => _showHelperDialog(context),
+                icon: const Icon(Icons.help))
+          ],
           bottom: TabBar(
             tabs: [
               Tab(
@@ -52,5 +58,15 @@ class StartWorkoutScreen extends StatelessWidget {
         ]),
       ),
     );
+  }
+
+  Future<String?> _showHelperDialog(BuildContext context) {
+    return showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => HelperDialog(
+            title: 'Editing Grips',
+            body:
+                'To edit the order of a grip, tap and hold the grip then drag it to the desired position. Alternatively, move the grip using the drag handle on the right.',
+            image: Image.asset('assets/gifs/grip_sequence_demo.gif')));
   }
 }

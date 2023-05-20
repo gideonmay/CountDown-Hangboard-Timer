@@ -31,8 +31,10 @@ class _GripDetailsPickersState extends State<GripDetailsPickers> {
         const AppHeader(title: 'Post-Grip Break'),
         const Padding(
           padding: EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
-          child:
-              Text('The break duration between this grip and the next'),
+          child: Text(
+            'The break duration between this grip and the next',
+            textAlign: TextAlign.center,
+          ),
         ),
         _lastBreakSpinBoxes(),
       ],

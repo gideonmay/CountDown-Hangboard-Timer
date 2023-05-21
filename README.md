@@ -21,7 +21,7 @@ Create Custom Workouts
 Create Custom Grips  
 ![custom grips](screenshots/add_grip.png)  
 
-Re-sequence Custom  
+Re-sequence Custom Grips  
 ![grip sequencer](screenshots/grip_sequence.gif)  
 
 Create Custom Grip Types  

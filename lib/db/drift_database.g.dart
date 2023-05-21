@@ -507,6 +507,12 @@ class $GripsTable extends Grips with TableInfo<$GripsTable, Grip> {
       requiredDuringInsert: true,
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'REFERENCES grip_types (id) ON DELETE CASCADE'));
+  static const VerificationMeta _edgeSizeMeta =
+      const VerificationMeta('edgeSize');
+  @override
+  late final GeneratedColumn<int> edgeSize = GeneratedColumn<int>(
+      'edge_size', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _setCountMeta =
       const VerificationMeta('setCount');
   @override
@@ -584,6 +590,7 @@ class $GripsTable extends Grips with TableInfo<$GripsTable, Grip> {
         id,
         workout,
         gripType,
+        edgeSize,
         setCount,
         repCount,
         workSeconds,
@@ -617,6 +624,10 @@ class $GripsTable extends Grips with TableInfo<$GripsTable, Grip> {
           gripType.isAcceptableOrUnknown(data['grip_type']!, _gripTypeMeta));
     } else if (isInserting) {
       context.missing(_gripTypeMeta);
+    }
+    if (data.containsKey('edge_size')) {
+      context.handle(_edgeSizeMeta,
+          edgeSize.isAcceptableOrUnknown(data['edge_size']!, _edgeSizeMeta));
     }
     if (data.containsKey('set_count')) {
       context.handle(_setCountMeta,
@@ -701,6 +712,8 @@ class $GripsTable extends Grips with TableInfo<$GripsTable, Grip> {
           .read(DriftSqlType.int, data['${effectivePrefix}workout'])!,
       gripType: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}grip_type'])!,
+      edgeSize: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}edge_size']),
       setCount: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}set_count'])!,
       repCount: attachedDatabase.typeMapping
@@ -732,6 +745,7 @@ class Grip extends DataClass implements Insertable<Grip> {
   final int id;
   final int workout;
   final int gripType;
+  final int? edgeSize;
   final int setCount;
   final int repCount;
   final int workSeconds;
@@ -749,6 +763,7 @@ class Grip extends DataClass implements Insertable<Grip> {
       {required this.id,
       required this.workout,
       required this.gripType,
+      this.edgeSize,
       required this.setCount,
       required this.repCount,
       required this.workSeconds,
@@ -764,6 +779,9 @@ class Grip extends DataClass implements Insertable<Grip> {
     map['id'] = Variable<int>(id);
     map['workout'] = Variable<int>(workout);
     map['grip_type'] = Variable<int>(gripType);
+    if (!nullToAbsent || edgeSize != null) {
+      map['edge_size'] = Variable<int>(edgeSize);
+    }
     map['set_count'] = Variable<int>(setCount);
     map['rep_count'] = Variable<int>(repCount);
     map['work_seconds'] = Variable<int>(workSeconds);
@@ -781,6 +799,9 @@ class Grip extends DataClass implements Insertable<Grip> {
       id: Value(id),
       workout: Value(workout),
       gripType: Value(gripType),
+      edgeSize: edgeSize == null && nullToAbsent
+          ? const Value.absent()
+          : Value(edgeSize),
       setCount: Value(setCount),
       repCount: Value(repCount),
       workSeconds: Value(workSeconds),
@@ -800,6 +821,7 @@ class Grip extends DataClass implements Insertable<Grip> {
       id: serializer.fromJson<int>(json['id']),
       workout: serializer.fromJson<int>(json['workout']),
       gripType: serializer.fromJson<int>(json['gripType']),
+      edgeSize: serializer.fromJson<int?>(json['edgeSize']),
       setCount: serializer.fromJson<int>(json['setCount']),
       repCount: serializer.fromJson<int>(json['repCount']),
       workSeconds: serializer.fromJson<int>(json['workSeconds']),
@@ -818,6 +840,7 @@ class Grip extends DataClass implements Insertable<Grip> {
       'id': serializer.toJson<int>(id),
       'workout': serializer.toJson<int>(workout),
       'gripType': serializer.toJson<int>(gripType),
+      'edgeSize': serializer.toJson<int?>(edgeSize),
       'setCount': serializer.toJson<int>(setCount),
       'repCount': serializer.toJson<int>(repCount),
       'workSeconds': serializer.toJson<int>(workSeconds),
@@ -834,6 +857,7 @@ class Grip extends DataClass implements Insertable<Grip> {
           {int? id,
           int? workout,
           int? gripType,
+          Value<int?> edgeSize = const Value.absent(),
           int? setCount,
           int? repCount,
           int? workSeconds,
@@ -847,6 +871,7 @@ class Grip extends DataClass implements Insertable<Grip> {
         id: id ?? this.id,
         workout: workout ?? this.workout,
         gripType: gripType ?? this.gripType,
+        edgeSize: edgeSize.present ? edgeSize.value : this.edgeSize,
         setCount: setCount ?? this.setCount,
         repCount: repCount ?? this.repCount,
         workSeconds: workSeconds ?? this.workSeconds,
@@ -863,6 +888,7 @@ class Grip extends DataClass implements Insertable<Grip> {
           ..write('id: $id, ')
           ..write('workout: $workout, ')
           ..write('gripType: $gripType, ')
+          ..write('edgeSize: $edgeSize, ')
           ..write('setCount: $setCount, ')
           ..write('repCount: $repCount, ')
           ..write('workSeconds: $workSeconds, ')
@@ -881,6 +907,7 @@ class Grip extends DataClass implements Insertable<Grip> {
       id,
       workout,
       gripType,
+      edgeSize,
       setCount,
       repCount,
       workSeconds,
@@ -897,6 +924,7 @@ class Grip extends DataClass implements Insertable<Grip> {
           other.id == this.id &&
           other.workout == this.workout &&
           other.gripType == this.gripType &&
+          other.edgeSize == this.edgeSize &&
           other.setCount == this.setCount &&
           other.repCount == this.repCount &&
           other.workSeconds == this.workSeconds &&
@@ -912,6 +940,7 @@ class GripsCompanion extends UpdateCompanion<Grip> {
   final Value<int> id;
   final Value<int> workout;
   final Value<int> gripType;
+  final Value<int?> edgeSize;
   final Value<int> setCount;
   final Value<int> repCount;
   final Value<int> workSeconds;
@@ -925,6 +954,7 @@ class GripsCompanion extends UpdateCompanion<Grip> {
     this.id = const Value.absent(),
     this.workout = const Value.absent(),
     this.gripType = const Value.absent(),
+    this.edgeSize = const Value.absent(),
     this.setCount = const Value.absent(),
     this.repCount = const Value.absent(),
     this.workSeconds = const Value.absent(),
@@ -939,6 +969,7 @@ class GripsCompanion extends UpdateCompanion<Grip> {
     this.id = const Value.absent(),
     required int workout,
     required int gripType,
+    this.edgeSize = const Value.absent(),
     required int setCount,
     required int repCount,
     required int workSeconds,
@@ -963,6 +994,7 @@ class GripsCompanion extends UpdateCompanion<Grip> {
     Expression<int>? id,
     Expression<int>? workout,
     Expression<int>? gripType,
+    Expression<int>? edgeSize,
     Expression<int>? setCount,
     Expression<int>? repCount,
     Expression<int>? workSeconds,
@@ -977,6 +1009,7 @@ class GripsCompanion extends UpdateCompanion<Grip> {
       if (id != null) 'id': id,
       if (workout != null) 'workout': workout,
       if (gripType != null) 'grip_type': gripType,
+      if (edgeSize != null) 'edge_size': edgeSize,
       if (setCount != null) 'set_count': setCount,
       if (repCount != null) 'rep_count': repCount,
       if (workSeconds != null) 'work_seconds': workSeconds,
@@ -993,6 +1026,7 @@ class GripsCompanion extends UpdateCompanion<Grip> {
       {Value<int>? id,
       Value<int>? workout,
       Value<int>? gripType,
+      Value<int?>? edgeSize,
       Value<int>? setCount,
       Value<int>? repCount,
       Value<int>? workSeconds,
@@ -1006,6 +1040,7 @@ class GripsCompanion extends UpdateCompanion<Grip> {
       id: id ?? this.id,
       workout: workout ?? this.workout,
       gripType: gripType ?? this.gripType,
+      edgeSize: edgeSize ?? this.edgeSize,
       setCount: setCount ?? this.setCount,
       repCount: repCount ?? this.repCount,
       workSeconds: workSeconds ?? this.workSeconds,
@@ -1029,6 +1064,9 @@ class GripsCompanion extends UpdateCompanion<Grip> {
     }
     if (gripType.present) {
       map['grip_type'] = Variable<int>(gripType.value);
+    }
+    if (edgeSize.present) {
+      map['edge_size'] = Variable<int>(edgeSize.value);
     }
     if (setCount.present) {
       map['set_count'] = Variable<int>(setCount.value);
@@ -1066,6 +1104,7 @@ class GripsCompanion extends UpdateCompanion<Grip> {
           ..write('id: $id, ')
           ..write('workout: $workout, ')
           ..write('gripType: $gripType, ')
+          ..write('edgeSize: $edgeSize, ')
           ..write('setCount: $setCount, ')
           ..write('repCount: $repCount, ')
           ..write('workSeconds: $workSeconds, ')

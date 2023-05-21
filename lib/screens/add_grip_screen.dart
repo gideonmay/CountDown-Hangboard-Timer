@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../db/drift_database.dart';
@@ -28,6 +29,7 @@ class _AddGripScreenState extends State<AddGripScreen> {
     await db.addGrip(GripsCompanion.insert(
         workout: widget.workout.id,
         gripType: gripDTO.gripTypeID!,
+        edgeSize: Value(gripDTO.edgeSize),
         setCount: gripDTO.sets.toInt(),
         repCount: gripDTO.reps.toInt(),
         workSeconds: gripDTO.workSeconds.toInt(),

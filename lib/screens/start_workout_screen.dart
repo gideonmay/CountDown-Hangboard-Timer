@@ -24,6 +24,7 @@ class StartWorkoutScreen extends StatelessWidget {
                 icon: const Icon(Icons.help))
           ],
           bottom: TabBar(
+            indicatorColor: Colors.white,
             tabs: [
               Tab(
                 child: Row(

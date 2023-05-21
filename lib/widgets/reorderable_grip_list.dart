@@ -61,7 +61,7 @@ class _ReorderableGripListState extends State<ReorderableGripList> {
             (index + 1).toString(),
             style: const TextStyle(fontSize: 20.0),
           ),
-          title: Text(grip.gripType.name),
+          title: _titleText(grip),
           subtitle: _subitleText(grip),
           trailing: ReorderableDragStartListener(
               index: index, child: const Icon(Icons.drag_handle)),
@@ -69,5 +69,14 @@ class _ReorderableGripListState extends State<ReorderableGripList> {
         const AppDivider(indent: 45, height: 1.0),
       ],
     );
+  }
+
+  /// Returns a Text widget that omits the edge size if it is null
+  Widget _titleText(GripWithGripType grip) {
+    if (grip.entry.edgeSize == null) {
+      return Text(grip.gripType.name);
+    }
+
+    return Text('${grip.gripType.name} - ${grip.entry.edgeSize}mm');
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../models/grip_dto.dart';
 import '../widgets/app_divider.dart';
 import '../widgets/app_header.dart';
@@ -22,21 +23,78 @@ class _GripDetailsPickersState extends State<GripDetailsPickers> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
+        _edgeSize(),
         _setsPicker(),
-        _repsSpinBox(),
-        _workSpinBox(),
-        _restSpinBox(),
-        _breakSpinBoxes(),
+        _repsPicker(),
+        _workDurationPicker(),
+        _restDurationPicker(),
+        _breakDurationPicker(),
         const AppDivider(),
         const AppHeader(title: 'Post-Grip Break'),
-        const Padding(
-          padding: EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
-          child: Text(
-            'The break duration between this grip and the next',
-            textAlign: TextAlign.center,
-          ),
+        const Text(
+          'The break duration between this grip and the next',
+          textAlign: TextAlign.center,
         ),
         _lastBreakSpinBoxes(),
+      ],
+    );
+  }
+
+  /// A text input to enter the edge depth for this grip
+  Widget _edgeSize() {
+    return Row(
+      children: [
+        const NumberPickerTitle(
+            title: 'Edge Size', subtitle: '(optional)', maxWidth: 110.0),
+        Expanded(
+            child: Padding(
+          padding: const EdgeInsets.fromLTRB(8.0, 8.0, 24.0, 8.0),
+          child: LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+            return Stack(
+              children: [
+                Positioned(
+                    top: 11.5,
+                    right: constraints.maxWidth / 2 - 55,
+                    child: const Text('mm', style: TextStyle(fontSize: 20.0))),
+                TextFormField(
+                  decoration:
+                      const InputDecoration(filled: true, counterText: ''),
+                  maxLength: 2,
+                  style: const TextStyle(fontSize: 24.0, height: 1.0),
+                  textAlign: TextAlign.center,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    /*
+                     * Remove leading zeroes. Obtained from following source:
+                     * https://stackoverflow.com/questions/64367743/remove-the-first-zeros-of-phone-input-textformfield-of-type-numbers-flutter
+                     */
+                    FilteringTextInputFormatter.deny(RegExp(r'^0+'))
+                  ],
+                  onFieldSubmitted: (value) {},
+                  onSaved: (newValue) {
+                    if (newValue != null) {
+                      int? edgeSize = int.tryParse(newValue);
+                      widget.gripDTO.edgeSize = edgeSize;
+                    }
+                  },
+                  validator: (value) {
+                    if (value != null) {
+                      int? edgeSize = int.tryParse(value);
+
+                      if (edgeSize != null && edgeSize <= 0) {
+                        return 'Edge size must be a positive number';
+                      }
+                    }
+
+                    return null;
+                  },
+                ),
+              ],
+            );
+          }),
+        )),
       ],
     );
   }
@@ -62,7 +120,7 @@ class _GripDetailsPickersState extends State<GripDetailsPickers> {
   }
 
   /// NumberPicker that allows user to choose number of reps
-  Widget _repsSpinBox() {
+  Widget _repsPicker() {
     return Row(
       children: [
         const NumberPickerTitle(title: 'Reps', maxWidth: 60.0),
@@ -82,7 +140,7 @@ class _GripDetailsPickersState extends State<GripDetailsPickers> {
   }
 
   /// NumberPicker that allows user to choose work seconds
-  Widget _workSpinBox() {
+  Widget _workDurationPicker() {
     return Row(
       children: [
         const NumberPickerTitle(title: 'Work', maxWidth: 60.0),
@@ -103,7 +161,7 @@ class _GripDetailsPickersState extends State<GripDetailsPickers> {
   }
 
   /// NumberPicker that allows user to choose rest seconds
-  Widget _restSpinBox() {
+  Widget _restDurationPicker() {
     return Row(
       children: [
         const NumberPickerTitle(title: 'Rest', maxWidth: 60.0),
@@ -124,7 +182,7 @@ class _GripDetailsPickersState extends State<GripDetailsPickers> {
   }
 
   /// Spin boxes that allows user to choose break minutes and seconds
-  Widget _breakSpinBoxes() {
+  Widget _breakDurationPicker() {
     return Row(
       children: [
         const NumberPickerTitle(title: 'Break', maxWidth: 60.0),

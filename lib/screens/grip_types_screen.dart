@@ -28,6 +28,7 @@ class _GripTypesScreenState extends State<GripTypesScreen> {
                   icon: const Icon(Icons.help))
             ],
             bottom: TabBar(
+              indicatorColor: Colors.white,
               tabs: [
                 Tab(
                   child: Row(
@@ -84,7 +85,6 @@ class _GripTypesScreenState extends State<GripTypesScreen> {
             title: 'Grip Types',
             body:
                 'A grip type is a resuable descriptor for a grip. Adding a grip type will add it to your list of saved grip types.\n\n'
-                'Be careful when deleting grip types from the list, as any grip that it is used on will also be deleted.'
-            ));
+                'Be careful when deleting grip types from the list, as any grip that it is used on will also be deleted.'));
   }
 }

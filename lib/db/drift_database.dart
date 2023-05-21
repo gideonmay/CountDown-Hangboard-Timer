@@ -21,6 +21,7 @@ class Grips extends Table {
       integer().references(Workouts, #id, onDelete: KeyAction.cascade)();
   IntColumn get gripType =>
       integer().references(GripTypes, #id, onDelete: KeyAction.cascade)();
+  IntColumn get edgeSize => integer().nullable()();
   IntColumn get setCount => integer().check(setCount.isBetweenValues(1, 30))();
   IntColumn get repCount => integer().check(repCount.isBetweenValues(1, 30))();
   IntColumn get workSeconds =>

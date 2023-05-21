@@ -10,8 +10,7 @@ class AppHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Text(title,
-          style: TextStyle(color: Colors.grey.shade600, fontSize: 20.0)),
+      child: Text(title, style: const TextStyle(fontSize: 20.0)),
     );
   }
 }

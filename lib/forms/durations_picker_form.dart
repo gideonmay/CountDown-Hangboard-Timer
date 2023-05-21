@@ -123,6 +123,9 @@ class _DurationsPickerFormState extends State<DurationsPickerForm> {
               onPressed: () {
                 widget.onStartPressed(context, timerDurations);
               },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Theme.of(context).colorScheme.secondary,
+              ),
               child: const Text(
                 'Start',
                 style: TextStyle(fontSize: 20.0),

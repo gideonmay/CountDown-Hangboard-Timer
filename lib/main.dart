@@ -4,6 +4,7 @@ import './db/drift_database.dart';
 import 'screens/settings_screen.dart';
 import 'screens/durations_picker_screen.dart';
 import 'screens/my_workouts_screen.dart';
+import 'theme/color_theme.dart';
 
 void main() {
   runApp(const App());
@@ -21,7 +22,8 @@ class App extends StatelessWidget {
           title: 'Flutter Demo',
           theme: ThemeData(
               colorScheme: ColorScheme.fromSwatch().copyWith(
-                  primary: Colors.blue, secondary: Colors.blue.shade300)),
+                  primary: AppColorTheme.primary,
+                  secondary: AppColorTheme.secondary)),
           home: const AppScaffold()),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../theme/color_theme.dart';
 
 /// A widget that contains the Start, Reset, and Skip buttons that can change
 /// depending on the state of the timer
@@ -38,7 +39,7 @@ class _TimerControlButtonsState extends State<TimerControlButtons> {
               padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
               child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
+                      backgroundColor: AppColorTheme.green,
                       minimumSize: const Size.fromHeight(40)),
                   onPressed: () {
                     widget.resumeTimer();
@@ -57,7 +58,7 @@ class _TimerControlButtonsState extends State<TimerControlButtons> {
               padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
               child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.yellow.shade700,
+                      backgroundColor: AppColorTheme.yellow,
                       minimumSize: const Size.fromHeight(40)),
                   onPressed: () {
                     widget.pauseTimer();
@@ -74,6 +75,7 @@ class _TimerControlButtonsState extends State<TimerControlButtons> {
           padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
           child: ElevatedButton(
               style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.secondary,
                   minimumSize: const Size.fromHeight(40)),
               onPressed: () {
                 widget.startTimer();
@@ -93,7 +95,7 @@ class _TimerControlButtonsState extends State<TimerControlButtons> {
             padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
             child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
+                    backgroundColor: AppColorTheme.red,
                     minimumSize: const Size.fromHeight(40)),
                 onPressed: () {
                   widget.resetTimer();
@@ -106,7 +108,7 @@ class _TimerControlButtonsState extends State<TimerControlButtons> {
             padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
             child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
+                    backgroundColor: AppColorTheme.blue,
                     minimumSize: const Size.fromHeight(40)),
                 onPressed: () {
                   widget.skipDuration();

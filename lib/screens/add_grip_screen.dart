@@ -69,7 +69,6 @@ class _AddGripScreenState extends State<AddGripScreen> {
             title: 'Adding Grips',
             body:
                 'Specify the number of sets and reps, and the work, rest, and break durations for this grip.\n\n'
-                'A grip type is also required for each grip. This is a name used to describe a grip which can be resued among other grips.'
-            ));
+                'A grip type is also required for each grip. This is a name used to describe a grip which can be reused among other grips.'));
   }
 }

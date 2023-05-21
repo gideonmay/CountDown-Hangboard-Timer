@@ -363,7 +363,7 @@ class ArcPainter extends CustomPainter {
     // Draw circle
     Offset center = Offset(size.width / 2, size.height / 2);
     Paint circlePaint = Paint()
-      ..color = Colors.grey.shade300
+      ..color = Colors.grey.shade200
       ..strokeWidth = 20.0
       ..style = PaintingStyle.stroke;
 

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'duration_status.dart';
 import 'status_value.dart';
+import '../theme/color_theme.dart';
 
 // These colors correspond to different status values
-Color workColor = Colors.green;
-Color restColor = Colors.yellow.shade700;
-Color breakColor = Colors.red;
-Color prepareColor = Colors.blue;
+Color workColor = AppColorTheme.green;
+Color restColor = AppColorTheme.yellow;
+Color breakColor = AppColorTheme.red;
+Color prepareColor = AppColorTheme.blue;
 
 /// Represents a list of DurationStatus objects that can be 'fed' into the
 /// countdown timer. This object takes the given values for reps, sets,
@@ -99,7 +100,7 @@ class DurationStatusList {
       }
 
       currSet += 1;
-      
+
       // Add break duration after all but last set
       if (currSet <= sets) {
         _durationStatusList.add(DurationStatus(

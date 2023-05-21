@@ -29,7 +29,7 @@ class _EditGripsTabState extends State<EditGripsTab> {
                 child: ElevatedButton.icon(
                     style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(
-                            Theme.of(context).colorScheme.primary),
+                            Theme.of(context).colorScheme.secondary),
                         shape:
                             MaterialStateProperty.all<RoundedRectangleBorder>(
                                 RoundedRectangleBorder(

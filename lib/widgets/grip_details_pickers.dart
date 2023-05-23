@@ -64,6 +64,7 @@ class _GripDetailsPickersState extends State<GripDetailsPickers> {
                   style: const TextStyle(fontSize: 24.0, height: 1.0),
                   textAlign: TextAlign.center,
                   keyboardType: TextInputType.number,
+                  initialValue: _initialEdgeSize(),
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
                     /*
@@ -97,6 +98,13 @@ class _GripDetailsPickersState extends State<GripDetailsPickers> {
         )),
       ],
     );
+  }
+
+  /// Returns the edge size if not null. Otherwise, returns en empty string
+  String _initialEdgeSize() {
+    return widget.gripDTO.edgeSize != null
+        ? widget.gripDTO.edgeSize.toString()
+        : '';
   }
 
   /// NumberPicker that allows user to choose number of sets

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../db/drift_database.dart';
+import '../screens/edit_grip_screen.dart';
 import '../widgets/app_divider.dart';
 
 /// A ReorderableListView that enables the user to tap and drag grips to
@@ -61,6 +62,9 @@ class _ReorderableGripListState extends State<ReorderableGripList> {
             (index + 1).toString(),
             style: const TextStyle(fontSize: 20.0),
           ),
+          onTap: () {
+            _navigateToEditGripScreen(context, grip);
+          },
           title: _titleText(grip),
           subtitle: _subitleText(grip),
           trailing: ReorderableDragStartListener(
@@ -78,5 +82,14 @@ class _ReorderableGripListState extends State<ReorderableGripList> {
     }
 
     return Text('${grip.gripType.name} - ${grip.entry.edgeSize}mm');
+  }
+
+  /// Navigates to the EditGripScreen widget
+  static _navigateToEditGripScreen(
+      BuildContext context, GripWithGripType grip) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => EditGripScreen(grip: grip)),
+    );
   }
 }

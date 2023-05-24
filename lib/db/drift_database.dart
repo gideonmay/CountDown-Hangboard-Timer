@@ -3,6 +3,7 @@ import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
+import '../models/grip_dto.dart';
 
 part 'drift_database.g.dart';
 
@@ -176,6 +177,23 @@ class AppDatabase extends _$AppDatabase {
   Future<int> updateGripSeqNum(int gripID, int newSeqNum) {
     return (update(grips)..where((g) => g.id.equals(gripID)))
         .write(GripsCompanion(sequenceNum: Value(newSeqNum)));
+  }
+
+  /// Updates the grip with the given gripID using the given GripDTO
+  Future<int> updateGrip(int gripID, GripDTO gripDTO) {
+    return (update(grips)..where((g) => g.id.equals(gripID)))
+        .write(GripsCompanion(
+      gripType: Value(gripDTO.gripTypeID!),
+      edgeSize: Value(gripDTO.edgeSize),
+      setCount: Value(gripDTO.sets.toInt()),
+      repCount: Value(gripDTO.reps.toInt()),
+      workSeconds: Value(gripDTO.workSeconds.toInt()),
+      restSeconds: Value(gripDTO.restSeconds.toInt()),
+      breakMinutes: Value(gripDTO.breakMinutes.toInt()),
+      breakSeconds: Value(gripDTO.breakSeconds.toInt()),
+      lastBreakMinutes: Value(gripDTO.lastBreakMinutes.toInt()),
+      lastBreakSeconds: Value(gripDTO.lastBreakSeconds.toInt()),
+    ));
   }
 
   /// Updates the sequence number for any grips in the given list that have

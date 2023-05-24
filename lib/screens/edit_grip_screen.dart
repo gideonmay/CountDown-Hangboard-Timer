@@ -48,7 +48,18 @@ class _EditGripScreenState extends State<EditGripScreen> {
         appBar: AppBar(
           title: const Text('Edit Grip'),
         ),
-        body:
-            SafeArea(child: AddGripForm(gripDTO: gripDTO, onFormSaved: () {})));
+        body: SafeArea(
+            child: AddGripForm(gripDTO: gripDTO, onFormSaved: _updateGrip)));
+  }
+
+  /// Updates the grip using data kept in the gripDTO
+  void _updateGrip() async {
+    final db = Provider.of<AppDatabase>(context, listen: false);
+    await db.updateGrip(widget.grip.entry.id, gripDTO);
+
+    // Navigate back to Start Workout page
+    if (context.mounted) {
+      Navigator.pop(context);
+    }
   }
 }

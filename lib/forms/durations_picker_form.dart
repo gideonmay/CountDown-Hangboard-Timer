@@ -107,9 +107,10 @@ class _DurationsPickerFormState extends State<DurationsPickerForm> {
               child: NumberPicker(
                 unit: 'sec.',
                 initialValue: timerDurations.breakSeconds.toInt(),
-                min: 1,
-                max: 60,
+                min: 0,
+                max: 59,
                 padding: const EdgeInsets.fromLTRB(0, 8.0, 16.0, 8.0),
+                shouldZeroPad: true,
                 onItemChanged: (newValue) {
                   timerDurations.breakSeconds = newValue.toDouble();
                 },

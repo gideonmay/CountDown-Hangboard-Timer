@@ -9,6 +9,9 @@ class NumberPicker extends StatelessWidget {
   final int min;
   final int max;
   final EdgeInsets padding;
+
+  /// Whether or not to zero pad single digit numbers to two digits
+  final bool shouldZeroPad;
   final void Function(int newValue) onItemChanged;
 
   const NumberPicker(
@@ -18,7 +21,8 @@ class NumberPicker extends StatelessWidget {
       required this.max,
       required this.onItemChanged,
       this.unit,
-      required this.padding});
+      required this.padding,
+      this.shouldZeroPad = false});
 
   @override
   Widget build(BuildContext context) {
@@ -48,9 +52,7 @@ class NumberPicker extends StatelessWidget {
             // Generate a list from min to max (inclusive)
             children: List<Widget>.generate(max - min + 1, (int index) {
               return Center(
-                child: Text(
-                  (index + min).toString(),
-                ),
+                child: _numberText(index + min),
               );
             }),
           );
@@ -77,5 +79,15 @@ class NumberPicker extends StatelessWidget {
             style: const TextStyle(fontSize: 20.0),
           ))
     ]);
+  }
+
+  /// Returns a Text widget with the given value. Zero pads the text depending
+  /// on the value of shouldZeroPad
+  Widget _numberText(int value) {
+    if (shouldZeroPad) {
+      return Text(value.toString().padLeft(2, '0'));
+    }
+
+    return Text(value.toString());
   }
 }

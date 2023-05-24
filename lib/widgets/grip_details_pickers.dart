@@ -210,9 +210,10 @@ class _GripDetailsPickersState extends State<GripDetailsPickers> {
           child: NumberPicker(
             unit: 'sec.',
             initialValue: widget.gripDTO.breakSeconds.toInt(),
-            min: 1,
-            max: 60,
+            min: 0,
+            max: 59,
             padding: const EdgeInsets.fromLTRB(0, 8.0, 16.0, 8.0),
+            shouldZeroPad: true,
             onItemChanged: (newValue) {
               widget.gripDTO.breakSeconds = newValue.toDouble();
             },
@@ -244,9 +245,10 @@ class _GripDetailsPickersState extends State<GripDetailsPickers> {
           child: NumberPicker(
             unit: 'sec.',
             initialValue: widget.gripDTO.lastBreakSeconds.toInt(),
-            min: 1,
-            max: 60,
+            min: 0,
+            max: 59,
             padding: const EdgeInsets.fromLTRB(0, 8.0, 16.0, 8.0),
+            shouldZeroPad: true,
             onItemChanged: (newValue) {
               widget.gripDTO.lastBreakSeconds = newValue.toDouble();
             },

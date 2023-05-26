@@ -32,7 +32,7 @@ class _DurationsPickerFormState extends State<DurationsPickerForm> {
                 max: 20,
                 padding: const EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
                 onItemChanged: (newValue) {
-                  timerDurations.sets = newValue.toDouble();
+                  timerDurations.sets = newValue;
                 },
               ),
             ),
@@ -48,7 +48,7 @@ class _DurationsPickerFormState extends State<DurationsPickerForm> {
                 max: 20,
                 padding: const EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
                 onItemChanged: (newValue) {
-                  timerDurations.reps = newValue.toDouble();
+                  timerDurations.reps = newValue;
                 },
               ),
             ),
@@ -65,7 +65,7 @@ class _DurationsPickerFormState extends State<DurationsPickerForm> {
                 max: 60,
                 padding: const EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
                 onItemChanged: (newValue) {
-                  timerDurations.workSeconds = newValue.toDouble();
+                  timerDurations.workSeconds = newValue;
                 },
               ),
             ),
@@ -82,7 +82,7 @@ class _DurationsPickerFormState extends State<DurationsPickerForm> {
                 max: 60,
                 padding: const EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
                 onItemChanged: (newValue) {
-                  timerDurations.restSeconds = newValue.toDouble();
+                  timerDurations.restSeconds = newValue;
                 },
               ),
             ),
@@ -99,7 +99,7 @@ class _DurationsPickerFormState extends State<DurationsPickerForm> {
                 min: 0,
                 max: 30,
                 onItemChanged: (newValue) {
-                  timerDurations.breakMinutes = newValue.toDouble();
+                  timerDurations.breakMinutes = newValue;
                 },
               ),
             ),
@@ -112,7 +112,7 @@ class _DurationsPickerFormState extends State<DurationsPickerForm> {
                 padding: const EdgeInsets.fromLTRB(0, 8.0, 16.0, 8.0),
                 shouldZeroPad: true,
                 onItemChanged: (newValue) {
-                  timerDurations.breakSeconds = newValue.toDouble();
+                  timerDurations.breakSeconds = newValue;
                 },
               ),
             ),

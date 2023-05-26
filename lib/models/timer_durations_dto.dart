@@ -2,12 +2,12 @@
 /// for a timer. This class serves as a data transfer object between the timer
 /// durations picker form and other areas of the app.
 class TimerDurationsDTO {
-  double sets;
-  double reps;
-  double workSeconds;
-  double restSeconds;
-  double breakMinutes;
-  double breakSeconds;
+  int sets;
+  int reps;
+  int workSeconds;
+  int restSeconds;
+  int breakMinutes;
+  int breakSeconds;
 
   TimerDurationsDTO(
       {required this.sets,

@@ -119,7 +119,7 @@ class _GripDetailsPickersState extends State<GripDetailsPickers> {
             max: 20,
             padding: const EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
             onItemChanged: (newValue) {
-              widget.gripDTO.sets = newValue.toDouble();
+              widget.gripDTO.sets = newValue;
             },
           ),
         ),
@@ -139,7 +139,7 @@ class _GripDetailsPickersState extends State<GripDetailsPickers> {
             max: 20,
             padding: const EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
             onItemChanged: (newValue) {
-              widget.gripDTO.reps = newValue.toDouble();
+              widget.gripDTO.reps = newValue;
             },
           ),
         ),
@@ -160,7 +160,7 @@ class _GripDetailsPickersState extends State<GripDetailsPickers> {
             max: 60,
             padding: const EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
             onItemChanged: (newValue) {
-              widget.gripDTO.workSeconds = newValue.toDouble();
+              widget.gripDTO.workSeconds = newValue;
             },
           ),
         ),
@@ -181,7 +181,7 @@ class _GripDetailsPickersState extends State<GripDetailsPickers> {
             max: 60,
             padding: const EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
             onItemChanged: (newValue) {
-              widget.gripDTO.restSeconds = newValue.toDouble();
+              widget.gripDTO.restSeconds = newValue;
             },
           ),
         ),
@@ -202,7 +202,7 @@ class _GripDetailsPickersState extends State<GripDetailsPickers> {
             min: 0,
             max: 30,
             onItemChanged: (newValue) {
-              widget.gripDTO.breakMinutes = newValue.toDouble();
+              widget.gripDTO.breakMinutes = newValue;
             },
           ),
         ),
@@ -215,7 +215,7 @@ class _GripDetailsPickersState extends State<GripDetailsPickers> {
             padding: const EdgeInsets.fromLTRB(0, 8.0, 16.0, 8.0),
             shouldZeroPad: true,
             onItemChanged: (newValue) {
-              widget.gripDTO.breakSeconds = newValue.toDouble();
+              widget.gripDTO.breakSeconds = newValue;
             },
           ),
         ),
@@ -237,7 +237,7 @@ class _GripDetailsPickersState extends State<GripDetailsPickers> {
             min: 0,
             max: 30,
             onItemChanged: (newValue) {
-              widget.gripDTO.lastBreakMinutes = newValue.toDouble();
+              widget.gripDTO.lastBreakMinutes = newValue;
             },
           ),
         ),
@@ -250,7 +250,7 @@ class _GripDetailsPickersState extends State<GripDetailsPickers> {
             padding: const EdgeInsets.fromLTRB(0, 8.0, 16.0, 8.0),
             shouldZeroPad: true,
             onItemChanged: (newValue) {
-              widget.gripDTO.lastBreakSeconds = newValue.toDouble();
+              widget.gripDTO.lastBreakSeconds = newValue;
             },
           ),
         ),

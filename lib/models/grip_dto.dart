@@ -10,10 +10,10 @@ class GripDTO extends TimerDurationsDTO {
   int? edgeSize;
 
   /// Break minutes between this grip and the next grip
-  double lastBreakMinutes;
+  int lastBreakMinutes;
 
   /// Break seconds between this grip and the next grip
-  double lastBreakSeconds;
+  int lastBreakSeconds;
 
   GripDTO(
       {required this.gripName,

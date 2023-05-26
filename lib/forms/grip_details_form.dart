@@ -4,20 +4,25 @@ import '../widgets/grip_details_pickers.dart';
 import '../widgets/grip_type_dropdown.dart';
 
 /// A form that allows user to input grip information
-class AddGripForm extends StatefulWidget {
+class GripDetailsForm extends StatefulWidget {
   final GripDTO gripDTO;
+
+  final String buttonText;
 
   /// Function to be executed when form is saved to write grip to database
   final Function onFormSaved;
 
-  const AddGripForm(
-      {super.key, required this.gripDTO, required this.onFormSaved});
+  const GripDetailsForm(
+      {super.key,
+      required this.gripDTO,
+      required this.onFormSaved,
+      required this.buttonText});
 
   @override
-  State<AddGripForm> createState() => _AddGripFormState();
+  State<GripDetailsForm> createState() => _GripDetailsFormState();
 }
 
-class _AddGripFormState extends State<AddGripForm> {
+class _GripDetailsFormState extends State<GripDetailsForm> {
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -49,7 +54,8 @@ class _AddGripFormState extends State<AddGripForm> {
               widget.onFormSaved();
             }
           },
-          child: const Text('Submit', style: TextStyle(fontSize: 20.0))),
+          child:
+              Text(widget.buttonText, style: const TextStyle(fontSize: 20.0))),
     );
   }
 }

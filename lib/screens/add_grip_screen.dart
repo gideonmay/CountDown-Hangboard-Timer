@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../db/drift_database.dart';
 import '../models/grip_dto.dart';
-import '../forms/add_grip_form.dart';
+import '../forms/grip_details_form.dart';
 import '../widgets/helper_dialog.dart';
 
 /// A screen that allows the user to add a new grip to the workout
@@ -58,8 +58,9 @@ class _AddGripScreenState extends State<AddGripScreen> {
           ],
         ),
         body: SafeArea(
-            child: AddGripForm(
+            child: GripDetailsForm(
           gripDTO: gripDTO,
+          buttonText: 'Submit',
           onFormSaved: _createGrip,
         )));
   }

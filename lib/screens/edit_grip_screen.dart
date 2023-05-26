@@ -1,11 +1,10 @@
-import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../db/drift_database.dart';
 import '../models/grip_dto.dart';
-import '../forms/add_grip_form.dart';
-import '../widgets/helper_dialog.dart';
+import '../forms/grip_details_form.dart';
 
+/// A creen with a form to edit the details of a given grip
 class EditGripScreen extends StatefulWidget {
   final GripWithGripType grip;
 
@@ -31,14 +30,14 @@ class _EditGripScreenState extends State<EditGripScreen> {
       gripDTO.gripTypeID = widget.grip.entry.gripType;
       gripDTO.gripName = widget.grip.gripType.name;
       gripDTO.edgeSize = widget.grip.entry.edgeSize;
-      gripDTO.sets = widget.grip.entry.setCount.toDouble();
-      gripDTO.reps = widget.grip.entry.repCount.toDouble();
-      gripDTO.workSeconds = widget.grip.entry.workSeconds.toDouble();
-      gripDTO.restSeconds = widget.grip.entry.restSeconds.toDouble();
-      gripDTO.breakMinutes = widget.grip.entry.breakMinutes.toDouble();
-      gripDTO.breakSeconds = widget.grip.entry.breakSeconds.toDouble();
-      gripDTO.lastBreakMinutes = widget.grip.entry.lastBreakMinutes.toDouble();
-      gripDTO.lastBreakSeconds = widget.grip.entry.lastBreakSeconds.toDouble();
+      gripDTO.sets = widget.grip.entry.setCount;
+      gripDTO.reps = widget.grip.entry.repCount;
+      gripDTO.workSeconds = widget.grip.entry.workSeconds;
+      gripDTO.restSeconds = widget.grip.entry.restSeconds;
+      gripDTO.breakMinutes = widget.grip.entry.breakMinutes;
+      gripDTO.breakSeconds = widget.grip.entry.breakSeconds;
+      gripDTO.lastBreakMinutes = widget.grip.entry.lastBreakMinutes;
+      gripDTO.lastBreakSeconds = widget.grip.entry.lastBreakSeconds;
     });
   }
 
@@ -49,7 +48,10 @@ class _EditGripScreenState extends State<EditGripScreen> {
           title: const Text('Edit Grip'),
         ),
         body: SafeArea(
-            child: AddGripForm(gripDTO: gripDTO, onFormSaved: _updateGrip)));
+            child: GripDetailsForm(
+                gripDTO: gripDTO,
+                buttonText: 'Save Changes',
+                onFormSaved: _updateGrip)));
   }
 
   /// Updates the grip using data kept in the gripDTO

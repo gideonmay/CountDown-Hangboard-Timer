@@ -48,6 +48,8 @@ class _AddGripScreenState extends State<AddGripScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final db = Provider.of<AppDatabase>(context, listen: false);
+
     return Scaffold(
         appBar: AppBar(
           title: const Text('Add Grip'),
@@ -60,6 +62,7 @@ class _AddGripScreenState extends State<AddGripScreen> {
         body: SafeArea(
             child: GripDetailsForm(
           gripDTO: gripDTO,
+          gripTypeStream: db.watchAllGripTypes(),
           buttonText: 'Submit',
           onFormSaved: _createGrip,
         )));

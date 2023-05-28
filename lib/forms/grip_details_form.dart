@@ -1,13 +1,16 @@
 import 'package:countdown_app/models/grip_dto.dart';
 import 'package:flutter/material.dart';
+import '../db/drift_database.dart';
 import '../widgets/grip_details_pickers.dart';
 import '../widgets/grip_type_dropdown.dart';
 
 /// A form that allows user to input grip information
 class GripDetailsForm extends StatefulWidget {
   final GripDTO gripDTO;
-
   final String buttonText;
+
+  /// The stream of grip types to populate the dropdown with
+  final Stream<List<GripType>> gripTypeStream;
 
   /// Function to be executed when form is saved to write grip to database
   final Function onFormSaved;
@@ -16,7 +19,8 @@ class GripDetailsForm extends StatefulWidget {
       {super.key,
       required this.gripDTO,
       required this.onFormSaved,
-      required this.buttonText});
+      required this.buttonText,
+      required this.gripTypeStream});
 
   @override
   State<GripDetailsForm> createState() => _GripDetailsFormState();
@@ -32,7 +36,8 @@ class _GripDetailsFormState extends State<GripDetailsForm> {
         key: _formKey,
         child: ListView(
           children: [
-            GripTypeDropdown(gripDTO: widget.gripDTO),
+            GripTypeDropdown(
+                gripDTO: widget.gripDTO, gripTypeStream: widget.gripTypeStream),
             GripDetailsPickers(gripDTO: widget.gripDTO),
             _submitButton(),
           ],

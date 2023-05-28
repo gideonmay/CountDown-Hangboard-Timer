@@ -43,6 +43,8 @@ class _EditGripScreenState extends State<EditGripScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final db = Provider.of<AppDatabase>(context, listen: false);
+
     return Scaffold(
         appBar: AppBar(
           title: const Text('Edit Grip'),
@@ -50,6 +52,7 @@ class _EditGripScreenState extends State<EditGripScreen> {
         body: SafeArea(
             child: GripDetailsForm(
                 gripDTO: gripDTO,
+                gripTypeStream: db.watchAllGripTypes(),
                 buttonText: 'Save Changes',
                 onFormSaved: _updateGrip)));
   }

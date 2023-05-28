@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '../db/drift_database.dart';
 import '../models/grip_dto.dart';
 import '../screens/grip_types_screen.dart';
@@ -8,7 +7,11 @@ import '../screens/grip_types_screen.dart';
 class GripTypeDropdown extends StatefulWidget {
   final GripDTO gripDTO;
 
-  const GripTypeDropdown({super.key, required this.gripDTO});
+  /// The stream of grip types to populate the dropdown with
+  final Stream<List<GripType>> gripTypeStream;
+
+  const GripTypeDropdown(
+      {super.key, required this.gripDTO, required this.gripTypeStream});
 
   @override
   State<GripTypeDropdown> createState() => _GripTypeDropdownState();
@@ -59,10 +62,8 @@ class _GripTypeDropdownState extends State<GripTypeDropdown> {
 
   /// Returns a List of DropdownMenuItems for each grip type in the database
   StreamBuilder<List<GripType>> _buildDropdownFormField(BuildContext context) {
-    final db = Provider.of<AppDatabase>(context);
-
     return StreamBuilder(
-      stream: db.watchAllGripTypes(),
+      stream: widget.gripTypeStream,
       builder: (context, AsyncSnapshot<List<GripType>> snapshot) {
         final gripTypes = snapshot.data ?? List.empty();
 
@@ -86,12 +87,12 @@ class _GripTypeDropdownState extends State<GripTypeDropdown> {
           },
           onChanged: (value) {
             setState(() {
-              widget.gripDTO.gripTypeID = value as int;
+              widget.gripDTO.gripTypeID = value;
             });
           },
           onSaved: (value) {
             setState(() {
-              widget.gripDTO.gripTypeID = value as int;
+              widget.gripDTO.gripTypeID = value;
             });
           },
           decoration: const InputDecoration(filled: true),
@@ -102,11 +103,7 @@ class _GripTypeDropdownState extends State<GripTypeDropdown> {
 
   /// Returns a hint String based on the length of the gripTypes list
   String getHintText(List<GripType> gripTypes) {
-    if (gripTypes.isEmpty) {
-      return 'No grip types added';
-    }
-
-    return 'Choose a grip type';
+    return gripTypes.isEmpty ? 'No grip types added' : 'Choose a grip type';
   }
 
   /// Navigates to the AddGripType widget

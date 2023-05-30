@@ -83,7 +83,7 @@ class GripTypeWithGripCount {
 /// The Drift database object for the app
 @DriftDatabase(tables: [GripTypes, Grips, Workouts])
 class AppDatabase extends _$AppDatabase {
-  AppDatabase() : super(_openConnection());
+  AppDatabase(QueryExecutor e) : super(e);
 
   @override
   int get schemaVersion => 1;
@@ -221,7 +221,8 @@ class AppDatabase extends _$AppDatabase {
   }
 }
 
-LazyDatabase _openConnection() {
+/// Returns a connection to the native SQLite database
+LazyDatabase openConnection() {
   return LazyDatabase(() async {
     final dbFolder = await getApplicationDocumentsDirectory();
     final file = File(p.join(dbFolder.path, 'db.sqlite'));

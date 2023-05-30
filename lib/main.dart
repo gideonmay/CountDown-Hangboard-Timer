@@ -16,7 +16,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Provider(
-      create: (context) => AppDatabase(),
+      create: (context) => AppDatabase(openConnection()),
       dispose: (context, db) => db.close(),
       child: MaterialApp(
           title: 'Flutter Demo',

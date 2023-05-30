@@ -76,7 +76,7 @@ class _WorkoutFormState extends State<WorkoutForm> {
       padding: const EdgeInsets.all(8.0),
       child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-              backgroundColor: Theme.of(context).colorScheme.primary,
+              backgroundColor: Theme.of(context).colorScheme.secondary,
               minimumSize: const Size.fromHeight(40)),
           onPressed: () async {
             if (_formKey.currentState!.validate()) {

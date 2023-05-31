@@ -41,7 +41,7 @@ void main() {
     });
   });
 
-  group('GripTypes', () {
+  group('GripTypes table', () {
     test('GripType is created with correct values', () async {
       await db.addGripType('Half Crimp');
       final gripTypes = await db.watchAllGripTypes().first;
@@ -62,7 +62,7 @@ void main() {
     });
   });
 
-  group('GripTypes with Grip counts', () {
+  group('GripTypes with Grip counts query', () {
     late int gripTypeID;
     late int workoutID;
 
@@ -98,27 +98,97 @@ void main() {
     });
   });
 
-  // group('Grips table', () {
-  //   late final int workoutID;
+  group('Grips table', () {
+    late int gripTypeID;
+    late int workoutID;
 
-  //   setUp(() async {
-  //     final workoutDTO =
-  //         WorkoutDTO(name: 'Test Workout', description: 'Test description');
-  //     workoutID = await db.addWorkout(workoutDTO);
-  //   });
+    setUp(() async {
+      // Create a grip type and workout to be used to create test grips
+      gripTypeID = await db.addGripType('Open Hand Crimp');
+      final workoutDTO =
+          WorkoutDTO(name: 'Test Workout', description: 'Test description');
+      workoutID = await db.addWorkout(workoutDTO);
+    });
 
-  //   test('Grip is created with correct values', () async {
-  //     final gripDTO = GripDTO(
-  //         gripName: 'Test Grip', lastBreakMinutes: 1, lastBreakSeconds: 30);
-  //     gripDTO.edgeSize = 16;
-  //     gripDTO.
+    test('Grip is created with correct values', () async {
+      final gripDTO = GripDTO.standard()
+        ..edgeSize = 16
+        ..gripTypeID = gripTypeID;
 
-  //     await db.addGrip(workoutID, gripDTO);
-  //     final grips = await db.watchAllGripsWithType(workoutID).first;
-  //   });
+      await db.addGrip(workoutID, gripDTO);
+      List<GripWithGripType> grips =
+          await db.watchAllGripsWithType(workoutID).first;
+      final grip = grips[0].entry;
+      final gripType = grips[0].gripType;
 
-  //   test('Max sequence number is correct when zero grips exist', () {});
+      expect(grip.setCount, 1);
+      expect(grip.repCount, 1);
+      expect(grip.workSeconds, 10);
+      expect(grip.restSeconds, 5);
+      expect(grip.breakMinutes, 0);
+      expect(grip.breakSeconds, 30);
+      expect(grip.lastBreakMinutes, 0);
+      expect(grip.lastBreakSeconds, 30);
+      expect(grip.edgeSize, 16);
+      expect(grip.sequenceNum, 1);
+      expect(grip.workout, workoutID);
+      expect(grip.gripType, gripTypeID);
+      expect(gripType.name, 'Open Hand Crimp');
+    });
 
-  //   test('Max sequence number is correct when multiple grips exist', () {});
-  // });
+    test('Grip is correctly created with a null edge size', () async {
+      final gripDTO = GripDTO.standard()..gripTypeID = gripTypeID;
+
+      await db.addGrip(workoutID, gripDTO);
+      List<GripWithGripType> grips =
+          await db.watchAllGripsWithType(workoutID).first;
+      final grip = grips[0].entry;
+
+      expect(grip.edgeSize, null);
+    });
+
+    test('Grips have correct sequence numbers', () async {
+      final gripDTO = GripDTO.standard()..gripTypeID = gripTypeID;
+      await db.addGrip(workoutID, gripDTO); // 1st grip
+      await db.addGrip(workoutID, gripDTO); // 2nd grip
+      await db.addGrip(workoutID, gripDTO); // 3rd grip
+
+      List<GripWithGripType> grips =
+          await db.watchAllGripsWithType(workoutID).first;
+
+      expect(grips[0].entry.sequenceNum, 1);
+      expect(grips[1].entry.sequenceNum, 2);
+      expect(grips[2].entry.sequenceNum, 3);
+    });
+
+    test('Max sequence number is correct when zero grips exist', () async {
+      final maxSeqNum = await db.getMaxGripSeqNum(workoutID);
+      expect(maxSeqNum, 0);
+    });
+
+    test('Max sequence number is correct when one grip exists', () async {
+      final gripDTO = GripDTO.standard()..gripTypeID = gripTypeID;
+      await db.addGrip(workoutID, gripDTO);
+      final maxSeqNum = await db.getMaxGripSeqNum(workoutID);
+
+      expect(maxSeqNum, 1);
+    });
+
+    test('Max sequence number is correct when two grips exist', () async {
+      final gripDTO = GripDTO.standard()..gripTypeID = gripTypeID;
+      await db.addGrip(workoutID, gripDTO); // 1st grip
+      await db.addGrip(workoutID, gripDTO); // 2nd grip
+      final maxSeqNum = await db.getMaxGripSeqNum(workoutID);
+
+      expect(maxSeqNum, 2);
+    });
+
+    test('Grip is correctly deleted', () async {
+      // TODO: Add this functionality
+    });
+
+    test('Grip is correctly duplicated', () async {
+      // TODO: Add this functionality
+    });
+  });
 }

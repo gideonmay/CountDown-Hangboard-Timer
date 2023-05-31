@@ -1,3 +1,5 @@
+// ignore_for_file: recursive_getters
+
 import 'dart:io';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';

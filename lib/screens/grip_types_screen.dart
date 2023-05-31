@@ -27,13 +27,13 @@ class _GripTypesScreenState extends State<GripTypesScreen> {
                   onPressed: () => _showHelperDialog(context),
                   icon: const Icon(Icons.help))
             ],
-            bottom: TabBar(
+            bottom: const TabBar(
               indicatorColor: Colors.white,
               tabs: [
                 Tab(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       Padding(
                         padding: EdgeInsets.all(3.0),
                         child: Icon(Icons.add),
@@ -45,7 +45,7 @@ class _GripTypesScreenState extends State<GripTypesScreen> {
                 Tab(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       Padding(
                         padding: EdgeInsets.all(3.0),
                         child: Icon(Icons.view_list),

@@ -23,13 +23,13 @@ class StartWorkoutScreen extends StatelessWidget {
                 onPressed: () => _showHelperDialog(context),
                 icon: const Icon(Icons.help))
           ],
-          bottom: TabBar(
+          bottom: const TabBar(
             indicatorColor: Colors.white,
             tabs: [
               Tab(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
+                  children: [
                     Padding(
                       padding: EdgeInsets.all(3.0),
                       child: Icon(Icons.play_arrow),
@@ -41,7 +41,7 @@ class StartWorkoutScreen extends StatelessWidget {
               Tab(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
+                  children: [
                     Padding(
                       padding: EdgeInsets.all(3.0),
                       child: Icon(Icons.edit_outlined),

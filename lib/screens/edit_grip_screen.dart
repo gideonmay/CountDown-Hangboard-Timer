@@ -15,8 +15,7 @@ class EditGripScreen extends StatefulWidget {
 }
 
 class _EditGripScreenState extends State<EditGripScreen> {
-  final GripDTO gripDTO =
-      GripDTO(gripName: '', lastBreakMinutes: 0, lastBreakSeconds: 30);
+  final GripDTO gripDTO = GripDTO.standard();
 
   @override
   void initState() {
@@ -28,7 +27,6 @@ class _EditGripScreenState extends State<EditGripScreen> {
   void _initializeGripDTO() {
     setState(() {
       gripDTO.gripTypeID = widget.grip.entry.gripType;
-      gripDTO.gripName = widget.grip.gripType.name;
       gripDTO.edgeSize = widget.grip.entry.edgeSize;
       gripDTO.sets = widget.grip.entry.setCount;
       gripDTO.reps = widget.grip.entry.repCount;

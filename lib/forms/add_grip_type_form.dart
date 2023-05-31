@@ -87,7 +87,7 @@ class _AddGripTypeFormState extends State<AddGripTypeForm> {
   /// Adds the grip type to the database
   void _createGripType() async {
     final db = Provider.of<AppDatabase>(context, listen: false);
-    await db.addGripType(GripTypesCompanion.insert(name: _gripTypeName!));
+    await db.addGripType(_gripTypeName!);
 
     // Navigate back to AddGripScreen
     if (context.mounted) {

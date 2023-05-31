@@ -4,6 +4,7 @@ import 'package:drift/native.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import '../models/grip_dto.dart';
+import '../models/workout_dto.dart';
 
 part 'drift_database.g.dart';
 
@@ -145,26 +146,44 @@ class AppDatabase extends _$AppDatabase {
     }).watch();
   }
 
-  /// Returns the largest sequenc number among all grips in a given workout
-  Future<int?> getMaxGripSeqNum(int workoutID) async {
-    final maxSeqNum = grips.sequenceNum.max();
-    final query = selectOnly(grips)..addColumns([maxSeqNum]);
-    return query.map((row) => row.read(maxSeqNum)).getSingle();
-  }
-
   /// Creates a new workout
-  Future<int> addWorkout(WorkoutsCompanion entry) {
-    return into(workouts).insert(entry);
+  Future<int> addWorkout(WorkoutDTO workoutDTO) {
+    return into(workouts).insert(WorkoutsCompanion.insert(
+        name: workoutDTO.name!, description: workoutDTO.description!));
   }
 
   /// Creates a new grip
-  Future<int> addGrip(GripsCompanion entry) {
-    return into(grips).insert(entry);
+  Future<int> addGrip(int workoutID, GripDTO gripDTO) async {
+    // Get the maximum sequence number for all grips in the curent workout
+    int maxSeqNum = await getMaxGripSeqNum(workoutID);
+
+    return into(grips).insert(GripsCompanion.insert(
+        workout: workoutID,
+        gripType: gripDTO.gripTypeID!,
+        edgeSize: Value(gripDTO.edgeSize),
+        setCount: gripDTO.sets,
+        repCount: gripDTO.reps,
+        workSeconds: gripDTO.workSeconds,
+        restSeconds: gripDTO.restSeconds,
+        breakMinutes: gripDTO.breakMinutes,
+        breakSeconds: gripDTO.breakSeconds,
+        lastBreakMinutes: gripDTO.lastBreakMinutes,
+        lastBreakSeconds: gripDTO.lastBreakSeconds,
+        sequenceNum: maxSeqNum + 1)); // Add 1 so new grip has largest seq num
+  }
+
+  /// Returns the largest sequence number among all grips in a given workout. If
+  /// there are no grips created yet then zero is returned.
+  Future<int> getMaxGripSeqNum(int workoutID) async {
+    final maxSeqNum = grips.sequenceNum.max();
+    final query = selectOnly(grips)..addColumns([maxSeqNum]);
+    int? result = await query.map((row) => row.read(maxSeqNum)).getSingle();
+    return result ?? 0;
   }
 
   /// Creates a new grip type
-  Future<int> addGripType(GripTypesCompanion entry) {
-    return into(gripTypes).insert(entry);
+  Future<int> addGripType(String name) {
+    return into(gripTypes).insert(GripTypesCompanion.insert(name: name));
   }
 
   /// Edits the workout with the given id using the given name and description
@@ -185,14 +204,14 @@ class AppDatabase extends _$AppDatabase {
         .write(GripsCompanion(
       gripType: Value(gripDTO.gripTypeID!),
       edgeSize: Value(gripDTO.edgeSize),
-      setCount: Value(gripDTO.sets.toInt()),
-      repCount: Value(gripDTO.reps.toInt()),
-      workSeconds: Value(gripDTO.workSeconds.toInt()),
-      restSeconds: Value(gripDTO.restSeconds.toInt()),
-      breakMinutes: Value(gripDTO.breakMinutes.toInt()),
-      breakSeconds: Value(gripDTO.breakSeconds.toInt()),
-      lastBreakMinutes: Value(gripDTO.lastBreakMinutes.toInt()),
-      lastBreakSeconds: Value(gripDTO.lastBreakSeconds.toInt()),
+      setCount: Value(gripDTO.sets),
+      repCount: Value(gripDTO.reps),
+      workSeconds: Value(gripDTO.workSeconds),
+      restSeconds: Value(gripDTO.restSeconds),
+      breakMinutes: Value(gripDTO.breakMinutes),
+      breakSeconds: Value(gripDTO.breakSeconds),
+      lastBreakMinutes: Value(gripDTO.lastBreakMinutes),
+      lastBreakSeconds: Value(gripDTO.lastBreakSeconds),
     ));
   }
 

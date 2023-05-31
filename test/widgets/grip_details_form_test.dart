@@ -35,11 +35,10 @@ void main() {
 
   testWidgets('GripDetailsForm shows error if grip type not chosen',
       (tester) async {
-    final gripDTO =
-        GripDTO(gripName: '', lastBreakMinutes: 0, lastBreakSeconds: 30);
+    final gripDTO = GripDTO.standard();
 
     Widget gripForm = Provider(
-      create: (context) => AppDatabase(),
+      create: (context) => AppDatabase(openConnection()),
       dispose: (context, db) => db.close(),
       child: MaterialApp(
         home: Scaffold(

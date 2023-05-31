@@ -59,11 +59,10 @@ void main() {
 
   testWidgets('Dropdown shows "Choose a grip type" if grip type list not empty',
       (tester) async {
-    final gripDTO =
-        GripDTO(gripName: '', lastBreakMinutes: 0, lastBreakSeconds: 30);
+    final gripDTO = GripDTO.standard();
 
     Widget dropdown = Provider(
-        create: (context) => AppDatabase(),
+        create: (context) => AppDatabase(openConnection()),
         dispose: (context, db) => db.close(),
         child: MaterialApp(
           home: Scaffold(
@@ -81,11 +80,10 @@ void main() {
 
   testWidgets('Dropdown shows "No grip types added" if grip type list is empty',
       (tester) async {
-    final gripDTO =
-        GripDTO(gripName: '', lastBreakMinutes: 0, lastBreakSeconds: 30);
+    final gripDTO = GripDTO.standard();
 
     Widget dropdown = Provider(
-        create: (context) => AppDatabase(),
+        create: (context) => AppDatabase(openConnection()),
         dispose: (context, db) => db.close(),
         child: MaterialApp(
           home: Scaffold(

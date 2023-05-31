@@ -44,8 +44,7 @@ class _CreateWorkoutScreenState extends State<CreateWorkoutScreen> {
   /// Adds the workout to the database then navigates back to My Workouts screen
   void _createWorkout() async {
     final db = Provider.of<AppDatabase>(context, listen: false);
-    await db.addWorkout(WorkoutsCompanion.insert(
-        name: _workoutDTO.name!, description: _workoutDTO.description!));
+    await db.addWorkout(_workoutDTO);
 
     // Navigate back to My Workouts page
     if (context.mounted) {

@@ -1,4 +1,3 @@
-import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../db/drift_database.dart';
@@ -17,28 +16,12 @@ class AddGripScreen extends StatefulWidget {
 }
 
 class _AddGripScreenState extends State<AddGripScreen> {
-  final gripDTO =
-      GripDTO(gripName: '', lastBreakMinutes: 0, lastBreakSeconds: 30);
+  final gripDTO = GripDTO.standard();
 
   /// Adds the grip defined by the gripDTO to the database
   void _createGrip() async {
     final db = Provider.of<AppDatabase>(context, listen: false);
-    // Get the maximum sequence number for all grips in the curent workout
-    int maxSeqNum = await db.getMaxGripSeqNum(widget.workout.id) ?? 0;
-
-    await db.addGrip(GripsCompanion.insert(
-        workout: widget.workout.id,
-        gripType: gripDTO.gripTypeID!,
-        edgeSize: Value(gripDTO.edgeSize),
-        setCount: gripDTO.sets.toInt(),
-        repCount: gripDTO.reps.toInt(),
-        workSeconds: gripDTO.workSeconds.toInt(),
-        restSeconds: gripDTO.restSeconds.toInt(),
-        breakMinutes: gripDTO.breakMinutes.toInt(),
-        breakSeconds: gripDTO.breakSeconds.toInt(),
-        lastBreakMinutes: gripDTO.lastBreakMinutes.toInt(),
-        lastBreakSeconds: gripDTO.lastBreakSeconds.toInt(),
-        sequenceNum: maxSeqNum + 1)); // Add 1 so new grip has largest seq num
+    await db.addGrip(widget.workout.id, gripDTO);
 
     // Navigate back to Start Workout page
     if (context.mounted) {

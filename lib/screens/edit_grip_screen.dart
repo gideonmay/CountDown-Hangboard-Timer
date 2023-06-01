@@ -4,7 +4,9 @@ import '../db/drift_database.dart';
 import '../models/grip_dto.dart';
 import '../forms/grip_details_form.dart';
 
-/// A creen with a form to edit the details of a given grip
+enum PopupItem { delete, duplicate }
+
+/// A screen with a form to edit the details of a given grip
 class EditGripScreen extends StatefulWidget {
   final GripWithGripType grip;
 
@@ -46,6 +48,7 @@ class _EditGripScreenState extends State<EditGripScreen> {
     return Scaffold(
         appBar: AppBar(
           title: const Text('Edit Grip'),
+          actions: [_popupMenu()],
         ),
         body: SafeArea(
             child: GripDetailsForm(
@@ -55,10 +58,56 @@ class _EditGripScreenState extends State<EditGripScreen> {
                 onFormSaved: _updateGrip)));
   }
 
+  /// A popup menu displaying options to delete or duplicate the current grip
+  Widget _popupMenu() {
+    return PopupMenuButton<PopupItem>(
+      itemBuilder: (BuildContext context) => <PopupMenuEntry<PopupItem>>[
+        const PopupMenuItem<PopupItem>(
+          value: PopupItem.duplicate,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Duplicate'),
+              Icon(
+                Icons.content_copy,
+                color: Colors.grey,
+              )
+            ],
+          ),
+        ),
+        PopupMenuItem<PopupItem>(
+          value: PopupItem.delete,
+          onTap: () => _deleteGrip(),
+          child: const Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Delete'),
+              Icon(
+                Icons.delete,
+                color: Colors.grey,
+              )
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
   /// Updates the grip using data kept in the gripDTO
   void _updateGrip() async {
     final db = Provider.of<AppDatabase>(context, listen: false);
     await db.updateGrip(widget.grip.entry.id, gripDTO);
+
+    // Navigate back to Start Workout page
+    if (context.mounted) {
+      Navigator.pop(context);
+    }
+  }
+
+  /// Deletes the current grip from the database
+  void _deleteGrip() async {
+    final db = Provider.of<AppDatabase>(context, listen: false);
+    await db.deleteGrip(widget.grip.entry);
 
     // Navigate back to Start Workout page
     if (context.mounted) {

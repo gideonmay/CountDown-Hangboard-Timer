@@ -237,9 +237,11 @@ class AppDatabase extends _$AppDatabase {
       delete(workouts).delete(workout);
 
   /// Delete the given grip type
-  Future<int> deleteGripType(GripType gripType) {
-    return delete(gripTypes).delete(gripType);
-  }
+  Future<int> deleteGripType(GripType gripType) =>
+      delete(gripTypes).delete(gripType);
+
+  /// Delete the given grip
+  Future<int> deleteGrip(Grip grip) => delete(grips).delete(grip);
 }
 
 /// Returns a connection to the native SQLite database

@@ -19,7 +19,6 @@ void main() {
 
   test('GripDTO.standard() returns correct last break duration', () {
     final gripDTO = GripDTO.standard();
-
     expect(gripDTO.lastBreakDuration, const Duration(seconds: 30));
   });
 }

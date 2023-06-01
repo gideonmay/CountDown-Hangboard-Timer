@@ -184,6 +184,29 @@ void main() {
     });
 
     test('Grip is correctly deleted', () async {
+      // Add a new grip
+      final gripDTO = GripDTO.standard()..gripTypeID = gripTypeID;
+      int addedGripID = await db.addGrip(workoutID, gripDTO);
+      List<GripWithGripType> grips =
+          await db.watchAllGripsWithType(workoutID).first;
+
+      // Delete the grip that was added
+      int deletedGripID = await db.deleteGrip(grips[0].entry);
+      grips = await db.watchAllGripsWithType(workoutID).first;
+
+      expect(deletedGripID, addedGripID);
+      expect(grips.length, 0);
+    });
+
+    test('Grip is correctly updated', () async {
+      // TODO: Add this functionality
+    });
+
+    test('Grip sequence number is correctly updated', () async {
+      // TODO: Add this functionality
+    });
+
+    test('A list of grips are updated with the correct seqNums', () async {
       // TODO: Add this functionality
     });
 

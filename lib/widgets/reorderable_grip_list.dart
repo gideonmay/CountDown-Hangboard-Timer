@@ -25,7 +25,8 @@ class _ReorderableGripListState extends State<ReorderableGripList> {
         shrinkWrap: true,
         children: <Widget>[
           for (int index = 0; index < widget.gripList.length; index++)
-            _listTileWithDivider(index, widget.gripList[index])
+            _listTileWithDivider(
+                index, widget.gripList.length - 1, widget.gripList[index])
         ],
         onReorder: (oldIndex, newIndex) {
           // Remove the grip and reinsert it at the new index
@@ -42,16 +43,8 @@ class _ReorderableGripListState extends State<ReorderableGripList> {
         });
   }
 
-  /// Specifies details about the given grip
-  Text _subitleText(GripWithGripType grip) {
-    return Text(
-      'Sets ${grip.entry.setCount} | Reps ${grip.entry.repCount} | W ${grip.entry.workSeconds}s | R ${grip.entry.restSeconds}s | B ${grip.entry.breakMinutes}m${grip.entry.breakSeconds}s',
-      style: const TextStyle(fontSize: 12.0),
-    );
-  }
-
   /// A ListTile with a divider
-  Widget _listTileWithDivider(int index, GripWithGripType grip) {
+  Widget _listTileWithDivider(int index, int lastIndex, GripWithGripType grip) {
     return Column(
       key: Key('$index'),
       children: [
@@ -66,12 +59,21 @@ class _ReorderableGripListState extends State<ReorderableGripList> {
             _navigateToEditGripScreen(context, grip);
           },
           title: _titleText(grip),
-          subtitle: _subitleText(grip),
+          subtitle: _subitleText(grip.entry),
           trailing: ReorderableDragStartListener(
               index: index, child: const Icon(Icons.drag_handle)),
         ),
-        const AppDivider(indent: 45, height: 1.0),
+        _dividerWithBreakDuration(grip.entry, index, lastIndex),
       ],
+    );
+  }
+
+  /// Navigates to the EditGripScreen widget
+  static _navigateToEditGripScreen(
+      BuildContext context, GripWithGripType grip) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => EditGripScreen(grip: grip)),
     );
   }
 
@@ -84,12 +86,28 @@ class _ReorderableGripListState extends State<ReorderableGripList> {
     return Text('${grip.gripType.name} - ${grip.entry.edgeSize}mm');
   }
 
-  /// Navigates to the EditGripScreen widget
-  static _navigateToEditGripScreen(
-      BuildContext context, GripWithGripType grip) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => EditGripScreen(grip: grip)),
+  /// Specifies details about the given grip
+  Text _subitleText(Grip grip) {
+    return Text(
+      'Sets ${grip.setCount} | Reps ${grip.repCount} | W ${grip.workSeconds}s | R ${grip.restSeconds}s | B ${grip.breakMinutes}:${grip.breakSeconds.toString().padLeft(2, '0')}',
+      style: const TextStyle(fontSize: 12.0),
+    );
+  }
+
+  /// A set of dividers with the Post-Break duration in between them
+  Widget _dividerWithBreakDuration(Grip grip, int gripIndex, int lastIndex) {
+    if (gripIndex == lastIndex) {
+      return const AppDivider(indent: 45, height: 1.0);
+    }
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Expanded(child: AppDivider(indent: 45, height: 3.0)),
+        Text(
+            'Break ${grip.lastBreakMinutes}:${grip.lastBreakSeconds.toString().padLeft(2, '0')}'),
+        const Expanded(child: AppDivider(indent: 8.0, height: 3.0)),
+      ],
     );
   }
 }

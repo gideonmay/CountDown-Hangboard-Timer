@@ -199,15 +199,76 @@ void main() {
     });
 
     test('Grip is correctly updated', () async {
-      // TODO: Add this functionality
+      GripDTO gripDTO = GripDTO.standard()..gripTypeID = gripTypeID;
+      int addedGripID = await db.addGrip(workoutID, gripDTO);
+      List<GripWithGripType> grips =
+          await db.watchAllGripsWithType(workoutID).first;
+
+      // Change all grip attributes
+      gripDTO.edgeSize = 25;
+      gripDTO.sets = 10;
+      gripDTO.reps = 8;
+      gripDTO.workSeconds = 21;
+      gripDTO.restSeconds = 22;
+      gripDTO.breakMinutes = 3;
+      gripDTO.breakSeconds = 4;
+      gripDTO.lastBreakMinutes = 5;
+      gripDTO.lastBreakSeconds = 6;
+
+      await db.updateGrip(addedGripID, gripDTO);
+      grips = await db.watchAllGripsWithType(workoutID).first;
+      final grip = grips[0].entry;
+      final gripType = grips[0].gripType;
+
+      expect(grip.setCount, gripDTO.sets);
+      expect(grip.repCount, gripDTO.reps);
+      expect(grip.workSeconds, gripDTO.workSeconds);
+      expect(grip.restSeconds, gripDTO.restSeconds);
+      expect(grip.breakMinutes, gripDTO.breakMinutes);
+      expect(grip.breakSeconds, gripDTO.breakSeconds);
+      expect(grip.lastBreakMinutes, gripDTO.lastBreakMinutes);
+      expect(grip.lastBreakSeconds, gripDTO.lastBreakSeconds);
+      expect(grip.edgeSize, gripDTO.edgeSize);
+      expect(grip.workout, workoutID);
+      expect(grip.gripType, gripTypeID);
+      expect(gripType.name, 'Open Hand Crimp');
     });
 
     test('Grip sequence number is correctly updated', () async {
-      // TODO: Add this functionality
+      GripDTO gripDTO = GripDTO.standard()..gripTypeID = gripTypeID;
+      int addedGripID = await db.addGrip(workoutID, gripDTO);
+      await db.updateGripSeqNum(addedGripID, 99);
+      List<GripWithGripType> grips =
+          await db.watchAllGripsWithType(workoutID).first;
+
+      expect(grips[0].entry.sequenceNum, 99);
     });
 
     test('A list of grips are updated with the correct seqNums', () async {
-      // TODO: Add this functionality
+      // Create grips with distinct edge sizes of 10, 15, and 20
+      GripDTO gripDTO = GripDTO.standard()
+        ..gripTypeID = gripTypeID
+        ..edgeSize = 10;
+      await db.addGrip(workoutID, gripDTO); // 1st grip
+      gripDTO.edgeSize = 15;
+      await db.addGrip(workoutID, gripDTO); // 2nd grip
+      gripDTO.edgeSize = 20;
+      await db.addGrip(workoutID, gripDTO); // 3rd grip
+
+      List<GripWithGripType> grips =
+          await db.watchAllGripsWithType(workoutID).first;
+
+      // Swap grips so new order in terms of grip edge sizes is [15, 20, 10]
+      GripWithGripType grip = grips.removeAt(0);
+      grips.insert(1, grip);
+      grip = grips.removeAt(1);
+      grips.insert(2, grip);
+      await db.updateMultipleGripSeqNum(grips);
+      grips = await db.watchAllGripsWithType(workoutID).first;
+
+      expect(grips[0].entry.edgeSize, 15);
+      expect(grips[1].entry.edgeSize, 20);
+      expect(grips[2].entry.edgeSize, 10);
     });
 
     test('Grip is correctly duplicated', () async {

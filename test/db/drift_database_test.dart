@@ -211,7 +211,32 @@ void main() {
     });
 
     test('Grip is correctly duplicated', () async {
-      // TODO: Add this functionality
+      // Add a new grip
+      final gripDTO = GripDTO.standard()..gripTypeID = gripTypeID;
+      await db.addGrip(workoutID, gripDTO);
+      List<GripWithGripType> grips =
+          await db.watchAllGripsWithType(workoutID).first;
+
+      // Create a duplicate of the added grip
+      final addedGrip = grips[0].entry;
+      await db.addDuplicateGrip(addedGrip);
+
+      grips = await db.watchAllGripsWithType(workoutID).first;
+      final grip1 = grips[0].entry;
+      final grip2 = grips[1].entry;
+
+      expect(grip1.setCount, grip2.setCount);
+      expect(grip1.repCount, grip2.repCount);
+      expect(grip1.workSeconds, grip2.workSeconds);
+      expect(grip1.restSeconds, grip2.restSeconds);
+      expect(grip1.breakMinutes, grip2.breakMinutes);
+      expect(grip1.breakSeconds, grip2.breakSeconds);
+      expect(grip1.lastBreakMinutes, grip2.lastBreakMinutes);
+      expect(grip1.lastBreakSeconds, grip2.lastBreakSeconds);
+      expect(grip1.edgeSize, grip2.edgeSize);
+      expect(grip1.sequenceNum, lessThan(grip2.sequenceNum));
+      expect(grip1.workout, grip2.workout);
+      expect(grip1.gripType, grip2.gripType);
     });
   });
 }

@@ -174,6 +174,27 @@ class AppDatabase extends _$AppDatabase {
         sequenceNum: maxSeqNum + 1)); // Add 1 so new grip has largest seq num
   }
 
+  /// Creates duplicate of the given grip. The duplicate grip will have the
+  /// largest sequence number so that it is placed after all other grips in the
+  /// workout.
+  Future<int> addDuplicateGrip(Grip grip) async {
+    int maxSeqNum = await getMaxGripSeqNum(grip.workout);
+
+    return into(grips).insert(GripsCompanion.insert(
+        workout: grip.workout,
+        gripType: grip.gripType,
+        edgeSize: Value(grip.edgeSize),
+        setCount: grip.setCount,
+        repCount: grip.repCount,
+        workSeconds: grip.workSeconds,
+        restSeconds: grip.restSeconds,
+        breakMinutes: grip.breakMinutes,
+        breakSeconds: grip.breakSeconds,
+        lastBreakMinutes: grip.lastBreakMinutes,
+        lastBreakSeconds: grip.lastBreakSeconds,
+        sequenceNum: maxSeqNum + 1));
+  }
+
   /// Returns the largest sequence number among all grips in a given workout. If
   /// there are no grips created yet then zero is returned.
   Future<int> getMaxGripSeqNum(int workoutID) async {

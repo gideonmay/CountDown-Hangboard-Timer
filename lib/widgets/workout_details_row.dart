@@ -13,7 +13,7 @@ class WorkoutDetailsRow extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text('$title ',
               style: TextStyle(color: Colors.grey.shade600, fontSize: 16.0)),

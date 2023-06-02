@@ -62,12 +62,15 @@ class _EditGripScreenState extends State<EditGripScreen> {
   Widget _popupMenu() {
     return PopupMenuButton<PopupItem>(
       itemBuilder: (BuildContext context) => <PopupMenuEntry<PopupItem>>[
-        const PopupMenuItem<PopupItem>(
+        PopupMenuItem<PopupItem>(
           value: PopupItem.duplicate,
-          child: Row(
+          onTap: () => _duplicateGrip(),
+          child: const Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Duplicate'),
+              SizedBox(
+                  width: 150,
+                  child: Text('Duplicate', style: TextStyle(fontSize: 20.0))),
               Icon(
                 Icons.content_copy,
                 color: Colors.grey,
@@ -81,7 +84,9 @@ class _EditGripScreenState extends State<EditGripScreen> {
           child: const Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Delete'),
+              SizedBox(
+                  width: 150,
+                  child: Text('Delete', style: TextStyle(fontSize: 20.0))),
               Icon(
                 Icons.delete,
                 color: Colors.grey,
@@ -108,6 +113,17 @@ class _EditGripScreenState extends State<EditGripScreen> {
   void _deleteGrip() async {
     final db = Provider.of<AppDatabase>(context, listen: false);
     await db.deleteGrip(widget.grip.entry);
+
+    // Navigate back to Start Workout page
+    if (context.mounted) {
+      Navigator.pop(context);
+    }
+  }
+
+  /// Makes a duplicate of the current grip
+  void _duplicateGrip() async {
+    final db = Provider.of<AppDatabase>(context, listen: false);
+    await db.addDuplicateGrip(widget.grip.entry);
 
     // Navigate back to Start Workout page
     if (context.mounted) {

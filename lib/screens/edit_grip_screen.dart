@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 import '../db/drift_database.dart';
 import '../models/grip_dto.dart';
 import '../forms/grip_details_form.dart';
-
-enum PopupItem { delete, duplicate }
+import '../utils/navigation_utils.dart';
+import '../widgets/popup_menu.dart';
 
 /// A screen with a form to edit the details of a given grip
 class EditGripScreen extends StatefulWidget {
@@ -48,7 +48,7 @@ class _EditGripScreenState extends State<EditGripScreen> {
     return Scaffold(
         appBar: AppBar(
           title: const Text('Edit Grip'),
-          actions: [_popupMenu()],
+          actions: [_popupMenu(context)],
         ),
         body: SafeArea(
             child: GripDetailsForm(
@@ -58,44 +58,46 @@ class _EditGripScreenState extends State<EditGripScreen> {
                 onFormSaved: _updateGrip)));
   }
 
-  /// A popup menu displaying options to delete or duplicate the current grip
-  Widget _popupMenu() {
-    return PopupMenuButton<PopupItem>(
-      itemBuilder: (BuildContext context) => <PopupMenuEntry<PopupItem>>[
-        PopupMenuItem<PopupItem>(
-          value: PopupItem.duplicate,
+  /// A popup menu displaying options to add a grip type, edit a grip type,
+  /// duplicate this grip, or delete this grip
+  Widget _popupMenu(BuildContext context) {
+    return PopupMenu(popupItemDetails: [
+      PopupItemDetail(
+          iconData: Icons.add,
+          onTap: () async {
+            /*
+             * Must add a short delay to prevent new route from being
+             * immediately popped. Solution copied from this source:
+             * https://stackoverflow.com/questions/67713122/navigator-inside-popupmenuitem-does-not-work
+             */
+            await Future.delayed(Duration.zero);
+            if (context.mounted) {
+              navigateToAddGripType(context);
+            }
+          },
+          popupItemType: PopupItem.addGripType,
+          itemText: 'Add Grip Type'),
+      PopupItemDetail(
+          iconData: Icons.edit,
+          onTap: () async {
+            await Future.delayed(Duration.zero);
+            if (context.mounted) {
+              navigateToAddGripType(context);
+            }
+          },
+          popupItemType: PopupItem.editGripTypes,
+          itemText: 'Edit Grip Types'),
+      PopupItemDetail(
+          iconData: Icons.content_copy,
           onTap: () => _duplicateGrip(),
-          child: const Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                  width: 150,
-                  child: Text('Duplicate', style: TextStyle(fontSize: 20.0))),
-              Icon(
-                Icons.content_copy,
-                color: Colors.grey,
-              )
-            ],
-          ),
-        ),
-        PopupMenuItem<PopupItem>(
-          value: PopupItem.delete,
+          popupItemType: PopupItem.duplicate,
+          itemText: 'Duplicate'),
+      PopupItemDetail(
+          iconData: Icons.delete,
           onTap: () => _deleteGrip(),
-          child: const Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                  width: 150,
-                  child: Text('Delete', style: TextStyle(fontSize: 20.0))),
-              Icon(
-                Icons.delete,
-                color: Colors.grey,
-              )
-            ],
-          ),
-        ),
-      ],
-    );
+          popupItemType: PopupItem.delete,
+          itemText: 'Delete'),
+    ]);
   }
 
   /// Updates the grip using data kept in the gripDTO

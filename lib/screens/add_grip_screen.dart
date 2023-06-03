@@ -4,6 +4,8 @@ import '../db/drift_database.dart';
 import '../models/grip_dto.dart';
 import '../forms/grip_details_form.dart';
 import '../widgets/helper_dialog.dart';
+import '../utils/navigation_utils.dart';
+import '../widgets/popup_menu.dart';
 
 /// A screen that allows the user to add a new grip to the workout
 class AddGripScreen extends StatefulWidget {
@@ -36,11 +38,7 @@ class _AddGripScreenState extends State<AddGripScreen> {
     return Scaffold(
         appBar: AppBar(
           title: const Text('Add Grip'),
-          actions: [
-            IconButton(
-                onPressed: () => _showHelperDialog(context),
-                icon: const Icon(Icons.help))
-          ],
+          actions: [_popupMenu()],
         ),
         body: SafeArea(
             child: GripDetailsForm(
@@ -51,6 +49,38 @@ class _AddGripScreenState extends State<AddGripScreen> {
         )));
   }
 
+  /// A popup menu displaying options to add or edit grip types
+  Widget _popupMenu() {
+    return PopupMenu(popupItemDetails: [
+      PopupItemDetail(
+          iconData: Icons.add,
+          onTap: () async {
+            /*
+             * Must add a short delay to prevent new route from being
+             * immediately popped. Solution copied from this source:
+             * https://stackoverflow.com/questions/67713122/navigator-inside-popupmenuitem-does-not-work
+             */
+            await Future.delayed(Duration.zero);
+            if (context.mounted) {
+              navigateToAddGripType(context);
+            }
+          },
+          popupItemType: PopupItem.addGripType,
+          itemText: 'Add Grip Type'),
+      PopupItemDetail(
+          iconData: Icons.edit,
+          onTap: () async {
+            await Future.delayed(Duration.zero);
+            if (context.mounted) {
+              navigateToAddGripType(context);
+            }
+          },
+          popupItemType: PopupItem.editGripTypes,
+          itemText: 'Edit Grip Types'),
+    ]);
+  }
+
+  // TODO: Show this when user first visits this screen
   Future<String?> _showHelperDialog(BuildContext context) {
     return showDialog<String>(
         context: context,

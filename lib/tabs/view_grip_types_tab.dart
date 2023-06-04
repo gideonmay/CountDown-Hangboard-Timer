@@ -6,7 +6,11 @@ import '../db/drift_database.dart';
 class ViewGripTypesTab extends StatelessWidget {
   final List<GripTypeWithGripCount> gripTypes;
 
-  const ViewGripTypesTab({super.key, required this.gripTypes});
+  /// The grip type that is currently chosen in the dropdown
+  final int? currGripTypeID;
+
+  const ViewGripTypesTab(
+      {super.key, required this.gripTypes, this.currGripTypeID});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +26,7 @@ class ViewGripTypesTab extends StatelessWidget {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            GripTypesList(gripTypes: gripTypes),
+            GripTypesList(gripTypes: gripTypes, currGripTypeID: currGripTypeID),
           ],
         ),
       ),

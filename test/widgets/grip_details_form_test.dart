@@ -42,11 +42,13 @@ void main() {
       dispose: (context, db) => db.close(),
       child: MaterialApp(
         home: Scaffold(
-            body: GripDetailsForm(
-                gripDTO: gripDTO,
-                gripTypeStream: mockStream,
-                onFormSaved: () {},
-                buttonText: 'Submit')),
+            body: SafeArea(
+          child: GripDetailsForm(
+              gripDTO: gripDTO,
+              gripTypeStream: mockStream,
+              onFormSaved: () {},
+              buttonText: 'Submit'),
+        )),
       ),
     );
 
@@ -55,7 +57,7 @@ void main() {
     // Scroll down until Submit button is in view
     final submitButton = find.text('Submit');
     await tester.dragUntilVisible(
-        submitButton, find.byType(ListView), const Offset(0.0, -50.0),
+        submitButton, find.text('Reps'), const Offset(0.0, -50.0),
         maxIteration: 100);
     await tester.pumpAndSettle();
 

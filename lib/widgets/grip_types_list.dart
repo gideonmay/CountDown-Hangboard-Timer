@@ -8,7 +8,11 @@ import '../widgets/app_divider.dart';
 class GripTypesList extends StatelessWidget {
   final List<GripTypeWithGripCount> gripTypes;
 
-  const GripTypesList({super.key, required this.gripTypes});
+  /// The grip type that is currently chosen in the dropdown
+  final int? currGripTypeID;
+
+  const GripTypesList(
+      {super.key, required this.gripTypes, this.currGripTypeID});
 
   @override
   Widget build(BuildContext context) {
@@ -29,15 +33,50 @@ class GripTypesList extends StatelessWidget {
               title: Text(gripType.entry.name),
               subtitle: Text('Used with ${gripType.gripCount} grips'),
               trailing: IconButton(
-                icon: const Icon(Icons.delete),
-                onPressed: () => _showAlertDialog(context, gripType),
-              ),
+                  key: Key('deleteIcon$index'),
+                  icon: const Icon(Icons.delete),
+                  onPressed: () {
+                    // Ensure that use cannot delete currently chosen grip type
+                    if (_isCurrentlyEditing(gripType.entry)) {
+                      _showErrorDialog(context, gripType);
+                    } else {
+                      _showAlertDialog(context, gripType);
+                    }
+                  }),
               horizontalTitleGap: 5.0,
             ),
             const AppDivider(indent: 15.0, height: 1.0)
           ],
         );
       },
+    );
+  }
+
+  /// Returns true if the grip type currently being edited is equal to the grip
+  /// type the user is attempting to delete
+  bool _isCurrentlyEditing(GripType gripTypeToDelete) {
+    return currGripTypeID == gripTypeToDelete.id;
+  }
+
+  // Shows a dialog box to inform user that the grip type cannot be deleted
+  Future<void> _showErrorDialog(
+      BuildContext context, GripTypeWithGripCount gripType) {
+    return showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext context) => CupertinoAlertDialog(
+        title: const Text('Grip type cannot be deleted'),
+        content: const Text(
+            'This grip type is selected for the current grip. To delete it, go back and change the grip type for this grip.'),
+        actions: <CupertinoDialogAction>[
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('Cancel'),
+          ),
+        ],
+      ),
     );
   }
 

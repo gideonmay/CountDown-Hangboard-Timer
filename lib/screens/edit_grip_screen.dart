@@ -64,7 +64,7 @@ class _EditGripScreenState extends State<EditGripScreen> {
     return PopupMenu(popupItemDetails: [
       PopupItemDetail(
           iconData: Icons.edit,
-          onTap: () => navigateToAddGripType(context),
+          onTap: () => navigateToGripTypeScreen(context, gripDTO.gripTypeID),
           popupItemType: PopupItem.addGripType,
           itemText: 'Edit Grip Types'),
       PopupItemDetail(

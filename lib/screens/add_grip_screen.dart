@@ -63,7 +63,7 @@ class _AddGripScreenState extends State<AddGripScreen> {
               gripDTO.gripTypeID = null;
             });
 
-            navigateToAddGripType(context);
+            navigateToGripTypeScreen(context);
           },
           popupItemType: PopupItem.addGripType,
           itemText: 'Edit Grip Types'),

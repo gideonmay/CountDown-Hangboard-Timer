@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import '../screens/grip_types_screen.dart';
 
-/// Navigates to the GripTypesScreen widget
-void navigateToAddGripType(BuildContext context) async {
+/// Navigates to the GripTypesScreen widget. The optional current grip type
+/// argument will be passed to the GripTypesScreen widget if given.
+void navigateToGripTypeScreen(BuildContext context,
+    [int? currGripTypeID]) async {
   /*
    * Must add a short delay to prevent new route from being
    * immediately popped. Solution copied from this source:
@@ -13,7 +15,10 @@ void navigateToAddGripType(BuildContext context) async {
   if (context.mounted) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const GripTypesScreen()),
+      MaterialPageRoute(
+          builder: (context) => GripTypesScreen(
+                currGripTypeID: currGripTypeID,
+              )),
     );
   }
 }

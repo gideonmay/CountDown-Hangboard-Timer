@@ -8,7 +8,10 @@ import '../widgets/helper_dialog.dart';
 /// A screen that allows the user to create new grip types and delete existing
 /// grips that they no longer want listed
 class GripTypesScreen extends StatefulWidget {
-  const GripTypesScreen({super.key});
+  /// The grip type that is currently chosen in the dropdown
+  final int? currGripTypeID;
+
+  const GripTypesScreen({super.key, this.currGripTypeID});
 
   @override
   State<GripTypesScreen> createState() => _GripTypesScreenState();
@@ -22,11 +25,6 @@ class _GripTypesScreenState extends State<GripTypesScreen> {
       child: Scaffold(
           appBar: AppBar(
             title: const Text('Grip Types'),
-            actions: [
-              IconButton(
-                  onPressed: () => _showHelperDialog(context),
-                  icon: const Icon(Icons.help))
-            ],
             bottom: const TabBar(
               indicatorColor: Colors.white,
               tabs: [
@@ -73,11 +71,13 @@ class _GripTypesScreenState extends State<GripTypesScreen> {
 
           return TabBarView(children: [
             AddGripTypeTab(gripTypes: gripTypes),
-            ViewGripTypesTab(gripTypes: gripTypes),
+            ViewGripTypesTab(
+                gripTypes: gripTypes, currGripTypeID: widget.currGripTypeID),
           ]);
         });
   }
 
+  // TODO: Make this only appear when user first visits screen
   Future<String?> _showHelperDialog(BuildContext context) {
     return showDialog<String>(
         context: context,

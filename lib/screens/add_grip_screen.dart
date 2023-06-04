@@ -53,29 +53,19 @@ class _AddGripScreenState extends State<AddGripScreen> {
   Widget _popupMenu() {
     return PopupMenu(popupItemDetails: [
       PopupItemDetail(
-          iconData: Icons.add,
-          onTap: () async {
-            /*
-             * Must add a short delay to prevent new route from being
-             * immediately popped. Solution copied from this source:
-             * https://stackoverflow.com/questions/67713122/navigator-inside-popupmenuitem-does-not-work
-             */
-            await Future.delayed(Duration.zero);
-            if (context.mounted) {
-              navigateToAddGripType(context);
-            }
+          iconData: Icons.edit,
+          onTap: () {
+            setState(() {
+              /*
+               * Set grip type to null so that if that grip type is deleted
+               * on next screen, an error does not occur
+               */
+              gripDTO.gripTypeID = null;
+            });
+
+            navigateToAddGripType(context);
           },
           popupItemType: PopupItem.addGripType,
-          itemText: 'Add Grip Type'),
-      PopupItemDetail(
-          iconData: Icons.edit,
-          onTap: () async {
-            await Future.delayed(Duration.zero);
-            if (context.mounted) {
-              navigateToAddGripType(context);
-            }
-          },
-          popupItemType: PopupItem.editGripTypes,
           itemText: 'Edit Grip Types'),
     ]);
   }

@@ -29,32 +29,6 @@ class _GripTypeDropdownState extends State<GripTypeDropdown> {
           padding: const EdgeInsets.fromLTRB(8.0, 16.0, 24.0, 8.0),
           child: _buildDropdownFormField(context),
         )),
-        // Flexible(
-        //     flex: 30,
-        //     child: Center(
-        //       child: ElevatedButton.icon(
-        //           style: ButtonStyle(
-        //               backgroundColor: MaterialStateProperty.all(
-        //                   Theme.of(context).colorScheme.secondary),
-        //               shape:
-        //                   MaterialStateProperty.all<RoundedRectangleBorder>(
-        //                       RoundedRectangleBorder(
-        //                 borderRadius: BorderRadius.circular(18.0),
-        //               ))),
-        //           onPressed: () {
-        //             /*
-        //              * Set chosen gripType to null before navigating to new
-        //              * screen. If the chosen gripType is deleted while it is
-        //              * currently selected by the dropdown, an error occurs.
-        //              */
-        //             setState(() {
-        //               widget.gripDTO.gripTypeID = null;
-        //             });
-        //             _navigateToAddGripType(context);
-        //           },
-        //           icon: const Icon(Icons.add),
-        //           label: const Text('Add')),
-        //     )),
       ],
     );
   }

@@ -41,7 +41,7 @@ class PopupMenu extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       SizedBox(
-                          width: 150,
+                          width: 200,
                           child: Text(item.itemText,
                               style: const TextStyle(fontSize: 20.0))),
                       Icon(

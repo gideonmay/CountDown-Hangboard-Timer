@@ -6,10 +6,10 @@ import '../widgets/helper_dialog.dart';
 
 /// A screen that displays the details of a workout and allows the user to
 /// add, edit, and organize grips for their workout
-class StartWorkoutScreen extends StatelessWidget {
+class WorkoutDetailScreen extends StatelessWidget {
   final Workout workout;
 
-  const StartWorkoutScreen({super.key, required this.workout});
+  const WorkoutDetailScreen({super.key, required this.workout});
 
   @override
   Widget build(BuildContext context) {
@@ -18,11 +18,6 @@ class StartWorkoutScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Text(workout.name),
-          actions: [
-            IconButton(
-                onPressed: () => _showHelperDialog(context),
-                icon: const Icon(Icons.help))
-          ],
           bottom: const TabBar(
             indicatorColor: Colors.white,
             tabs: [
@@ -32,9 +27,9 @@ class StartWorkoutScreen extends StatelessWidget {
                   children: [
                     Padding(
                       padding: EdgeInsets.all(3.0),
-                      child: Icon(Icons.play_arrow),
+                      child: Icon(Icons.info),
                     ),
-                    Text('Start')
+                    Text('Details')
                   ],
                 ),
               ),
@@ -61,6 +56,7 @@ class StartWorkoutScreen extends StatelessWidget {
     );
   }
 
+  // TODO: Only show when user first visits this screen
   Future<String?> _showHelperDialog(BuildContext context) {
     return showDialog<String>(
         context: context,

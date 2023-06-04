@@ -5,9 +5,10 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'create_workout_screen.dart';
 import 'edit_workout_screen.dart';
-import 'start_workout_screen.dart';
+import 'workout_detail_screen.dart';
 import '../db/drift_database.dart';
 import '../models/workout_dto.dart';
+import '../theme/color_theme.dart';
 import '../widgets/app_divider.dart';
 
 /// A screen that lists all of the workouts available in the database
@@ -97,14 +98,24 @@ class _MyWorkoutsScreenState extends State<MyWorkoutsScreen> {
       child: Column(
         children: [
           ListTile(
+            leading: IconButton(
+              icon: const Icon(Icons.play_arrow,
+                  size: 40.0, color: AppColorTheme.green),
+              onPressed: () {},
+            ),
             title: Text(workout.name, overflow: TextOverflow.ellipsis),
             subtitle: Text(workout.description,
                 maxLines: 1, overflow: TextOverflow.ellipsis),
-            trailing:
-                Text('Last Used: ${_getFormattedDate(workout.lastUsedDate)}'),
+            trailing: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('Last Used:'),
+                Text(' ${_getFormattedDate(workout.lastUsedDate)}'),
+              ],
+            ),
             onTap: () => _navigateToStartWorkout(context, workout),
           ),
-          const AppDivider(height: 1.0),
+          const AppDivider(indent: 80, height: 1.0),
         ],
       ),
     );
@@ -127,7 +138,7 @@ class _MyWorkoutsScreenState extends State<MyWorkoutsScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => StartWorkoutScreen(workout: workout)),
+          builder: (context) => WorkoutDetailScreen(workout: workout)),
     );
   }
 
@@ -138,7 +149,7 @@ class _MyWorkoutsScreenState extends State<MyWorkoutsScreen> {
       builder: (BuildContext context) => CupertinoAlertDialog(
         title: const Text('Are you sure?'),
         content: Text(
-              'The workout \'${workout.name}\' will be permanently deleted.'),
+            'The workout \'${workout.name}\' will be permanently deleted.'),
         actions: <CupertinoDialogAction>[
           CupertinoDialogAction(
             isDefaultAction: true,
@@ -151,7 +162,7 @@ class _MyWorkoutsScreenState extends State<MyWorkoutsScreen> {
             isDestructiveAction: true,
             onPressed: () {
               _deleteWorkout(context, workout);
-                Navigator.of(context).pop();
+              Navigator.of(context).pop();
             },
             child: const Text('Yes'),
           ),

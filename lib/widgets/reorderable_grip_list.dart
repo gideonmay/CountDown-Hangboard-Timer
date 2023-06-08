@@ -20,27 +20,28 @@ class _ReorderableGripListState extends State<ReorderableGripList> {
   Widget build(BuildContext context) {
     final db = Provider.of<AppDatabase>(context);
 
-    return ReorderableListView(
-        physics: const NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        children: <Widget>[
-          for (int index = 0; index < widget.gripList.length; index++)
-            _listTileWithDivider(
-                index, widget.gripList.length - 1, widget.gripList[index])
-        ],
-        onReorder: (oldIndex, newIndex) {
-          // Remove the grip and reinsert it at the new index
-          setState(() {
-            if (oldIndex < newIndex) {
-              newIndex -= 1;
-            }
-            final grip = widget.gripList.removeAt(oldIndex);
-            widget.gripList.insert(newIndex, grip);
-          });
-
-          // Modify sequenceNum in database for all grips that were reordered
-          db.updateMultipleGripSeqNum(widget.gripList);
-        });
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 25.0),
+      child: ReorderableListView(
+          children: <Widget>[
+            for (int index = 0; index < widget.gripList.length; index++)
+              _listTileWithDivider(
+                  index, widget.gripList.length - 1, widget.gripList[index]),
+          ],
+          onReorder: (oldIndex, newIndex) {
+            // Remove the grip and reinsert it at the new index
+            setState(() {
+              if (oldIndex < newIndex) {
+                newIndex -= 1;
+              }
+              final grip = widget.gripList.removeAt(oldIndex);
+              widget.gripList.insert(newIndex, grip);
+            });
+    
+            // Modify sequenceNum in database for all grips that were reordered
+            db.updateMultipleGripSeqNum(widget.gripList);
+          }),
+    );
   }
 
   /// A ListTile with a divider

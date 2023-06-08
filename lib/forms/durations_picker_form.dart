@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/timer_durations_dto.dart';
+import '../widgets/duration_picker.dart';
 import '../widgets/number_picker.dart';
 import '../widgets/number_picker_title.dart';
 
@@ -26,16 +27,15 @@ class _DurationsPickerFormState extends State<DurationsPickerForm> {
           children: [
             const NumberPickerTitle(title: 'Sets', maxWidth: 60.0),
             Expanded(
-              child: NumberPicker(
-                initialValue: timerDurations.sets.toInt(),
-                min: 1,
-                max: 20,
-                padding: const EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
-                onItemChanged: (newValue) {
-                  timerDurations.sets = newValue;
-                },
-              ),
-            ),
+                child: NumberPicker(
+              initialValue: timerDurations.sets,
+              minValue: 1,
+              maxValue: 20,
+              padding: const EdgeInsets.fromLTRB(8.0, 16.0, 16.0, 8.0),
+              onValueChanged: (newValue) {
+                timerDurations.sets = newValue;
+              },
+            )),
           ],
         ),
         Row(
@@ -44,10 +44,10 @@ class _DurationsPickerFormState extends State<DurationsPickerForm> {
             Expanded(
               child: NumberPicker(
                 initialValue: timerDurations.reps.toInt(),
-                min: 1,
-                max: 20,
+                minValue: 1,
+                maxValue: 20,
                 padding: const EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
-                onItemChanged: (newValue) {
+                onValueChanged: (newValue) {
                   timerDurations.reps = newValue;
                 },
               ),
@@ -61,10 +61,10 @@ class _DurationsPickerFormState extends State<DurationsPickerForm> {
               child: NumberPicker(
                 unit: 'sec.',
                 initialValue: timerDurations.workSeconds.toInt(),
-                min: 1,
-                max: 60,
+                minValue: 1,
+                maxValue: 60,
                 padding: const EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
-                onItemChanged: (newValue) {
+                onValueChanged: (newValue) {
                   timerDurations.workSeconds = newValue;
                 },
               ),
@@ -78,10 +78,10 @@ class _DurationsPickerFormState extends State<DurationsPickerForm> {
               child: NumberPicker(
                 unit: 'sec.',
                 initialValue: timerDurations.restSeconds.toInt(),
-                min: 1,
-                max: 60,
+                minValue: 1,
+                maxValue: 60,
                 padding: const EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
-                onItemChanged: (newValue) {
+                onValueChanged: (newValue) {
                   timerDurations.restSeconds = newValue;
                 },
               ),
@@ -92,30 +92,15 @@ class _DurationsPickerFormState extends State<DurationsPickerForm> {
           children: [
             const NumberPickerTitle(title: 'Break', maxWidth: 60.0),
             Expanded(
-              child: NumberPicker(
-                unit: 'min.',
-                padding: const EdgeInsets.fromLTRB(8.0, 8.0, 0, 8.0),
-                initialValue: timerDurations.breakMinutes.toInt(),
-                min: 0,
-                max: 30,
-                onItemChanged: (newValue) {
-                  timerDurations.breakMinutes = newValue;
-                },
-              ),
-            ),
-            Expanded(
-              child: NumberPicker(
-                unit: 'sec.',
-                initialValue: timerDurations.breakSeconds.toInt(),
-                min: 0,
-                max: 59,
-                padding: const EdgeInsets.fromLTRB(0, 8.0, 16.0, 8.0),
-                shouldZeroPad: true,
-                onItemChanged: (newValue) {
-                  timerDurations.breakSeconds = newValue;
-                },
-              ),
-            ),
+                child: DurationPicker(
+              minutes: timerDurations.breakMinutes,
+              seconds: timerDurations.breakSeconds,
+              padding: const EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
+              onDurationChanged: (newDuration) {
+                timerDurations.breakMinutes = newDuration.inMinutes;
+                timerDurations.breakSeconds = newDuration.inSeconds % 60;
+              },
+            )),
           ],
         ),
         Padding(

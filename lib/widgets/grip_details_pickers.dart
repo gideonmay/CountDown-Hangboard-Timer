@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../models/grip_dto.dart';
-import '../widgets/app_divider.dart';
-import '../widgets/app_header.dart';
-import '../widgets/number_picker.dart';
-import '../widgets/number_picker_title.dart';
+import 'app_divider.dart';
+import 'app_header.dart';
+import 'duration_picker.dart';
+import 'number_picker.dart';
+import 'number_picker_title.dart';
 
 /// A series of NumberPickers allowing the user to choose sets and reps, and the
 /// work, rest, and break durations for a particular grip
@@ -24,10 +25,10 @@ class _GripDetailsPickersState extends State<GripDetailsPickers> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         _edgeSize(),
-        _setsPicker(),
-        _repsPicker(),
-        _workDurationPicker(),
-        _restDurationPicker(),
+        _setsNumberPicker(),
+        _repsNumberPicker(),
+        _workNumberPicker(),
+        _restNumberPicker(),
         _breakDurationPicker(),
         const AppDivider(),
         const AppHeader(title: 'Post-Grip Break'),
@@ -35,7 +36,7 @@ class _GripDetailsPickersState extends State<GripDetailsPickers> {
           'The break duration between this grip and the next',
           textAlign: TextAlign.center,
         ),
-        _lastBreakSpinBoxes(),
+        _lastBreakDurationPicker(),
       ],
     );
   }
@@ -108,17 +109,17 @@ class _GripDetailsPickersState extends State<GripDetailsPickers> {
   }
 
   /// NumberPicker that allows user to choose number of sets
-  Widget _setsPicker() {
+  Widget _setsNumberPicker() {
     return Row(
       children: [
         const NumberPickerTitle(title: 'Sets', maxWidth: 60.0),
         Expanded(
           child: NumberPicker(
             initialValue: widget.gripDTO.sets.toInt(),
-            min: 1,
-            max: 20,
+            minValue: 1,
+            maxValue: 20,
             padding: const EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
-            onItemChanged: (newValue) {
+            onValueChanged: (newValue) {
               widget.gripDTO.sets = newValue;
             },
           ),
@@ -128,17 +129,17 @@ class _GripDetailsPickersState extends State<GripDetailsPickers> {
   }
 
   /// NumberPicker that allows user to choose number of reps
-  Widget _repsPicker() {
+  Widget _repsNumberPicker() {
     return Row(
       children: [
         const NumberPickerTitle(title: 'Reps', maxWidth: 60.0),
         Expanded(
           child: NumberPicker(
             initialValue: widget.gripDTO.reps.toInt(),
-            min: 1,
-            max: 20,
+            minValue: 1,
+            maxValue: 20,
             padding: const EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
-            onItemChanged: (newValue) {
+            onValueChanged: (newValue) {
               widget.gripDTO.reps = newValue;
             },
           ),
@@ -148,7 +149,7 @@ class _GripDetailsPickersState extends State<GripDetailsPickers> {
   }
 
   /// NumberPicker that allows user to choose work seconds
-  Widget _workDurationPicker() {
+  Widget _workNumberPicker() {
     return Row(
       children: [
         const NumberPickerTitle(title: 'Work', maxWidth: 60.0),
@@ -156,10 +157,10 @@ class _GripDetailsPickersState extends State<GripDetailsPickers> {
           child: NumberPicker(
             unit: 'sec.',
             initialValue: widget.gripDTO.workSeconds.toInt(),
-            min: 1,
-            max: 60,
+            minValue: 1,
+            maxValue: 60,
             padding: const EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
-            onItemChanged: (newValue) {
+            onValueChanged: (newValue) {
               widget.gripDTO.workSeconds = newValue;
             },
           ),
@@ -169,7 +170,7 @@ class _GripDetailsPickersState extends State<GripDetailsPickers> {
   }
 
   /// NumberPicker that allows user to choose rest seconds
-  Widget _restDurationPicker() {
+  Widget _restNumberPicker() {
     return Row(
       children: [
         const NumberPickerTitle(title: 'Rest', maxWidth: 60.0),
@@ -177,10 +178,10 @@ class _GripDetailsPickersState extends State<GripDetailsPickers> {
           child: NumberPicker(
             unit: 'sec.',
             initialValue: widget.gripDTO.restSeconds.toInt(),
-            min: 1,
-            max: 60,
+            minValue: 1,
+            maxValue: 60,
             padding: const EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
-            onItemChanged: (newValue) {
+            onValueChanged: (newValue) {
               widget.gripDTO.restSeconds = newValue;
             },
           ),
@@ -195,27 +196,13 @@ class _GripDetailsPickersState extends State<GripDetailsPickers> {
       children: [
         const NumberPickerTitle(title: 'Break', maxWidth: 60.0),
         Expanded(
-          child: NumberPicker(
-            unit: 'min.',
-            padding: const EdgeInsets.fromLTRB(8.0, 8.0, 0, 8.0),
-            initialValue: widget.gripDTO.breakMinutes.toInt(),
-            min: 0,
-            max: 30,
-            onItemChanged: (newValue) {
-              widget.gripDTO.breakMinutes = newValue;
-            },
-          ),
-        ),
-        Expanded(
-          child: NumberPicker(
-            unit: 'sec.',
-            initialValue: widget.gripDTO.breakSeconds.toInt(),
-            min: 0,
-            max: 59,
-            padding: const EdgeInsets.fromLTRB(0, 8.0, 16.0, 8.0),
-            shouldZeroPad: true,
-            onItemChanged: (newValue) {
-              widget.gripDTO.breakSeconds = newValue;
+          child: DurationPicker(
+            padding: const EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
+            minutes: widget.gripDTO.breakMinutes,
+            seconds: widget.gripDTO.breakSeconds,
+            onDurationChanged: (newDuration) {
+              widget.gripDTO.breakMinutes = newDuration.inMinutes;
+              widget.gripDTO.breakSeconds = newDuration.inSeconds % 60;
             },
           ),
         ),
@@ -225,32 +212,18 @@ class _GripDetailsPickersState extends State<GripDetailsPickers> {
 
   /// Spin boxes that allow user to choose break minutes and seconds that occur
   /// after the last rep for the current grip
-  Widget _lastBreakSpinBoxes() {
+  Widget _lastBreakDurationPicker() {
     return Row(
       children: [
         const NumberPickerTitle(title: 'Break', maxWidth: 60.0),
         Expanded(
-          child: NumberPicker(
-            unit: 'min.',
-            padding: const EdgeInsets.fromLTRB(8.0, 8.0, 0, 8.0),
-            initialValue: widget.gripDTO.lastBreakMinutes.toInt(),
-            min: 0,
-            max: 30,
-            onItemChanged: (newValue) {
-              widget.gripDTO.lastBreakMinutes = newValue;
-            },
-          ),
-        ),
-        Expanded(
-          child: NumberPicker(
-            unit: 'sec.',
-            initialValue: widget.gripDTO.lastBreakSeconds.toInt(),
-            min: 0,
-            max: 59,
-            padding: const EdgeInsets.fromLTRB(0, 8.0, 16.0, 8.0),
-            shouldZeroPad: true,
-            onItemChanged: (newValue) {
-              widget.gripDTO.lastBreakSeconds = newValue;
+          child: DurationPicker(
+            padding: const EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
+            minutes: widget.gripDTO.lastBreakMinutes,
+            seconds: widget.gripDTO.lastBreakSeconds,
+            onDurationChanged: (newDuration) {
+              widget.gripDTO.lastBreakMinutes = newDuration.inMinutes;
+              widget.gripDTO.lastBreakSeconds = newDuration.inSeconds % 60;
             },
           ),
         ),

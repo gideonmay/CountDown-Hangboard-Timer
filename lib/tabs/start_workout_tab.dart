@@ -17,8 +17,8 @@ class StartWorkoutTab extends StatelessWidget {
         children: [
           WorkoutDetailsRow(title: 'Workout Name', body: workout.name),
           WorkoutDetailsRow(title: 'Description', body: workout.description),
-          WorkoutDetailsRow(title: 'Last Used', body: 'Some Date'),
-          WorkoutDetailsRow(title: 'Total Time', body: '20:00'),
+          const WorkoutDetailsRow(title: 'Last Used', body: 'Some Date'),
+          const WorkoutDetailsRow(title: 'Total Time', body: '20:00'),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton(

@@ -68,7 +68,7 @@ void main() {
     // Scroll back up until error text found
     final errorText = find.textContaining('Please choose a grip type');
     await tester.dragUntilVisible(
-        errorText, find.byType(ListView), const Offset(0.0, 50.0),
+        errorText, find.text('Reps'), const Offset(0.0, 50.0),
         maxIteration: 100);
     await tester.pumpAndSettle();
 

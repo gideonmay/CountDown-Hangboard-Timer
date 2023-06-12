@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -8,8 +7,6 @@ import 'edit_workout_screen.dart';
 import 'workout_detail_screen.dart';
 import '../db/drift_database.dart';
 import '../models/workout_dto.dart';
-import '../theme/color_theme.dart';
-import '../widgets/app_divider.dart';
 
 /// A screen that lists all of the workouts available in the database
 class MyWorkoutsScreen extends StatefulWidget {
@@ -22,26 +19,29 @@ class MyWorkoutsScreen extends StatefulWidget {
 class _MyWorkoutsScreenState extends State<MyWorkoutsScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('My Workouts'),
+    return CupertinoPageScaffold(
+        child: CustomScrollView(slivers: <Widget>[
+      CupertinoSliverNavigationBar(
+        largeTitle: const Text('My Workouts'),
+        trailing: CupertinoButton(
+            padding: EdgeInsets.zero,
+            child: const Icon(CupertinoIcons.add),
+            onPressed: () => _navigateToCreateWorkout(context)),
       ),
-      body: _buildWorkoutList(context),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _navigateToCreateWorkout(context);
-        },
-        tooltip: 'Add Workout',
-        child: const Icon(Icons.add),
-      ),
-    );
+      SliverSafeArea(
+          top: false,
+          minimum: const EdgeInsets.only(top: 0),
+          sliver: SliverToBoxAdapter(
+            child: _buildWorkoutList(context),
+          ))
+    ]));
   }
 
   /// Navigates to the CreateWorkoutScreen widget
   static _navigateToCreateWorkout(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const CreateWorkoutScreen()),
+      CupertinoPageRoute(builder: (context) => const CreateWorkoutScreen()),
     );
   }
 
@@ -65,12 +65,10 @@ class _MyWorkoutsScreenState extends State<MyWorkoutsScreen> {
           );
         }
 
-        return ListView.builder(
-          itemCount: workouts.length,
-          itemBuilder: (context, index) {
-            final workout = workouts[index];
-            return _slideableListTile(workout);
-          },
+        return CupertinoListSection(
+          topMargin: 0,
+          dividerMargin: 50,
+          children: [for (var workout in workouts) _slideableListTile(workout)],
         );
       },
     );
@@ -82,41 +80,38 @@ class _MyWorkoutsScreenState extends State<MyWorkoutsScreen> {
       endActionPane: ActionPane(motion: const ScrollMotion(), children: [
         SlidableAction(
           onPressed: (context) => _navigateToEditWorkout(context, workout),
-          backgroundColor: Colors.indigo,
-          foregroundColor: Colors.white,
-          icon: Icons.edit_outlined,
+          backgroundColor: CupertinoColors.systemIndigo,
+          foregroundColor: CupertinoColors.white,
+          icon: CupertinoIcons.pen,
           label: 'Edit',
         ),
         SlidableAction(
           onPressed: (context) => _showAlertDialog(context, workout),
-          backgroundColor: const Color(0xFFFE4A49),
-          foregroundColor: Colors.white,
-          icon: Icons.delete,
+          backgroundColor: CupertinoColors.systemRed,
+          foregroundColor: CupertinoColors.white,
+          icon: CupertinoIcons.delete,
           label: 'Delete',
         ),
       ]),
-      child: Column(
-        children: [
-          ListTile(
-            leading: IconButton(
-              icon: const Icon(Icons.play_arrow,
-                  size: 40.0, color: AppColorTheme.green),
-              onPressed: () {},
-            ),
-            title: Text(workout.name, overflow: TextOverflow.ellipsis),
-            subtitle: Text(workout.description,
-                maxLines: 1, overflow: TextOverflow.ellipsis),
-            trailing: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text('Last Used:'),
-                Text(' ${_getFormattedDate(workout.lastUsedDate)}'),
-              ],
-            ),
-            onTap: () => _navigateToStartWorkout(context, workout),
-          ),
-          const AppDivider(indent: 80, height: 1.0),
-        ],
+      child: CupertinoListTile(
+        leading: CupertinoButton(
+          onPressed: () {},
+          child: const Icon(CupertinoIcons.play_arrow_solid,
+              size: 35.0, color: CupertinoColors.activeGreen),
+        ),
+        leadingSize: 65.0,
+        title: Text(workout.name, overflow: TextOverflow.ellipsis),
+        subtitle: Text(workout.description,
+            maxLines: 1, overflow: TextOverflow.ellipsis),
+        trailing: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text('Last Used:', style: TextStyle(fontSize: 14.0)),
+            Text(' ${_formattedDate(workout.lastUsedDate)}',
+                style: const TextStyle(fontSize: 14.0)),
+          ],
+        ),
+        onTap: () => _navigateToStartWorkout(context, workout),
       ),
     );
   }
@@ -128,7 +123,7 @@ class _MyWorkoutsScreenState extends State<MyWorkoutsScreen> {
 
     Navigator.push(
       context,
-      MaterialPageRoute(
+      CupertinoPageRoute(
           builder: (context) => EditWorkoutScreen(workoutDTO: workoutDTO)),
     );
   }
@@ -137,7 +132,7 @@ class _MyWorkoutsScreenState extends State<MyWorkoutsScreen> {
   static _navigateToStartWorkout(BuildContext context, Workout workout) {
     Navigator.push(
       context,
-      MaterialPageRoute(
+      CupertinoPageRoute(
           builder: (context) => WorkoutDetailScreen(workout: workout)),
     );
   }
@@ -173,7 +168,7 @@ class _MyWorkoutsScreenState extends State<MyWorkoutsScreen> {
 
   /// Returns the given datetime formatted as 'MM/DD/YYYY'. If dateTime is null,
   /// then returns 'Never'
-  String _getFormattedDate(DateTime? dateTime) {
+  String _formattedDate(DateTime? dateTime) {
     if (dateTime == null) {
       return 'Never';
     }

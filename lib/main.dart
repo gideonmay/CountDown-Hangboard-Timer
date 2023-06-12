@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import './db/drift_database.dart';
 import 'screens/settings_screen.dart';
@@ -18,13 +19,9 @@ class App extends StatelessWidget {
     return Provider(
       create: (context) => AppDatabase(openConnection()),
       dispose: (context, db) => db.close(),
-      child: MaterialApp(
-          title: 'Flutter Demo',
-          theme: ThemeData(
-              colorScheme: ColorScheme.fromSwatch().copyWith(
-                  primary: AppColorTheme.primary,
-                  secondary: AppColorTheme.secondary)),
-          home: const AppScaffold()),
+      child: const CupertinoApp(
+          theme: CupertinoThemeData(brightness: Brightness.light),
+          home: AppScaffold()),
     );
   }
 }
@@ -37,45 +34,41 @@ class AppScaffold extends StatefulWidget {
 }
 
 class _AppScaffoldState extends State<AppScaffold> {
-  int _selectedIndex = 0;
-
+  /// The screens available in the bottom tab bar
   static const List<Widget> _screenOptions = <Widget>[
     MyWorkoutsScreen(),
-    DurationsPickerScreen(),
-    SettingsScreen()
+    Text('Timer'),
+    Text('Settings')
+    // DurationsPickerScreen(),
+    // SettingsScreen()
   ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: _screenOptions.elementAt(_selectedIndex),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
+    return CupertinoTabScaffold(
+      tabBar: CupertinoTabBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(CupertinoIcons.home),
             label: 'My Workouts',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.timer),
+            icon: Icon(CupertinoIcons.timer),
             label: 'Timer',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
+            icon: Icon(CupertinoIcons.settings),
             label: 'Settings',
           ),
         ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Theme.of(context).colorScheme.primary,
-        onTap: _onItemTapped,
       ),
+      tabBuilder: (BuildContext context, int index) {
+        return CupertinoTabView(
+          builder: (BuildContext context) {
+            return _screenOptions[index];
+          },
+        );
+      },
     );
   }
 }

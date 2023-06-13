@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import '../db/drift_database.dart';
 import '../forms/workout_form.dart';
@@ -17,18 +17,16 @@ class EditWorkoutScreen extends StatefulWidget {
 class _EditWorkoutScreenState extends State<EditWorkoutScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Edit Workout'),
+    return CupertinoPageScaffold(
+      backgroundColor: CupertinoColors.systemGrey6,
+      navigationBar: const CupertinoNavigationBar(
+        previousPageTitle: 'Workouts',
+        middle: Text('Add Workout'),
       ),
-      body: Column(
-        children: [
-          WorkoutForm(
-              workoutDTO: widget.workoutDTO,
-              onFormSaved: _updateWorkout,
-              buttonText: 'Save Changes'),
-        ],
-      ),
+      child: WorkoutForm(
+          workoutDTO: widget.workoutDTO,
+          onFormSaved: _updateWorkout,
+          buttonText: 'Save Changes'),
     );
   }
 

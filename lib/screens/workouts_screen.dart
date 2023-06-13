@@ -2,27 +2,28 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'create_workout_screen.dart';
+import 'add_workout_screen.dart';
 import 'edit_workout_screen.dart';
 import 'workout_detail_screen.dart';
 import '../db/drift_database.dart';
 import '../models/workout_dto.dart';
 
 /// A screen that lists all of the workouts available in the database
-class MyWorkoutsScreen extends StatefulWidget {
-  const MyWorkoutsScreen({super.key});
+class WorkoutsScreen extends StatefulWidget {
+  const WorkoutsScreen({super.key});
 
   @override
-  State<MyWorkoutsScreen> createState() => _MyWorkoutsScreenState();
+  State<WorkoutsScreen> createState() => _WorkoutsScreenState();
 }
 
-class _MyWorkoutsScreenState extends State<MyWorkoutsScreen> {
+class _WorkoutsScreenState extends State<WorkoutsScreen> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
+      backgroundColor: CupertinoColors.systemGrey6,
         child: CustomScrollView(slivers: <Widget>[
       CupertinoSliverNavigationBar(
-        largeTitle: const Text('My Workouts'),
+        largeTitle: const Text('Workouts'),
         trailing: CupertinoButton(
             padding: EdgeInsets.zero,
             child: const Icon(CupertinoIcons.add),
@@ -41,7 +42,7 @@ class _MyWorkoutsScreenState extends State<MyWorkoutsScreen> {
   static _navigateToCreateWorkout(BuildContext context) {
     Navigator.push(
       context,
-      CupertinoPageRoute(builder: (context) => const CreateWorkoutScreen()),
+      CupertinoPageRoute(builder: (context) => const AddWorkoutScreen()),
     );
   }
 

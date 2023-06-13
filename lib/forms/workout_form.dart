@@ -1,8 +1,7 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import '../models/workout_dto.dart';
 
-/// Provides a form to allow users to enter workout information then submit the
-/// information by tapping a button
+/// A form that enables the user to enter a name and description for a workout
 class WorkoutForm extends StatefulWidget {
   final WorkoutDTO workoutDTO;
 
@@ -11,7 +10,6 @@ class WorkoutForm extends StatefulWidget {
 
   /// The text to display in the submission button
   final String buttonText;
-
   const WorkoutForm(
       {super.key,
       required this.workoutDTO,
@@ -27,65 +25,82 @@ class _WorkoutFormState extends State<WorkoutForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
+    return SafeArea(
+        child: Form(
       key: _formKey,
-      child: Column(
+      child: ListView(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextFormField(
-              initialValue: widget.workoutDTO.name,
-              decoration: const InputDecoration(labelText: 'Name'),
-              maxLength: 40,
-              onSaved: (newValue) {
-                widget.workoutDTO.name = newValue;
-              },
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter a name';
-                }
-                return null;
-              },
-            ),
+          CupertinoFormSection.insetGrouped(
+            header: const Text('WORKOUT DETAILS'),
+            children: _formFieldRows(),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextFormField(
-              initialValue: widget.workoutDTO.description,
-              decoration: const InputDecoration(labelText: 'Description'),
-              maxLength: 100,
-              onSaved: (newValue) {
-                widget.workoutDTO.description = newValue;
-              },
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter a description';
-                }
-                return null;
-              },
-            ),
-          ),
+          const SizedBox(height: 20),
           _submitButton(context),
         ],
       ),
-    );
+    ));
+  }
+
+  /// The text fields for this form
+  List<Widget> _formFieldRows() {
+    return [
+      CupertinoTextFormFieldRow(
+        initialValue: widget.workoutDTO.name,
+        maxLength: 40,
+        textInputAction: TextInputAction.next,
+        prefix: const Text('Name'),
+        placeholder: 'Enter name',
+        onSaved: (newValue) {
+          if (newValue != null) {
+            // Trim blank spaces off front and end of string
+            widget.workoutDTO.name = newValue.trim();
+          } else {
+            widget.workoutDTO.name = newValue;
+          }
+        },
+        validator: (String? value) {
+          // Check if string is blank, empty, or only spaces
+          if (value == null || value.isEmpty || value.trim().isEmpty) {
+            return 'Please enter a name';
+          }
+          return null;
+        },
+      ),
+      CupertinoTextFormFieldRow(
+        initialValue: widget.workoutDTO.description,
+        maxLength: 100,
+        textInputAction: TextInputAction.next,
+        prefix: const Text('Description'),
+        placeholder: 'Enter description',
+        onSaved: (newValue) {
+          if (newValue != null) {
+            // Trim blank spaces off front and end of string
+            widget.workoutDTO.description = newValue.trim();
+          } else {
+            widget.workoutDTO.description = newValue;
+          }
+        },
+        validator: (String? value) {
+          if (value == null || value.isEmpty || value.trim().isEmpty) {
+            return 'Please enter a description';
+          }
+          return null;
+        },
+      ),
+    ];
   }
 
   Widget _submitButton(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-              backgroundColor: Theme.of(context).colorScheme.secondary,
-              minimumSize: const Size.fromHeight(40)),
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: CupertinoButton.filled(
+          child: Text(widget.buttonText),
           onPressed: () async {
             if (_formKey.currentState!.validate()) {
               _formKey.currentState!.save();
               widget.onFormSaved();
             }
-          },
-          child:
-              Text(widget.buttonText, style: const TextStyle(fontSize: 20.0))),
+          }),
     );
   }
 }

@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import './db/drift_database.dart';
 import 'screens/settings_screen.dart';
 import 'screens/durations_picker_screen.dart';
-import 'screens/my_workouts_screen.dart';
+import 'screens/workouts_screen.dart';
 import 'theme/color_theme.dart';
 
 void main() {
@@ -36,7 +36,7 @@ class AppScaffold extends StatefulWidget {
 class _AppScaffoldState extends State<AppScaffold> {
   /// The screens available in the bottom tab bar
   static const List<Widget> _screenOptions = <Widget>[
-    MyWorkoutsScreen(),
+    WorkoutsScreen(),
     Text('Timer'),
     Text('Settings')
     // DurationsPickerScreen(),
@@ -50,7 +50,7 @@ class _AppScaffoldState extends State<AppScaffold> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(CupertinoIcons.home),
-            label: 'My Workouts',
+            label: 'Workouts',
           ),
           BottomNavigationBarItem(
             icon: Icon(CupertinoIcons.timer),

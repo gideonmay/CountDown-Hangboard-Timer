@@ -20,22 +20,22 @@ class _WorkoutsScreenState extends State<WorkoutsScreen> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      backgroundColor: CupertinoColors.systemGrey6,
+        backgroundColor: CupertinoColors.systemGrey6,
         child: CustomScrollView(slivers: <Widget>[
-      CupertinoSliverNavigationBar(
-        largeTitle: const Text('Workouts'),
-        trailing: CupertinoButton(
-            padding: EdgeInsets.zero,
-            child: const Icon(CupertinoIcons.add),
-            onPressed: () => _navigateToCreateWorkout(context)),
-      ),
-      SliverSafeArea(
-          top: false,
-          minimum: const EdgeInsets.only(top: 0),
-          sliver: SliverToBoxAdapter(
-            child: _buildWorkoutList(context),
-          ))
-    ]));
+          CupertinoSliverNavigationBar(
+            largeTitle: const Text('Workouts'),
+            trailing: CupertinoButton(
+                padding: EdgeInsets.zero,
+                child: const Icon(CupertinoIcons.add),
+                onPressed: () => _navigateToCreateWorkout(context)),
+          ),
+          SliverSafeArea(
+              top: false,
+              minimum: const EdgeInsets.only(top: 0),
+              sliver: SliverToBoxAdapter(
+                child: _buildWorkoutList(context),
+              ))
+        ]));
   }
 
   /// Navigates to the CreateWorkoutScreen widget
@@ -87,7 +87,7 @@ class _WorkoutsScreenState extends State<WorkoutsScreen> {
           label: 'Edit',
         ),
         SlidableAction(
-          onPressed: (context) => _showAlertDialog(context, workout),
+          onPressed: (context) => _showActionSheet(context, workout),
           backgroundColor: CupertinoColors.systemRed,
           foregroundColor: CupertinoColors.white,
           icon: CupertinoIcons.delete,
@@ -138,29 +138,28 @@ class _WorkoutsScreenState extends State<WorkoutsScreen> {
     );
   }
 
-  /// Shows a dialog box to confirm workout deletion
-  Future<void> _showAlertDialog(BuildContext context, Workout workout) {
-    return showCupertinoModalPopup<void>(
+  /// Shows an action sheet allowing user to delete the workout or cancel
+  void _showActionSheet(BuildContext context, Workout workout) {
+    showCupertinoModalPopup<void>(
       context: context,
-      builder: (BuildContext context) => CupertinoAlertDialog(
-        title: const Text('Are you sure?'),
-        content: Text(
+      builder: (BuildContext context) => CupertinoActionSheet(
+        message: Text(
             'The workout \'${workout.name}\' will be permanently deleted.'),
-        actions: <CupertinoDialogAction>[
-          CupertinoDialogAction(
+        actions: <CupertinoActionSheetAction>[
+          CupertinoActionSheetAction(
+            isDestructiveAction: true,
+            onPressed: () {
+              _deleteWorkout(context, workout);
+              Navigator.pop(context);
+            },
+            child: const Text('Delete'),
+          ),
+          CupertinoActionSheetAction(
             isDefaultAction: true,
             onPressed: () {
               Navigator.pop(context);
             },
-            child: const Text('No'),
-          ),
-          CupertinoDialogAction(
-            isDestructiveAction: true,
-            onPressed: () {
-              _deleteWorkout(context, workout);
-              Navigator.of(context).pop();
-            },
-            child: const Text('Yes'),
+            child: const Text('Cancel'),
           ),
         ],
       ),

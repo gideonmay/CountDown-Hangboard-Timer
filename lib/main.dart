@@ -1,5 +1,6 @@
 // import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import './db/drift_database.dart';
 import 'screens/settings_screen.dart';
@@ -20,6 +21,12 @@ class App extends StatelessWidget {
       create: (context) => AppDatabase(openConnection()),
       dispose: (context, db) => db.close(),
       child: const CupertinoApp(
+          localizationsDelegates: [
+            // These are necessary for the ReorderableListView widget to work
+            DefaultMaterialLocalizations.delegate,
+            DefaultCupertinoLocalizations.delegate,
+            DefaultWidgetsLocalizations.delegate,
+          ],
           theme: CupertinoThemeData(brightness: Brightness.light),
           home: AppScaffold()),
     );

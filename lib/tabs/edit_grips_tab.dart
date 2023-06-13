@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import '../widgets/reorderable_grip_list.dart';
 import '../db/drift_database.dart';
@@ -39,7 +39,7 @@ class _EditGripsTabState extends State<EditGripsTab> {
           );
         }
 
-        return ReorderableGripList(gripList: grips);
+        return SafeArea(child: ReorderableGripList(gripList: grips));
       },
     );
   }

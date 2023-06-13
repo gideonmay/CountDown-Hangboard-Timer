@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../db/drift_database.dart';
@@ -20,38 +21,35 @@ class _ReorderableGripListState extends State<ReorderableGripList> {
   Widget build(BuildContext context) {
     final db = Provider.of<AppDatabase>(context);
 
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 25.0),
-      child: ReorderableListView(
-          children: <Widget>[
-            for (int index = 0; index < widget.gripList.length; index++)
-              _listTileWithDivider(
-                  index, widget.gripList.length - 1, widget.gripList[index]),
-          ],
-          onReorder: (oldIndex, newIndex) {
-            // Remove the grip and reinsert it at the new index
-            setState(() {
-              if (oldIndex < newIndex) {
-                newIndex -= 1;
-              }
-              final grip = widget.gripList.removeAt(oldIndex);
-              widget.gripList.insert(newIndex, grip);
-            });
-    
-            // Modify sequenceNum in database for all grips that were reordered
-            db.updateMultipleGripSeqNum(widget.gripList);
-          }),
-    );
+    return ReorderableListView(
+        footer: const SizedBox(height: 20),
+        children: <Widget>[
+          for (int index = 0; index < widget.gripList.length; index++)
+            _listTileWithDivider(
+                index, widget.gripList.length - 1, widget.gripList[index]),
+        ],
+        onReorder: (oldIndex, newIndex) {
+          // Remove the grip and reinsert it at the new index
+          setState(() {
+            if (oldIndex < newIndex) {
+              newIndex -= 1;
+            }
+            final grip = widget.gripList.removeAt(oldIndex);
+            widget.gripList.insert(newIndex, grip);
+          });
+
+          // Modify sequenceNum in database for all grips that were reordered
+          db.updateMultipleGripSeqNum(widget.gripList);
+        });
   }
 
-  /// A ListTile with a divider
+  /// A CupertinoListTile with a divider
   Widget _listTileWithDivider(int index, int lastIndex, GripWithGripType grip) {
     return Column(
       key: Key('$index'),
       children: [
-        ListTile(
-          minLeadingWidth: 15.0,
-          visualDensity: const VisualDensity(horizontal: 0, vertical: -4.0),
+        CupertinoListTile(
+          backgroundColor: CupertinoColors.white,
           leading: Text(
             (index + 1).toString(),
             style: const TextStyle(fontSize: 20.0),
@@ -62,7 +60,11 @@ class _ReorderableGripListState extends State<ReorderableGripList> {
           title: _titleText(grip),
           subtitle: _subitleText(grip.entry),
           trailing: ReorderableDragStartListener(
-              index: index, child: const Icon(Icons.drag_handle)),
+              index: index,
+              child: const Icon(
+                CupertinoIcons.line_horizontal_3,
+                color: CupertinoColors.systemGrey2,
+              )),
         ),
         _dividerWithBreakDuration(grip.entry, index, lastIndex),
       ],
@@ -74,7 +76,7 @@ class _ReorderableGripListState extends State<ReorderableGripList> {
       BuildContext context, GripWithGripType grip) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => EditGripScreen(grip: grip)),
+      CupertinoPageRoute(builder: (context) => EditGripScreen(grip: grip)),
     );
   }
 
@@ -98,15 +100,17 @@ class _ReorderableGripListState extends State<ReorderableGripList> {
   /// A set of dividers with the Post-Break duration in between them
   Widget _dividerWithBreakDuration(Grip grip, int gripIndex, int lastIndex) {
     if (gripIndex == lastIndex) {
-      return const AppDivider(indent: 45, height: 1.0);
+      return Container();
     }
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Expanded(child: AppDivider(indent: 45, height: 3.0)),
+        const Expanded(child: AppDivider(indent: 62.0, height: 3.0)),
         Text(
-            'Break ${grip.lastBreakMinutes}:${grip.lastBreakSeconds.toString().padLeft(2, '0')}'),
+          'Break ${grip.lastBreakMinutes}:${grip.lastBreakSeconds.toString().padLeft(2, '0')}',
+          style: const TextStyle(fontSize: 14.0),
+        ),
         const Expanded(child: AppDivider(indent: 8.0, height: 3.0)),
       ],
     );

@@ -1,9 +1,9 @@
 import 'timer_durations_dto.dart';
 
-/// A data transfer object that stores all of the values in TimerDurationsDTO
-/// and stores the grip type ID, grip name, and last break duration. The last
-/// break represents the break between this grip and the next one, which may
-/// differ from this grip's break duration.
+/// A data transfer object that inherits from the TimerDurationsDTO class and,
+/// additionally, stores the grip type ID, grip name, and last break duration.
+/// The last break represents the break between this grip and the next one,
+/// which may differ from this grip's break duration.
 class GripDTO extends TimerDurationsDTO {
   int? gripTypeID;
   int? edgeSize;

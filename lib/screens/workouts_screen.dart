@@ -154,14 +154,14 @@ class _WorkoutsScreenState extends State<WorkoutsScreen> {
             },
             child: const Text('Delete'),
           ),
-          CupertinoActionSheetAction(
-            isDefaultAction: true,
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Text('Cancel'),
-          ),
         ],
+        cancelButton: CupertinoActionSheetAction(
+          isDefaultAction: true,
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: const Text('Cancel'),
+        ),
       ),
     );
   }

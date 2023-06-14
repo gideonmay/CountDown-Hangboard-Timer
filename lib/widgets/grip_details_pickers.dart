@@ -4,7 +4,6 @@ import '../models/grip_dto.dart';
 import 'app_divider.dart';
 import 'app_header.dart';
 import 'duration_picker.dart';
-import 'number_picker.dart';
 import 'number_picker_title.dart';
 
 /// A series of NumberPickers allowing the user to choose sets and reps, and the
@@ -25,11 +24,11 @@ class _GripDetailsPickersState extends State<GripDetailsPickers> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         _edgeSize(),
-        _setsNumberPicker(),
-        _repsNumberPicker(),
-        _workNumberPicker(),
-        _restNumberPicker(),
-        _breakDurationPicker(),
+        // _setsNumberPicker(),
+        // _repsNumberPicker(),
+        // _workNumberPicker(),
+        // _restNumberPicker(),
+        // _breakDurationPicker(),
         const AppDivider(),
         const AppHeader(title: 'Post-Grip Break'),
         const Text(
@@ -108,107 +107,107 @@ class _GripDetailsPickersState extends State<GripDetailsPickers> {
         : '';
   }
 
-  /// NumberPicker that allows user to choose number of sets
-  Widget _setsNumberPicker() {
-    return Row(
-      children: [
-        const NumberPickerTitle(title: 'Sets', maxWidth: 60.0),
-        Expanded(
-          child: NumberPicker(
-            initialValue: widget.gripDTO.sets.toInt(),
-            minValue: 1,
-            maxValue: 20,
-            padding: const EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
-            onValueChanged: (newValue) {
-              widget.gripDTO.sets = newValue;
-            },
-          ),
-        ),
-      ],
-    );
-  }
+  // /// NumberPicker that allows user to choose number of sets
+  // Widget _setsNumberPicker() {
+  //   return Row(
+  //     children: [
+  //       const NumberPickerTitle(title: 'Sets', maxWidth: 60.0),
+  //       Expanded(
+  //         child: NumberPicker(
+  //           initialValue: widget.gripDTO.sets.toInt(),
+  //           minValue: 1,
+  //           maxValue: 20,
+  //           padding: const EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
+  //           onValueChanged: (newValue) {
+  //             widget.gripDTO.sets = newValue;
+  //           },
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
 
-  /// NumberPicker that allows user to choose number of reps
-  Widget _repsNumberPicker() {
-    return Row(
-      children: [
-        const NumberPickerTitle(title: 'Reps', maxWidth: 60.0),
-        Expanded(
-          child: NumberPicker(
-            initialValue: widget.gripDTO.reps.toInt(),
-            minValue: 1,
-            maxValue: 20,
-            padding: const EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
-            onValueChanged: (newValue) {
-              widget.gripDTO.reps = newValue;
-            },
-          ),
-        ),
-      ],
-    );
-  }
+  // /// NumberPicker that allows user to choose number of reps
+  // Widget _repsNumberPicker() {
+  //   return Row(
+  //     children: [
+  //       const NumberPickerTitle(title: 'Reps', maxWidth: 60.0),
+  //       Expanded(
+  //         child: NumberPicker(
+  //           initialValue: widget.gripDTO.reps.toInt(),
+  //           minValue: 1,
+  //           maxValue: 20,
+  //           padding: const EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
+  //           onValueChanged: (newValue) {
+  //             widget.gripDTO.reps = newValue;
+  //           },
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
 
-  /// NumberPicker that allows user to choose work seconds
-  Widget _workNumberPicker() {
-    return Row(
-      children: [
-        const NumberPickerTitle(title: 'Work', maxWidth: 60.0),
-        Expanded(
-          child: NumberPicker(
-            unit: 'sec.',
-            initialValue: widget.gripDTO.workSeconds.toInt(),
-            minValue: 1,
-            maxValue: 60,
-            padding: const EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
-            onValueChanged: (newValue) {
-              widget.gripDTO.workSeconds = newValue;
-            },
-          ),
-        ),
-      ],
-    );
-  }
+  // /// NumberPicker that allows user to choose work seconds
+  // Widget _workNumberPicker() {
+  //   return Row(
+  //     children: [
+  //       const NumberPickerTitle(title: 'Work', maxWidth: 60.0),
+  //       Expanded(
+  //         child: NumberPicker(
+  //           unit: 'sec.',
+  //           initialValue: widget.gripDTO.workSeconds.toInt(),
+  //           minValue: 1,
+  //           maxValue: 60,
+  //           padding: const EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
+  //           onValueChanged: (newValue) {
+  //             widget.gripDTO.workSeconds = newValue;
+  //           },
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
 
-  /// NumberPicker that allows user to choose rest seconds
-  Widget _restNumberPicker() {
-    return Row(
-      children: [
-        const NumberPickerTitle(title: 'Rest', maxWidth: 60.0),
-        Expanded(
-          child: NumberPicker(
-            unit: 'sec.',
-            initialValue: widget.gripDTO.restSeconds.toInt(),
-            minValue: 1,
-            maxValue: 60,
-            padding: const EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
-            onValueChanged: (newValue) {
-              widget.gripDTO.restSeconds = newValue;
-            },
-          ),
-        ),
-      ],
-    );
-  }
+  // /// NumberPicker that allows user to choose rest seconds
+  // Widget _restNumberPicker() {
+  //   return Row(
+  //     children: [
+  //       const NumberPickerTitle(title: 'Rest', maxWidth: 60.0),
+  //       Expanded(
+  //         child: NumberPicker(
+  //           unit: 'sec.',
+  //           initialValue: widget.gripDTO.restSeconds.toInt(),
+  //           minValue: 1,
+  //           maxValue: 60,
+  //           padding: const EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
+  //           onValueChanged: (newValue) {
+  //             widget.gripDTO.restSeconds = newValue;
+  //           },
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
 
-  /// Spin boxes that allows user to choose break minutes and seconds
-  Widget _breakDurationPicker() {
-    return Row(
-      children: [
-        const NumberPickerTitle(title: 'Break', maxWidth: 60.0),
-        Expanded(
-          child: DurationPicker(
-            padding: const EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
-            minutes: widget.gripDTO.breakMinutes,
-            seconds: widget.gripDTO.breakSeconds,
-            onDurationChanged: (newDuration) {
-              widget.gripDTO.breakMinutes = newDuration.inMinutes;
-              widget.gripDTO.breakSeconds = newDuration.inSeconds % 60;
-            },
-          ),
-        ),
-      ],
-    );
-  }
+  // /// Spin boxes that allows user to choose break minutes and seconds
+  // Widget _breakDurationPicker() {
+  //   return Row(
+  //     children: [
+  //       const NumberPickerTitle(title: 'Break', maxWidth: 60.0),
+  //       Expanded(
+  //         child: DurationPicker(
+  //           padding: const EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
+  //           minutes: widget.gripDTO.breakMinutes,
+  //           seconds: widget.gripDTO.breakSeconds,
+  //           onDurationChanged: (newDuration) {
+  //             widget.gripDTO.breakMinutes = newDuration.inMinutes;
+  //             widget.gripDTO.breakSeconds = newDuration.inSeconds % 60;
+  //           },
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
 
   /// Spin boxes that allow user to choose break minutes and seconds that occur
   /// after the last rep for the current grip
@@ -218,7 +217,7 @@ class _GripDetailsPickersState extends State<GripDetailsPickers> {
         const NumberPickerTitle(title: 'Break', maxWidth: 60.0),
         Expanded(
           child: DurationPicker(
-            padding: const EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
+            title: 'Last Break',
             minutes: widget.gripDTO.lastBreakMinutes,
             seconds: widget.gripDTO.lastBreakSeconds,
             onDurationChanged: (newDuration) {

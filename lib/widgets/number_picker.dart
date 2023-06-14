@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../utils/sound_utils.dart';
 
@@ -8,18 +9,16 @@ class NumberPicker extends StatefulWidget {
   final int initialValue;
   final int minValue;
   final int maxValue;
-  final String? unit;
-  final EdgeInsets padding;
+  final String title;
   final void Function(int newValue) onValueChanged;
 
   const NumberPicker(
       {super.key,
       required this.onValueChanged,
-      required this.padding,
       required this.minValue,
       required this.maxValue,
       required this.initialValue,
-      this.unit});
+      required this.title});
 
   @override
   State<NumberPicker> createState() => _NumberPickerState();
@@ -45,62 +44,32 @@ class _NumberPickerState extends State<NumberPicker> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: widget.padding,
-      child: Container(
-        decoration: const BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(7.0)),
-            color: Color.fromRGBO(234, 234, 236, 1.0)),
-        height: 40,
-        child: Row(children: [
-          _valueText(),
-          _changeValueButtons(),
-        ]),
-      ),
+    return CupertinoListTile(
+      title: Text(widget.title),
+      trailing: Row(children: [
+        _valueText(),
+        _changeValueButtons(),
+      ]),
     );
   }
 
   /// A text widget containing the value of this number picker
   Widget _valueText() {
-    return Expanded(child: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-      return Stack(
-        children: [
-          Positioned(
-            top: 4.75,
-            right: constraints.maxWidth / 2 - 10,
-            child: Text(
-              _currValue.toString(),
-              style: const TextStyle(fontSize: 26.0),
-            ),
-          ),
-          _unitText(constraints),
-        ],
-      );
-    }));
-  }
-
-  /// Returns a positioned text containing the unit if the unit is not null
-  Widget _unitText(BoxConstraints constraints) {
-    if (widget.unit == null) {
-      return Container();
-    }
-
-    return Positioned(
-        top: 13,
-        left: constraints.maxWidth / 2 + 12,
+    return SizedBox(
+        width: 70.0,
         child: Text(
-          widget.unit!,
-          style: const TextStyle(fontSize: 18.0),
+          _currValue.toString(),
+          style: const TextStyle(fontSize: 20.0),
         ));
   }
 
   /// A plus and a minus button in a single row
   Widget _changeValueButtons() {
     return Container(
+      height: 35.0,
       decoration: const BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(7.0)),
-          color: Color.fromRGBO(214, 214, 215, 1.0)),
+          color: CupertinoColors.systemGrey4),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -131,13 +100,12 @@ class _NumberPickerState extends State<NumberPicker> {
           _timer.cancel();
         },
         child: InkWell(
-          splashFactory: InkRipple.splashFactory,
           borderRadius: const BorderRadius.all(Radius.circular(7.0)),
           onTap: () => _decreaseValueBy(1),
           child: const Padding(
             padding: EdgeInsets.only(left: 16.0, right: 16.0),
             child: Center(
-              child: Icon(Icons.remove),
+              child: Icon(CupertinoIcons.minus, color: CupertinoColors.black),
             ),
           ),
         ),
@@ -177,7 +145,7 @@ class _NumberPickerState extends State<NumberPicker> {
           child: const Padding(
             padding: EdgeInsets.only(left: 16.0, right: 16.0),
             child: Center(
-              child: Icon(Icons.add),
+              child: Icon(CupertinoIcons.add, color: CupertinoColors.black),
             ),
           ),
         ),

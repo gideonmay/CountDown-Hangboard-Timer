@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:countdown_app/forms/workout_form.dart';
 import 'package:countdown_app/models/workout_dto.dart';
@@ -7,9 +7,9 @@ void main() {
   testWidgets('WorkoutForm shows correct initial values', (tester) async {
     Widget workoutForm = MediaQuery(
         data: const MediaQueryData(),
-        child: MaterialApp(
-            home: Scaffold(
-          body: WorkoutForm(
+        child: CupertinoApp(
+            home: CupertinoPageScaffold(
+          child: WorkoutForm(
             workoutDTO:
                 WorkoutDTO(name: 'My Workout', description: 'Something'),
             onFormSaved: () => null,
@@ -27,9 +27,9 @@ void main() {
       (tester) async {
     Widget workoutForm = MediaQuery(
         data: const MediaQueryData(),
-        child: MaterialApp(
-            home: Scaffold(
-          body: WorkoutForm(
+        child: CupertinoApp(
+            home: CupertinoPageScaffold(
+          child: WorkoutForm(
             workoutDTO: WorkoutDTO.blank(),
             onFormSaved: () => null,
             buttonText: 'Submit',
@@ -48,9 +48,9 @@ void main() {
       (tester) async {
     Widget workoutForm = MediaQuery(
         data: const MediaQueryData(),
-        child: MaterialApp(
-            home: Scaffold(
-          body: WorkoutForm(
+        child: CupertinoApp(
+            home: CupertinoPageScaffold(
+          child: WorkoutForm(
             workoutDTO: WorkoutDTO(name: null, description: 'Something'),
             onFormSaved: () => null,
             buttonText: 'Submit',
@@ -69,9 +69,9 @@ void main() {
       (tester) async {
     Widget workoutForm = MediaQuery(
         data: const MediaQueryData(),
-        child: MaterialApp(
-            home: Scaffold(
-          body: WorkoutForm(
+        child: CupertinoApp(
+            home: CupertinoPageScaffold(
+          child: WorkoutForm(
             workoutDTO: WorkoutDTO(name: 'My Workout', description: null),
             onFormSaved: () => null,
             buttonText: 'Submit',

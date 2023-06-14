@@ -1,11 +1,9 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import '../db/drift_database.dart';
 import '../models/grip_dto.dart';
 import '../forms/grip_details_form.dart';
-import '../widgets/helper_dialog.dart';
 import '../utils/navigation_utils.dart';
-import '../widgets/popup_menu.dart';
 
 /// A screen that allows the user to add a new grip to the workout
 class AddGripScreen extends StatefulWidget {
@@ -35,12 +33,18 @@ class _AddGripScreenState extends State<AddGripScreen> {
   Widget build(BuildContext context) {
     final db = Provider.of<AppDatabase>(context, listen: false);
 
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text('Add Grip'),
-          actions: [_popupMenu()],
+    return CupertinoPageScaffold(
+        backgroundColor: CupertinoColors.systemGrey6,
+        navigationBar: CupertinoNavigationBar(
+          previousPageTitle: widget.workout.name,
+          middle: const Text('Add Grip'),
+          trailing: CupertinoButton(
+            padding: EdgeInsets.zero,
+            child: const Icon(CupertinoIcons.ellipsis_circle),
+            onPressed: () => _showActionSheet(context),
+          ),
         ),
-        body: SafeArea(
+        child: SafeArea(
             child: GripDetailsForm(
           gripDTO: gripDTO,
           gripTypeStream: db.watchAllGripTypes(),
@@ -49,35 +53,39 @@ class _AddGripScreenState extends State<AddGripScreen> {
         )));
   }
 
-  /// A popup menu displaying options to add or edit grip types
-  Widget _popupMenu() {
-    return PopupMenu(popupItemDetails: [
-      PopupItemDetail(
-          iconData: Icons.edit,
-          onTap: () {
-            setState(() {
-              /*
-               * Set grip type to null so that if that grip type is deleted
-               * on next screen, an error does not occur
-               */
-              gripDTO.gripTypeID = null;
-            });
-
-            navigateToGripTypeScreen(context);
+  /// Shows an action sheet allowing user navigate to screen to edit grip types
+  void _showActionSheet(BuildContext context) {
+    showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext context) => CupertinoActionSheet(
+        actions: <CupertinoActionSheetAction>[
+          CupertinoActionSheetAction(
+            onPressed: () {
+              navigateToGripTypeScreen(context);
+              Navigator.pop(context);
+            },
+            child: const Text('Edit Grip Types'),
+          ),
+        ],
+        cancelButton: CupertinoActionSheetAction(
+          isDefaultAction: true,
+          onPressed: () {
+            Navigator.pop(context);
           },
-          popupItemType: PopupItem.addGripType,
-          itemText: 'Edit Grip Types'),
-    ]);
+          child: const Text('Cancel'),
+        ),
+      ),
+    );
   }
 
   // TODO: Show this when user first visits this screen
-  Future<String?> _showHelperDialog(BuildContext context) {
-    return showDialog<String>(
-        context: context,
-        builder: (BuildContext context) => const HelperDialog(
-            title: 'Adding Grips',
-            body:
-                'Specify the number of sets and reps, and the work, rest, and break durations for this grip.\n\n'
-                'A grip type is also required for each grip. This is a name used to describe a grip which can be reused among other grips.'));
-  }
+  // Future<String?> _showHelperDialog(BuildContext context) {
+  //   return showDialog<String>(
+  //       context: context,
+  //       builder: (BuildContext context) => const HelperDialog(
+  //           title: 'Adding Grips',
+  //           body:
+  //               'Specify the number of sets and reps, and the work, rest, and break durations for this grip.\n\n'
+  //               'A grip type is also required for each grip. This is a name used to describe a grip which can be reused among other grips.'));
+  // }
 }

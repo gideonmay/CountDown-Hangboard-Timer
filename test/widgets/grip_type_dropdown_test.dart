@@ -4,7 +4,7 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
 import 'package:countdown_app/db/drift_database.dart';
-import 'package:countdown_app/widgets/grip_type_dropdown.dart';
+import 'package:countdown_app/widgets/grip_type_picker.dart';
 import 'package:countdown_app/models/grip_dto.dart';
 import 'grip_type_dropdown_test.mocks.dart';
 
@@ -66,7 +66,7 @@ void main() {
         dispose: (context, db) => db.close(),
         child: MaterialApp(
           home: Scaffold(
-            body: GripTypeDropdown(
+            body: GripTypePicker(
               gripDTO: gripDTO,
               gripTypeStream: mockStream,
             ),
@@ -87,7 +87,7 @@ void main() {
         dispose: (context, db) => db.close(),
         child: MaterialApp(
           home: Scaffold(
-            body: GripTypeDropdown(
+            body: GripTypePicker(
               gripDTO: gripDTO,
               gripTypeStream: mockStreamEmpty,
             ),

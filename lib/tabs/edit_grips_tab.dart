@@ -30,7 +30,7 @@ class _EditGripsTabState extends State<EditGripsTab> {
       builder: (context, AsyncSnapshot<List<GripWithGripType>> snapshot) {
         final List<GripWithGripType> grips = snapshot.data ?? List.empty();
 
-        if (grips.isEmpty) {
+        if (snapshot.hasData && grips.isEmpty) {
           return const Center(
             child: Padding(
               padding: EdgeInsets.all(16.0),

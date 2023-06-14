@@ -6,7 +6,6 @@ import './db/drift_database.dart';
 import 'screens/settings_screen.dart';
 import 'screens/durations_picker_screen.dart';
 import 'screens/workouts_screen.dart';
-import 'theme/color_theme.dart';
 
 void main() {
   runApp(const App());

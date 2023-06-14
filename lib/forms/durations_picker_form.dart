@@ -28,10 +28,10 @@ class _DurationsPickerFormState extends State<DurationsPickerForm> {
             const NumberPickerTitle(title: 'Sets', maxWidth: 60.0),
             Expanded(
                 child: NumberPicker(
+              title: 'Sets',
               initialValue: timerDurations.sets,
               minValue: 1,
               maxValue: 20,
-              padding: const EdgeInsets.fromLTRB(8.0, 16.0, 16.0, 8.0),
               onValueChanged: (newValue) {
                 timerDurations.sets = newValue;
               },
@@ -43,10 +43,10 @@ class _DurationsPickerFormState extends State<DurationsPickerForm> {
             const NumberPickerTitle(title: 'Reps', maxWidth: 60.0),
             Expanded(
               child: NumberPicker(
-                initialValue: timerDurations.reps.toInt(),
+                title: 'Reps',
+                initialValue: timerDurations.reps,
                 minValue: 1,
                 maxValue: 20,
-                padding: const EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
                 onValueChanged: (newValue) {
                   timerDurations.reps = newValue;
                 },
@@ -59,11 +59,10 @@ class _DurationsPickerFormState extends State<DurationsPickerForm> {
             const NumberPickerTitle(title: 'Work', maxWidth: 60.0),
             Expanded(
               child: NumberPicker(
-                unit: 'sec.',
-                initialValue: timerDurations.workSeconds.toInt(),
+                title: 'Work',
+                initialValue: timerDurations.workSeconds,
                 minValue: 1,
                 maxValue: 60,
-                padding: const EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
                 onValueChanged: (newValue) {
                   timerDurations.workSeconds = newValue;
                 },
@@ -76,11 +75,10 @@ class _DurationsPickerFormState extends State<DurationsPickerForm> {
             const NumberPickerTitle(title: 'Rest', maxWidth: 60.0),
             Expanded(
               child: NumberPicker(
-                unit: 'sec.',
-                initialValue: timerDurations.restSeconds.toInt(),
+                title: 'Rest',
+                initialValue: timerDurations.restSeconds,
                 minValue: 1,
                 maxValue: 60,
-                padding: const EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
                 onValueChanged: (newValue) {
                   timerDurations.restSeconds = newValue;
                 },
@@ -93,9 +91,9 @@ class _DurationsPickerFormState extends State<DurationsPickerForm> {
             const NumberPickerTitle(title: 'Break', maxWidth: 60.0),
             Expanded(
                 child: DurationPicker(
+              title: 'Break',
               minutes: timerDurations.breakMinutes,
               seconds: timerDurations.breakSeconds,
-              padding: const EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
               onDurationChanged: (newDuration) {
                 timerDurations.breakMinutes = newDuration.inMinutes;
                 timerDurations.breakSeconds = newDuration.inSeconds % 60;

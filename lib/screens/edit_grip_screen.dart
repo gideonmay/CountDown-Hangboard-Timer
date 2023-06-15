@@ -1,16 +1,16 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import '../db/drift_database.dart';
 import '../models/grip_dto.dart';
 import '../forms/grip_details_form.dart';
 import '../utils/navigation_utils.dart';
-import '../widgets/popup_menu.dart';
 
 /// A screen with a form to edit the details of a given grip
 class EditGripScreen extends StatefulWidget {
   final GripWithGripType grip;
+  final Workout workout;
 
-  const EditGripScreen({super.key, required this.grip});
+  const EditGripScreen({super.key, required this.grip, required this.workout});
 
   @override
   State<EditGripScreen> createState() => _EditGripScreenState();
@@ -45,12 +45,18 @@ class _EditGripScreenState extends State<EditGripScreen> {
   Widget build(BuildContext context) {
     final db = Provider.of<AppDatabase>(context, listen: false);
 
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text('Edit Grip'),
-          actions: [_popupMenu(context)],
+    return CupertinoPageScaffold(
+        navigationBar: CupertinoNavigationBar(
+          previousPageTitle: widget.workout.name,
+          middle: const Text('Edit Grip'),
+          trailing: CupertinoButton(
+            padding: EdgeInsets.zero,
+            child: const Icon(CupertinoIcons.ellipsis_circle),
+            onPressed: () => _showActionSheet(context),
+          ),
+          // actions: [_popupMenu(context)],
         ),
-        body: SafeArea(
+        child: SafeArea(
             child: GripDetailsForm(
                 gripDTO: gripDTO,
                 gripTypeStream: db.watchAllGripTypes(),
@@ -58,26 +64,44 @@ class _EditGripScreenState extends State<EditGripScreen> {
                 onFormSaved: _updateGrip)));
   }
 
-  /// A popup menu displaying options to add a grip type, edit a grip type,
-  /// duplicate this grip, or delete this grip
-  Widget _popupMenu(BuildContext context) {
-    return PopupMenu(popupItemDetails: [
-      PopupItemDetail(
-          iconData: Icons.edit,
-          onTap: () => navigateToGripTypeScreen(context, gripDTO.gripTypeID),
-          popupItemType: PopupItem.addGripType,
-          itemText: 'Edit Grip Types'),
-      PopupItemDetail(
-          iconData: Icons.content_copy,
-          onTap: () => _duplicateGrip(),
-          popupItemType: PopupItem.duplicate,
-          itemText: 'Duplicate'),
-      PopupItemDetail(
-          iconData: Icons.delete,
-          onTap: () => _deleteGrip(),
-          popupItemType: PopupItem.delete,
-          itemText: 'Delete'),
-    ]);
+  /// Shows an action sheet allowing user navigate to screen to edit grip types
+  void _showActionSheet(BuildContext context) {
+    showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext context) => CupertinoActionSheet(
+        actions: <CupertinoActionSheetAction>[
+          CupertinoActionSheetAction(
+            onPressed: () {
+              navigateToGripTypeScreen(context);
+              Navigator.pop(context);
+            },
+            child: const Text('Edit Grip Types...'),
+          ),
+          CupertinoActionSheetAction(
+            onPressed: () {
+              _duplicateGrip();
+              Navigator.pop(context);
+            },
+            child: const Text('Duplicate Grip'),
+          ),
+          CupertinoActionSheetAction(
+            isDestructiveAction: true,
+            onPressed: () {
+              _deleteGrip();
+              Navigator.pop(context);
+            },
+            child: const Text('Delete Grip'),
+          ),
+        ],
+        cancelButton: CupertinoActionSheetAction(
+          isDefaultAction: true,
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: const Text('Cancel'),
+        ),
+      ),
+    );
   }
 
   /// Updates the grip using data kept in the gripDTO

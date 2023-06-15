@@ -19,14 +19,7 @@ class GripTypePicker extends StatefulWidget {
 }
 
 class _GripTypePickerState extends State<GripTypePicker> {
-  late int _selectedGripType;
-
-  @override
-  void initState() {
-    super.initState();
-    // Set selected grip type to zero if the gripTypeID is currently null
-    _selectedGripType = widget.gripDTO.gripTypeID ?? 0;
-  }
+  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -51,27 +44,26 @@ class _GripTypePickerState extends State<GripTypePicker> {
           );
         }
 
-        // Set initial grip type to first grip type in list
-        widget.gripDTO.gripTypeID = gripTypes[_selectedGripType].id;
+        _setInitalGripType(gripTypes);
 
         return CupertinoListTile(
           title: const Text('Grip Type'),
           trailing: Expanded(
             child: CupertinoButton(
                 padding: EdgeInsets.zero,
-                child: Text(gripTypes[_selectedGripType].name),
+                child: Text(gripTypes[_selectedIndex].name),
                 onPressed: () {
                   showBottomDialog(
                       context,
                       CupertinoPicker(
                         itemExtent: 40.0,
                         scrollController: FixedExtentScrollController(
-                          initialItem: _selectedGripType,
+                          initialItem: _selectedIndex,
                         ),
                         onSelectedItemChanged: (value) {
                           playButtonSound();
                           setState(() {
-                            _selectedGripType = value;
+                            _selectedIndex = value;
                             widget.gripDTO.gripTypeID = gripTypes[value].id;
                           });
                         },
@@ -85,5 +77,20 @@ class _GripTypePickerState extends State<GripTypePicker> {
         );
       },
     );
+  }
+
+  /// Sets the inital value of the selected grip type index based on whether
+  /// or not the given GripDTO already contains a non-null grip type ID
+  void _setInitalGripType(List<GripType> gripTypes) {
+    if (widget.gripDTO.gripTypeID != null) {
+      // Find grip type in list that matches the grip type ID from the gripDTO
+      final initialGripType = gripTypes
+          .firstWhere((gripType) => gripType.id == widget.gripDTO.gripTypeID);
+      // Set the selected index to that of the gripDTO's grip type ID
+      _selectedIndex = gripTypes.indexOf(initialGripType);
+    } else {
+      // Set initial grip type to first grip type in list
+      widget.gripDTO.gripTypeID = gripTypes[_selectedIndex].id;
+    }
   }
 }

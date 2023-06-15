@@ -51,7 +51,8 @@ class _GripDetailsFormState extends State<GripDetailsForm> {
               footer: const Text(
                   '"Last Break" occurs between this grip and the next'),
               children: [
-                _setsPicker(), _repsPicker(),
+                _setsPicker(),
+                _repsPicker(),
                 _workDurationPicker(),
                 _restDurationPicker(),
                 _breakDurationPicker(),
@@ -98,6 +99,13 @@ class _GripDetailsFormState extends State<GripDetailsForm> {
         }
       },
     );
+  }
+
+  /// Returns the edge size if not null. Otherwise, returns en empty string
+  String _initialEdgeSize() {
+    return widget.gripDTO.edgeSize != null
+        ? widget.gripDTO.edgeSize.toString()
+        : '';
   }
 
   Widget _setsPicker() {
@@ -170,13 +178,6 @@ class _GripDetailsFormState extends State<GripDetailsForm> {
         widget.gripDTO.lastBreakSeconds = newDuration.inSeconds % 60;
       },
     );
-  }
-
-  /// Returns the edge size if not null. Otherwise, returns en empty string
-  String _initialEdgeSize() {
-    return widget.gripDTO.edgeSize != null
-        ? widget.gripDTO.edgeSize.toString()
-        : '';
   }
 
   Widget _submitButton() {

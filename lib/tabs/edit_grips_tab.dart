@@ -39,7 +39,11 @@ class _EditGripsTabState extends State<EditGripsTab> {
           );
         }
 
-        return SafeArea(child: ReorderableGripList(gripList: grips));
+        return SafeArea(
+            child: ReorderableGripList(
+          gripList: grips,
+          workout: widget.workout,
+        ));
       },
     );
   }

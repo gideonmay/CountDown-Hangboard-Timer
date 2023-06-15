@@ -64,7 +64,7 @@ class _AddGripScreenState extends State<AddGripScreen> {
               navigateToGripTypeScreen(context);
               Navigator.pop(context);
             },
-            child: const Text('Edit Grip Types'),
+            child: const Text('Edit Grip Types...'),
           ),
         ],
         cancelButton: CupertinoActionSheetAction(

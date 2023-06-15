@@ -9,8 +9,9 @@ import '../widgets/app_divider.dart';
 /// reorder the list of grips for the current workout
 class ReorderableGripList extends StatefulWidget {
   final List<GripWithGripType> gripList;
+  final Workout workout;
 
-  const ReorderableGripList({super.key, required this.gripList});
+  const ReorderableGripList({super.key, required this.gripList, required this.workout});
 
   @override
   State<ReorderableGripList> createState() => _ReorderableGripListState();
@@ -72,11 +73,11 @@ class _ReorderableGripListState extends State<ReorderableGripList> {
   }
 
   /// Navigates to the EditGripScreen widget
-  static _navigateToEditGripScreen(
+  void _navigateToEditGripScreen(
       BuildContext context, GripWithGripType grip) {
     Navigator.push(
       context,
-      CupertinoPageRoute(builder: (context) => EditGripScreen(grip: grip)),
+      CupertinoPageRoute(builder: (context) => EditGripScreen(grip: grip, workout: widget.workout)),
     );
   }
 

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -57,27 +57,6 @@ void main() {
         onError: onError, onDone: onDone, cancelOnError: cancelOnError);
   });
 
-  testWidgets('Dropdown shows "Choose a grip type" if grip type list not empty',
-      (tester) async {
-    final gripDTO = GripDTO.standard();
-
-    Widget dropdown = Provider(
-        create: (context) => AppDatabase(openConnection()),
-        dispose: (context, db) => db.close(),
-        child: MaterialApp(
-          home: Scaffold(
-            body: GripTypePicker(
-              gripDTO: gripDTO,
-              gripTypeStream: mockStream,
-            ),
-          ),
-        ));
-
-    await tester.pumpWidget(dropdown);
-    await tester.pumpAndSettle();
-    expect(find.text('Choose a grip type'), findsOneWidget);
-  });
-
   testWidgets('Dropdown shows "No grip types added" if grip type list is empty',
       (tester) async {
     final gripDTO = GripDTO.standard();
@@ -85,9 +64,9 @@ void main() {
     Widget dropdown = Provider(
         create: (context) => AppDatabase(openConnection()),
         dispose: (context, db) => db.close(),
-        child: MaterialApp(
-          home: Scaffold(
-            body: GripTypePicker(
+        child: CupertinoApp(
+          home: CupertinoPageScaffold(
+            child: GripTypePicker(
               gripDTO: gripDTO,
               gripTypeStream: mockStreamEmpty,
             ),

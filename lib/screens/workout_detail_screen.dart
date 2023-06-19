@@ -29,7 +29,7 @@ class _WorkoutDetailScreenState extends State<WorkoutDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-        backgroundColor: CupertinoColors.white,
+        backgroundColor: CupertinoColors.systemGrey6,
         navigationBar: _navBar(context),
         child: SafeArea(
           child: Column(

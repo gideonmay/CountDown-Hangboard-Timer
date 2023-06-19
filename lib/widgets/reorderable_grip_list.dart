@@ -11,7 +11,8 @@ class ReorderableGripList extends StatefulWidget {
   final List<GripWithGripType> gripList;
   final Workout workout;
 
-  const ReorderableGripList({super.key, required this.gripList, required this.workout});
+  const ReorderableGripList(
+      {super.key, required this.gripList, required this.workout});
 
   @override
   State<ReorderableGripList> createState() => _ReorderableGripListState();
@@ -73,11 +74,12 @@ class _ReorderableGripListState extends State<ReorderableGripList> {
   }
 
   /// Navigates to the EditGripScreen widget
-  void _navigateToEditGripScreen(
-      BuildContext context, GripWithGripType grip) {
+  void _navigateToEditGripScreen(BuildContext context, GripWithGripType grip) {
     Navigator.push(
       context,
-      CupertinoPageRoute(builder: (context) => EditGripScreen(grip: grip, workout: widget.workout)),
+      CupertinoPageRoute(
+          builder: (context) =>
+              EditGripScreen(grip: grip, workout: widget.workout)),
     );
   }
 
@@ -100,20 +102,29 @@ class _ReorderableGripListState extends State<ReorderableGripList> {
 
   /// A set of dividers with the Post-Break duration in between them
   Widget _dividerWithBreakDuration(Grip grip, int gripIndex, int lastIndex) {
+    return Container(
+      decoration: const BoxDecoration(color: CupertinoColors.white),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Expanded(child: AppDivider(indent: 62.0, height: 3.0)),
+          Text(
+            _dividerText(grip, gripIndex, lastIndex),
+            style: const TextStyle(fontSize: 14.0),
+          ),
+          const Expanded(child: AppDivider(indent: 8.0, height: 3.0)),
+        ],
+      ),
+    );
+  }
+
+  /// If the grip is the last in the list, then returns 'COMPLETE'. Otherwise,
+  /// returns the length of the last break for the given grip.
+  String _dividerText(Grip grip, int gripIndex, int lastIndex) {
     if (gripIndex == lastIndex) {
-      return Container();
+      return 'COMPLETE';
     }
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Expanded(child: AppDivider(indent: 62.0, height: 3.0)),
-        Text(
-          'Break ${grip.lastBreakMinutes}:${grip.lastBreakSeconds.toString().padLeft(2, '0')}',
-          style: const TextStyle(fontSize: 14.0),
-        ),
-        const Expanded(child: AppDivider(indent: 8.0, height: 3.0)),
-      ],
-    );
+    return 'Break ${grip.lastBreakMinutes}:${grip.lastBreakSeconds.toString().padLeft(2, '0')}';
   }
 }

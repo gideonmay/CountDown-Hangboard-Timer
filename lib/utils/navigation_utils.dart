@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../screens/add_grip_type_screen.dart';
 import '../screens/grip_types_screen.dart';
 
 /// Navigates to the GripTypesScreen widget. The optional current grip type
@@ -20,5 +21,13 @@ void navigateToGripTypeScreen(BuildContext context,
                 currGripTypeID: currGripTypeID,
               )),
     );
+  }
+}
+
+/// Navigates to the AddGripTypeScreen widget
+void navigateToAddGripTypeScreen(BuildContext context) {
+  if (context.mounted) {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const AddGripTypeScreen()));
   }
 }

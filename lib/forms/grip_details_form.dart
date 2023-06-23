@@ -12,7 +12,7 @@ class GripDetailsForm extends StatefulWidget {
   final String buttonText;
 
   /// The stream of grip types to populate the dropdown with
-  final Stream<List<GripType>> gripTypeStream;
+  final Stream<List<GripTypeWithGripCount>> gripTypeStream;
 
   /// Function to be executed when form is saved to write grip to database
   final Function onFormSaved;
@@ -30,6 +30,7 @@ class GripDetailsForm extends StatefulWidget {
 
 class _GripDetailsFormState extends State<GripDetailsForm> {
   final _formKey = GlobalKey<FormState>();
+  String? _gripTypeErrorText;
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +42,7 @@ class _GripDetailsFormState extends State<GripDetailsForm> {
             header: const Text('GRIP TYPE DETAILS'),
             children: [
               GripTypePicker(
+                  errorText: _gripTypeErrorText,
                   gripDTO: widget.gripDTO,
                   gripTypeStream: widget.gripTypeStream),
               _edgeSizeInput(),
@@ -185,6 +187,14 @@ class _GripDetailsFormState extends State<GripDetailsForm> {
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: CupertinoButton.filled(
           onPressed: () {
+            // Show error message if use has not chosen a grip type
+            if (widget.gripDTO.gripTypeID == null) {
+              setState(() {
+                _gripTypeErrorText = 'Please choose a grip type';
+              });
+              return;
+            }
+
             if (_formKey.currentState!.validate()) {
               _formKey.currentState!.save();
               widget.onFormSaved();

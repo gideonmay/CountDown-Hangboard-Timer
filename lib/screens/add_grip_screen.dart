@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import '../db/drift_database.dart';
 import '../models/grip_dto.dart';
 import '../forms/grip_details_form.dart';
-import '../utils/navigation_utils.dart';
 
 /// A screen that allows the user to add a new grip to the workout
 class AddGripScreen extends StatefulWidget {
@@ -38,44 +37,14 @@ class _AddGripScreenState extends State<AddGripScreen> {
         navigationBar: CupertinoNavigationBar(
           previousPageTitle: widget.workout.name,
           middle: const Text('Add Grip'),
-          trailing: CupertinoButton(
-            padding: EdgeInsets.zero,
-            child: const Icon(CupertinoIcons.ellipsis_circle),
-            onPressed: () => _showActionSheet(context),
-          ),
         ),
         child: SafeArea(
             child: GripDetailsForm(
           gripDTO: gripDTO,
-          gripTypeStream: db.watchAllGripTypes(),
+          gripTypeStream: db.watchAllGripTypesWithCount(),
           buttonText: 'Submit',
           onFormSaved: _createGrip,
         )));
-  }
-
-  /// Shows an action sheet allowing user navigate to screen to edit grip types
-  void _showActionSheet(BuildContext context) {
-    showCupertinoModalPopup<void>(
-      context: context,
-      builder: (BuildContext context) => CupertinoActionSheet(
-        actions: <CupertinoActionSheetAction>[
-          CupertinoActionSheetAction(
-            onPressed: () {
-              navigateToGripTypeScreen(context);
-              Navigator.pop(context);
-            },
-            child: const Text('Edit Grip Types...'),
-          ),
-        ],
-        cancelButton: CupertinoActionSheetAction(
-          isDefaultAction: true,
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: const Text('Cancel'),
-        ),
-      ),
-    );
   }
 
   // TODO: Show this when user first visits this screen

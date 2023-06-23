@@ -54,12 +54,11 @@ class _EditGripScreenState extends State<EditGripScreen> {
             child: const Icon(CupertinoIcons.ellipsis_circle),
             onPressed: () => _showActionSheet(context),
           ),
-          // actions: [_popupMenu(context)],
         ),
         child: SafeArea(
             child: GripDetailsForm(
                 gripDTO: gripDTO,
-                gripTypeStream: db.watchAllGripTypes(),
+                gripTypeStream: db.watchAllGripTypesWithCount(),
                 buttonText: 'Save Changes',
                 onFormSaved: _updateGrip)));
   }

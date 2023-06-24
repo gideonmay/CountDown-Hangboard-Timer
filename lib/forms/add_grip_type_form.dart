@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import '../db/drift_database.dart';
 
@@ -21,34 +21,38 @@ class _AddGripTypeFormState extends State<AddGripTypeForm> {
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
-      child: Column(
+      child: ListView(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextFormField(
-              decoration: const InputDecoration(labelText: 'Grip Name'),
-              maxLength: 40,
-              onSaved: (newValue) {
-                if (newValue != null) {
-                  _gripTypeName = newValue.trim();
-                } else {
-                  _gripTypeName = newValue;
-                }
-              },
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter a grip name';
-                }
+          CupertinoFormSection.insetGrouped(
+              header: const Text('GRIP TYPE NAME'),
+              footer: const Text(
+                  'A reusable name for a grip. Example: "Half Crimp."'),
+              children: [
+                CupertinoTextFormFieldRow(
+                  placeholder: 'Enter name',
+                  maxLength: 40,
+                  onSaved: (newValue) {
+                    if (newValue != null) {
+                      _gripTypeName = newValue.trim();
+                    } else {
+                      _gripTypeName = newValue;
+                    }
+                  },
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Please enter a grip type name';
+                    }
 
-                // Check if grip type name already exists
-                if (_isDuplicate(value.trim())) {
-                  return 'This grip type already exists';
-                }
+                    // Check if grip type name already exists
+                    if (_isDuplicate(value.trim())) {
+                      return 'This grip type already exists';
+                    }
 
-                return null;
-              },
-            ),
-          ),
+                    return null;
+                  },
+                ),
+              ]),
+          const SizedBox(height: 20.0),
           _submitButton(context),
         ],
       ),
@@ -69,11 +73,8 @@ class _AddGripTypeFormState extends State<AddGripTypeForm> {
 
   Widget _submitButton(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-              backgroundColor: Theme.of(context).colorScheme.secondary,
-              minimumSize: const Size.fromHeight(40)),
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: CupertinoButton.filled(
           onPressed: () async {
             if (_formKey.currentState!.validate()) {
               _formKey.currentState!.save();

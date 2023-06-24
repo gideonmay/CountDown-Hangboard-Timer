@@ -1,15 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import '../db/drift_database.dart';
-import '../widgets/duration_picker.dart';
+import '../forms/grip_type_form_field.dart';
 import '../models/grip_dto.dart';
-import '../widgets/grip_type_picker.dart';
+import '../models/grip_type_dto.dart';
+import '../widgets/duration_picker.dart';
 import '../widgets/number_picker.dart';
 
 /// A form that allows user to input grip information
 class GripDetailsForm extends StatefulWidget {
   final GripDTO gripDTO;
   final String buttonText;
+
+  /// The title of the page this form resides in
+  final String currentPageTitle;
 
   /// The stream of grip types to populate the dropdown with
   final Stream<List<GripTypeWithGripCount>> gripTypeStream;
@@ -22,7 +26,8 @@ class GripDetailsForm extends StatefulWidget {
       required this.gripDTO,
       required this.onFormSaved,
       required this.buttonText,
-      required this.gripTypeStream});
+      required this.gripTypeStream,
+      required this.currentPageTitle});
 
   @override
   State<GripDetailsForm> createState() => _GripDetailsFormState();
@@ -30,7 +35,6 @@ class GripDetailsForm extends StatefulWidget {
 
 class _GripDetailsFormState extends State<GripDetailsForm> {
   final _formKey = GlobalKey<FormState>();
-  String? _gripTypeErrorText;
 
   @override
   Widget build(BuildContext context) {
@@ -41,10 +45,7 @@ class _GripDetailsFormState extends State<GripDetailsForm> {
           CupertinoFormSection.insetGrouped(
             header: const Text('GRIP TYPE DETAILS'),
             children: [
-              GripTypePicker(
-                  errorText: _gripTypeErrorText,
-                  gripDTO: widget.gripDTO,
-                  gripTypeStream: widget.gripTypeStream),
+              _gripTypeFormField(context),
               _edgeSizeInput(),
             ],
           ),
@@ -63,6 +64,25 @@ class _GripDetailsFormState extends State<GripDetailsForm> {
           _submitButton(),
         ],
       ),
+    );
+  }
+
+  Widget _gripTypeFormField(BuildContext context) {
+    return GripTypeFormField(
+      currentPageTitle: widget.currentPageTitle,
+      onSaved: (newValue) {
+        widget.gripDTO.gripTypeID = newValue?.id;
+      },
+      validator: (value) {
+        if (value?.id == null) {
+          return 'Please choose a grip type';
+        }
+
+        return null;
+      },
+      initialValue: GripTypeDTO(
+          id: widget.gripDTO.gripTypeID, name: widget.gripDTO.gripTypeName),
+      context: context,
     );
   }
 
@@ -187,14 +207,6 @@ class _GripDetailsFormState extends State<GripDetailsForm> {
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: CupertinoButton.filled(
           onPressed: () {
-            // Show error message if use has not chosen a grip type
-            if (widget.gripDTO.gripTypeID == null) {
-              setState(() {
-                _gripTypeErrorText = 'Please choose a grip type';
-              });
-              return;
-            }
-
             if (_formKey.currentState!.validate()) {
               _formKey.currentState!.save();
               widget.onFormSaved();

@@ -1,5 +1,8 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import '../db/drift_database.dart';
+import '../models/grip_type_dto.dart';
 import '../screens/add_grip_type_screen.dart';
+import '../screens/choose_grip_type_screen.dart';
 import '../screens/grip_types_screen.dart';
 
 /// Navigates to the GripTypesScreen widget. The optional current grip type
@@ -16,7 +19,7 @@ void navigateToGripTypeScreen(BuildContext context,
   if (context.mounted) {
     Navigator.push(
       context,
-      MaterialPageRoute(
+      CupertinoPageRoute(
           builder: (context) => GripTypesScreen(
                 currGripTypeID: currGripTypeID,
               )),
@@ -25,9 +28,27 @@ void navigateToGripTypeScreen(BuildContext context,
 }
 
 /// Navigates to the AddGripTypeScreen widget
-void navigateToAddGripTypeScreen(BuildContext context) {
+void navigateToAddGripTypeScreen(BuildContext context,
+    List<GripTypeWithGripCount> gripTypes) {
   if (context.mounted) {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const AddGripTypeScreen()));
+    Navigator.push(
+        context,
+        CupertinoPageRoute(
+            builder: (context) => AddGripTypeScreen(
+                  gripTypes: gripTypes,
+                )));
   }
+}
+
+/// Navigates to the ChooseGripTypeScreen widget
+void navigateToChooseGripType(BuildContext context,
+    FormFieldState<GripTypeDTO> state, String previousPageTitle) {
+  Navigator.push(
+    context,
+    CupertinoPageRoute(
+        builder: (context) => ChooseGripTypeScreen(
+              formFieldState: state,
+              previousPageTitle: previousPageTitle,
+            )),
+  );
 }

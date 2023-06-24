@@ -40,6 +40,7 @@ class _AddGripScreenState extends State<AddGripScreen> {
         ),
         child: SafeArea(
             child: GripDetailsForm(
+          currentPageTitle: 'Add Grip',
           gripDTO: gripDTO,
           gripTypeStream: db.watchAllGripTypesWithCount(),
           buttonText: 'Submit',

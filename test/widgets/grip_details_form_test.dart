@@ -68,10 +68,12 @@ void main() {
         child: CupertinoApp(
           home: CupertinoPageScaffold(
             child: GripDetailsForm(
-                gripDTO: gripDTO,
-                onFormSaved: () {},
-                buttonText: 'Submit',
-                gripTypeStream: mockStreamEmpty),
+              gripDTO: gripDTO,
+              onFormSaved: () {},
+              buttonText: 'Submit',
+              gripTypeStream: mockStreamEmpty,
+              currentPageTitle: '',
+            ),
           ),
         ));
 
@@ -92,10 +94,12 @@ void main() {
         child: CupertinoApp(
           home: CupertinoPageScaffold(
             child: GripDetailsForm(
-                gripDTO: gripDTO,
-                onFormSaved: () {},
-                buttonText: 'Submit',
-                gripTypeStream: mockStream),
+              gripDTO: gripDTO,
+              onFormSaved: () {},
+              buttonText: 'Submit',
+              gripTypeStream: mockStream,
+              currentPageTitle: '',
+            ),
           ),
         ));
 

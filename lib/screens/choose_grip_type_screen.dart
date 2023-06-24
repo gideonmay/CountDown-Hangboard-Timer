@@ -1,62 +1,83 @@
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 import '../db/drift_database.dart';
-import '../models/grip_dto.dart';
+import '../models/grip_type_dto.dart';
+import '../utils/navigation_utils.dart';
 
 /// A screen showing a list of all available grip types to choose for the
 /// current grip
 class ChooseGripTypeScreen extends StatefulWidget {
-  final GripDTO gripDTO;
+  final FormFieldState<GripTypeDTO> formFieldState;
+  final String previousPageTitle;
 
-  /// The index of the currently selected grip type in the grip types list
-  final List<GripTypeWithGripCount> gripTypes;
-  final Function(int newGripTypeID) onGripTypeChange;
-
-  const ChooseGripTypeScreen(
-      {super.key,
-      required this.gripTypes,
-      required this.gripDTO,
-      required this.onGripTypeChange});
+  const ChooseGripTypeScreen({
+    super.key,
+    required this.formFieldState,
+    required this.previousPageTitle,
+  });
 
   @override
   State<ChooseGripTypeScreen> createState() => _ChooseGripTypeScreenState();
 }
 
 class _ChooseGripTypeScreenState extends State<ChooseGripTypeScreen> {
+  List<GripTypeWithGripCount> _gripTypes = List.empty();
+
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
         backgroundColor: CupertinoColors.systemGrey6,
         navigationBar: CupertinoNavigationBar(
-          previousPageTitle: 'Add Grip',
+          previousPageTitle: widget.previousPageTitle,
           middle: const Text('Choose Grip Type'),
           trailing: CupertinoButton(
             padding: EdgeInsets.zero,
             child: const Icon(CupertinoIcons.add),
-            onPressed: () {},
+            onPressed: () => navigateToAddGripTypeScreen(context, _gripTypes),
           ),
         ),
-        child: SafeArea(child: _gripTypesList(context)));
+        child: SafeArea(child: _buildGripTypeList(context)));
   }
 
-  /// A list of CupertinoListTiles for each grip type available to choose
-  Widget _gripTypesList(BuildContext context) {
-    return CupertinoListSection.insetGrouped(children: <Widget>[
-      for (int index = 0; index < widget.gripTypes.length; index++)
-        CupertinoListTile(
-          leading: _checkmarkIcon(widget.gripTypes[index].entry),
-          title: Text(widget.gripTypes[index].entry.name),
-          trailing: const Icon(CupertinoIcons.delete),
-          onTap: () {
-            setState(() {
-              widget.onGripTypeChange(widget.gripTypes[index].entry.id);
-            });
-          },
-        ),
-    ]);
+  /// Returns a list of CupertinoListTiles for each grip type in the stream
+  StreamBuilder<List<GripTypeWithGripCount>> _buildGripTypeList(
+      BuildContext context) {
+    final db = Provider.of<AppDatabase>(context, listen: false);
+    return StreamBuilder(
+      stream: db.watchAllGripTypesWithCount(),
+      builder: (context, AsyncSnapshot<List<GripTypeWithGripCount>> snapshot) {
+        _gripTypes = snapshot.data ?? List.empty();
+
+        // Show message to user if they have not yet created any grip types
+        if (_gripTypes.isEmpty) {
+          return const Center(
+            child: Text('No grip types added'),
+          );
+        }
+
+        return CupertinoListSection.insetGrouped(children: <Widget>[
+          for (int index = 0; index < _gripTypes.length; index++)
+            CupertinoListTile(
+              leading: _checkmarkIcon(_gripTypes[index].entry),
+              title: Text(_gripTypes[index].entry.name),
+              trailing: const Icon(CupertinoIcons.delete),
+              onTap: () {
+                setState(() {
+                  widget.formFieldState.didChange(GripTypeDTO(
+                      id: _gripTypes[index].entry.id,
+                      name: _gripTypes[index].entry.name));
+                });
+              },
+            ),
+        ]);
+      },
+    );
   }
 
+  /// Returns a checkmark icon for the grip type that is currently selected by
+  /// the parent form field
   Widget _checkmarkIcon(GripType currGripType) {
-    if (currGripType.id == widget.gripDTO.gripTypeID) {
+    if (currGripType.id == widget.formFieldState.value?.id) {
       return const Icon(CupertinoIcons.check_mark);
     }
 

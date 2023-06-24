@@ -6,6 +6,7 @@ import 'timer_durations_dto.dart';
 /// which may differ from this grip's break duration.
 class GripDTO extends TimerDurationsDTO {
   int? gripTypeID;
+  String? gripTypeName;
   int? edgeSize;
 
   /// Break minutes between this grip and the next grip

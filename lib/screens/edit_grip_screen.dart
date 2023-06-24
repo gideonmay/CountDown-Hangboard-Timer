@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import '../db/drift_database.dart';
 import '../models/grip_dto.dart';
 import '../forms/grip_details_form.dart';
-import '../utils/navigation_utils.dart';
 
 /// A screen with a form to edit the details of a given grip
 class EditGripScreen extends StatefulWidget {
@@ -29,6 +28,7 @@ class _EditGripScreenState extends State<EditGripScreen> {
   void _initializeGripDTO() {
     setState(() {
       gripDTO.gripTypeID = widget.grip.entry.gripType;
+      gripDTO.gripTypeName = widget.grip.gripType.name;
       gripDTO.edgeSize = widget.grip.entry.edgeSize;
       gripDTO.sets = widget.grip.entry.setCount;
       gripDTO.reps = widget.grip.entry.repCount;
@@ -57,6 +57,7 @@ class _EditGripScreenState extends State<EditGripScreen> {
         ),
         child: SafeArea(
             child: GripDetailsForm(
+                currentPageTitle: 'Edit Grip',
                 gripDTO: gripDTO,
                 gripTypeStream: db.watchAllGripTypesWithCount(),
                 buttonText: 'Save Changes',
@@ -69,13 +70,6 @@ class _EditGripScreenState extends State<EditGripScreen> {
       context: context,
       builder: (BuildContext context) => CupertinoActionSheet(
         actions: <CupertinoActionSheetAction>[
-          CupertinoActionSheetAction(
-            onPressed: () {
-              navigateToGripTypeScreen(context);
-              Navigator.pop(context);
-            },
-            child: const Text('Edit Grip Types...'),
-          ),
           CupertinoActionSheetAction(
             onPressed: () {
               _duplicateGrip();

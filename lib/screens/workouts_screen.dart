@@ -66,10 +66,13 @@ class _WorkoutsScreenState extends State<WorkoutsScreen> {
           );
         }
 
-        return CupertinoListSection(
-          topMargin: 0,
-          dividerMargin: 50,
-          children: [for (var workout in workouts) _slideableListTile(workout)],
+        return SlidableAutoCloseBehavior(
+          closeWhenOpened: true,
+          child: CupertinoListSection(
+            topMargin: 0,
+            dividerMargin: 50,
+            children: [for (var workout in workouts) _slideableListTile(workout)],
+          ),
         );
       },
     );

@@ -6,6 +6,7 @@ import 'package:drift/native.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import '../models/grip_dto.dart';
+
 import '../models/workout_dto.dart';
 
 part 'drift_database.g.dart';
@@ -219,6 +220,12 @@ class AppDatabase extends _$AppDatabase {
   Future<int> updateGripSeqNum(int gripID, int newSeqNum) {
     return (update(grips)..where((g) => g.id.equals(gripID)))
         .write(GripsCompanion(sequenceNum: Value(newSeqNum)));
+  }
+
+  /// Updates the grip type for the given grip
+  Future<int> updateGripType(int gripID, int newGripTypeID) {
+    return (update(grips)..where((g) => g.id.equals(gripID)))
+        .write(GripsCompanion(gripType: Value(newGripTypeID)));
   }
 
   /// Updates the grip with the given gripID using the given GripDTO

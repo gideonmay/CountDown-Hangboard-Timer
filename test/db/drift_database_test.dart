@@ -244,6 +244,18 @@ void main() {
       expect(grips[0].entry.sequenceNum, 99);
     });
 
+    test('Grip type of a grip is correctly updated', () async {
+      GripDTO gripDTO = GripDTO.standard()..gripTypeID = gripTypeID;
+      int addedGripID = await db.addGrip(workoutID, gripDTO);
+      int newGripTypeID = await db.addGripType('Half Crimp');
+
+      await db.updateGripType(addedGripID, newGripTypeID);
+      List<GripWithGripType> grips =
+          await db.watchAllGripsWithType(workoutID).first;
+
+      expect(grips[0].entry.gripType, newGripTypeID);
+    });
+
     test('A list of grips are updated with the correct seqNums', () async {
       // Create grips with distinct edge sizes of 10, 15, and 20
       GripDTO gripDTO = GripDTO.standard()

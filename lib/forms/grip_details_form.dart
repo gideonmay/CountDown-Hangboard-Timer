@@ -21,13 +21,17 @@ class GripDetailsForm extends StatefulWidget {
   /// Function to be executed when form is saved to write grip to database
   final Function onFormSaved;
 
+  /// Function to be called when the grip type is changed
+  final Function(GripTypeDTO newGripType)? onGripTypeChanged;
+
   const GripDetailsForm(
       {super.key,
       required this.gripDTO,
       required this.onFormSaved,
       required this.buttonText,
       required this.gripTypeStream,
-      required this.currentPageTitle});
+      required this.currentPageTitle,
+      this.onGripTypeChanged});
 
   @override
   State<GripDetailsForm> createState() => _GripDetailsFormState();
@@ -70,6 +74,7 @@ class _GripDetailsFormState extends State<GripDetailsForm> {
   Widget _gripTypeFormField(BuildContext context) {
     return GripTypeFormField(
       currentPageTitle: widget.currentPageTitle,
+      onGripTypeChanged: widget.onGripTypeChanged,
       onSaved: (newValue) {
         widget.gripDTO.gripTypeID = newValue?.id;
       },

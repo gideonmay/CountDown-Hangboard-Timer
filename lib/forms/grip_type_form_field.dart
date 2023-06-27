@@ -6,12 +6,17 @@ import '../utils/navigation_utils.dart';
 /// stores a GripTypeDTO object, which stores information regarding a specific
 /// grip type.
 class GripTypeFormField extends FormField<GripTypeDTO> {
+  /// Optional function to be called when the grip type is changed. In general,
+  /// this should be a function that updates the database with the new grip type.
+  final Function(GripTypeDTO newGripType)? onGripTypeChanged;
+
   GripTypeFormField(
       {super.key,
       required BuildContext context,
       required FormFieldSetter<GripTypeDTO> onSaved,
       required FormFieldValidator<GripTypeDTO> validator,
       required GripTypeDTO initialValue,
+      this.onGripTypeChanged,
       required String currentPageTitle,
       bool autovalidate = false})
       : super(
@@ -19,6 +24,15 @@ class GripTypeFormField extends FormField<GripTypeDTO> {
             onSaved: onSaved,
             validator: validator,
             builder: (FormFieldState<GripTypeDTO> state) {
+              /// Updates the form state with the given grip type
+              void gripTypeDidChange(GripTypeDTO newGripTypeDTO) {
+                if (onGripTypeChanged != null) {
+                  onGripTypeChanged(newGripTypeDTO);
+                }
+
+                state.didChange(newGripTypeDTO);
+              }
+
               return CupertinoFormRow(
                 padding: EdgeInsets.zero,
                 // Show error text if it is not null
@@ -36,8 +50,8 @@ class GripTypeFormField extends FormField<GripTypeDTO> {
                       ? const Text('None')
                       : Text(state.value!.name!),
                   trailing: const CupertinoListTileChevron(),
-                  onTap: () => navigateToChooseGripType(
-                      context, state, currentPageTitle),
+                  onTap: () => navigateToChooseGripType(context, state.value!,
+                      currentPageTitle, gripTypeDidChange),
                 ),
               );
             });

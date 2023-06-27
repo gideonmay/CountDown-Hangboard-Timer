@@ -1,3 +1,4 @@
+import 'package:countdown_app/models/grip_type_dto.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import '../db/drift_database.dart';
@@ -57,11 +58,13 @@ class _EditGripScreenState extends State<EditGripScreen> {
         ),
         child: SafeArea(
             child: GripDetailsForm(
-                currentPageTitle: 'Edit Grip',
-                gripDTO: gripDTO,
-                gripTypeStream: db.watchAllGripTypesWithCount(),
-                buttonText: 'Save Changes',
-                onFormSaved: _updateGrip)));
+          currentPageTitle: 'Edit Grip',
+          gripDTO: gripDTO,
+          gripTypeStream: db.watchAllGripTypesWithCount(),
+          buttonText: 'Save Changes',
+          onFormSaved: _updateGrip,
+          onGripTypeChanged: _updateGripType,
+        )));
   }
 
   /// Shows an action sheet allowing user navigate to screen to edit grip types
@@ -106,6 +109,12 @@ class _EditGripScreenState extends State<EditGripScreen> {
     if (context.mounted) {
       Navigator.pop(context);
     }
+  }
+
+  /// Updates the grip type of the grip
+  void _updateGripType(GripTypeDTO newGripType) async {
+    final db = Provider.of<AppDatabase>(context, listen: false);
+    await db.updateGripType(widget.grip.entry.id, newGripType.id!);
   }
 
   /// Deletes the current grip from the database

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'countdown_timer_screen.dart';
 import '../forms/durations_picker_form.dart';
 import '../models/timer_durations_dto.dart';
@@ -15,11 +15,19 @@ class DurationsPickerScreen extends StatefulWidget {
 class _DurationsPickerScreenState extends State<DurationsPickerScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text('Configure Timer'),
-        ),
-        body: const DurationsPickerForm(onStartPressed: navigateToTimer));
+    return const CupertinoPageScaffold(
+        backgroundColor: CupertinoColors.systemGrey6,
+        child: CustomScrollView(slivers: <Widget>[
+          CupertinoSliverNavigationBar(
+            largeTitle: Text('Timer Setup'),
+          ),
+          SliverSafeArea(
+              top: false,
+              minimum: EdgeInsets.only(top: 0),
+              sliver: SliverToBoxAdapter(
+                child: DurationsPickerForm(onStartPressed: navigateToTimer),
+              ))
+        ]));
   }
 
   /// Navigates to the countdown timer screen
@@ -27,7 +35,7 @@ class _DurationsPickerScreenState extends State<DurationsPickerScreen> {
       BuildContext context, TimerDurationsDTO timerDurations) {
     Navigator.push(
       context,
-      MaterialPageRoute(
+      CupertinoPageRoute(
           builder: (context) =>
               CountdownTimerScreen(timerDurations: timerDurations)),
     );

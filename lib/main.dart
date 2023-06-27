@@ -43,9 +43,8 @@ class _AppScaffoldState extends State<AppScaffold> {
   /// The screens available in the bottom tab bar
   static const List<Widget> _screenOptions = <Widget>[
     WorkoutsScreen(),
-    Text('Timer'),
+    DurationsPickerScreen(),
     Text('Settings')
-    // DurationsPickerScreen(),
     // SettingsScreen()
   ];
 

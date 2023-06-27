@@ -1,11 +1,10 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import '../models/timer_durations_dto.dart';
 import '../widgets/duration_picker.dart';
 import '../widgets/number_picker.dart';
-import '../widgets/number_picker_title.dart';
 
 /// A form widget that allows the user to pick the number of sets and reps, and
-/// the work, rest, and break durations for the countdown timer.
+/// the work, rest, and break durations for the countdown timer
 class DurationsPickerForm extends StatefulWidget {
   /// Function to be called when start button is pressed
   final Function(BuildContext, TimerDurationsDTO) onStartPressed;
@@ -21,101 +20,95 @@ class _DurationsPickerFormState extends State<DurationsPickerForm> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        Row(
-          children: [
-            const NumberPickerTitle(title: 'Sets', maxWidth: 60.0),
-            Expanded(
-                child: NumberPicker(
-              title: 'Sets',
-              initialValue: timerDurations.sets,
-              minValue: 1,
-              maxValue: 20,
-              onValueChanged: (newValue) {
-                timerDurations.sets = newValue;
-              },
+    return Column(children: [
+      CupertinoListSection.insetGrouped(
+        children: [
+          _setsPicker(),
+          _repsPicker(),
+          _workDurationPicker(),
+          _restDurationPicker(),
+          _breakDurationPicker(),
+        ],
+      ),
+      const SizedBox(height: 20.0),
+      _startButton(),
+    ]);
+  }
+
+  Widget _setsPicker() {
+    return NumberPicker(
+      title: 'Sets',
+      initialValue: timerDurations.sets,
+      minValue: 1,
+      maxValue: 20,
+      onValueChanged: (newValue) {
+        timerDurations.sets = newValue;
+      },
+    );
+  }
+
+  Widget _repsPicker() {
+    return NumberPicker(
+      title: 'Reps',
+      initialValue: timerDurations.reps,
+      minValue: 1,
+      maxValue: 20,
+      onValueChanged: (newValue) {
+        timerDurations.reps = newValue;
+      },
+    );
+  }
+
+  Widget _workDurationPicker() {
+    return NumberPicker(
+      title: 'Work (sec.)',
+      initialValue: timerDurations.workSeconds,
+      minValue: 1,
+      maxValue: 60,
+      onValueChanged: (newValue) {
+        timerDurations.workSeconds = newValue;
+      },
+    );
+  }
+
+  Widget _restDurationPicker() {
+    return NumberPicker(
+      title: 'Rest (sec.)',
+      initialValue: timerDurations.restSeconds,
+      minValue: 1,
+      maxValue: 60,
+      onValueChanged: (newValue) {
+        timerDurations.restSeconds = newValue;
+      },
+    );
+  }
+
+  Widget _breakDurationPicker() {
+    return DurationPicker(
+      title: 'Break',
+      minutes: timerDurations.breakMinutes,
+      seconds: timerDurations.breakSeconds,
+      onDurationChanged: (newDuration) {
+        timerDurations.breakMinutes = newDuration.inMinutes;
+        timerDurations.breakSeconds = newDuration.inSeconds % 60;
+      },
+    );
+  }
+
+  Widget _startButton() {
+    return SizedBox(
+      width: double.infinity,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        child: CupertinoButton.filled(
+            onPressed: () {
+              widget.onStartPressed(context, timerDurations);
+            },
+            child: const Text(
+              'Start',
+              style: TextStyle(fontSize: 20.0),
             )),
-          ],
-        ),
-        Row(
-          children: [
-            const NumberPickerTitle(title: 'Reps', maxWidth: 60.0),
-            Expanded(
-              child: NumberPicker(
-                title: 'Reps',
-                initialValue: timerDurations.reps,
-                minValue: 1,
-                maxValue: 20,
-                onValueChanged: (newValue) {
-                  timerDurations.reps = newValue;
-                },
-              ),
-            ),
-          ],
-        ),
-        Row(
-          children: [
-            const NumberPickerTitle(title: 'Work', maxWidth: 60.0),
-            Expanded(
-              child: NumberPicker(
-                title: 'Work',
-                initialValue: timerDurations.workSeconds,
-                minValue: 1,
-                maxValue: 60,
-                onValueChanged: (newValue) {
-                  timerDurations.workSeconds = newValue;
-                },
-              ),
-            ),
-          ],
-        ),
-        Row(
-          children: [
-            const NumberPickerTitle(title: 'Rest', maxWidth: 60.0),
-            Expanded(
-              child: NumberPicker(
-                title: 'Rest',
-                initialValue: timerDurations.restSeconds,
-                minValue: 1,
-                maxValue: 60,
-                onValueChanged: (newValue) {
-                  timerDurations.restSeconds = newValue;
-                },
-              ),
-            ),
-          ],
-        ),
-        Row(
-          children: [
-            const NumberPickerTitle(title: 'Break', maxWidth: 60.0),
-            Expanded(
-                child: DurationPicker(
-              title: 'Break',
-              minutes: timerDurations.breakMinutes,
-              seconds: timerDurations.breakSeconds,
-              onDurationChanged: (newDuration) {
-                timerDurations.breakMinutes = newDuration.inMinutes;
-                timerDurations.breakSeconds = newDuration.inSeconds % 60;
-              },
-            )),
-          ],
-        ),
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: ElevatedButton(
-              onPressed: () {
-                widget.onStartPressed(context, timerDurations);
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Theme.of(context).colorScheme.secondary,
-              ),
-              child: const Text(
-                'Start',
-                style: TextStyle(fontSize: 20.0),
-              )),
-        ),
-      ],
+      ),
     );
   }
 }

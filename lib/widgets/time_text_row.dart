@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 /// Takes a title and a duration string and displays both in a single row with
 /// styled text
@@ -20,12 +20,13 @@ class TimeTextRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         SizedBox(
           width: titleWidth,
           child: Text(
             title,
-            style: TextStyle(color: Colors.grey.shade700, fontSize: fontSize),
+            style: TextStyle(color: CupertinoColors.systemGrey, fontSize: fontSize),
           ),
         ),
         Text(

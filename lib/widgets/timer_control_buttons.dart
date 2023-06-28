@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import '../theme/color_theme.dart';
 
 /// A widget that contains the Start, Reset, and Skip buttons that can change
@@ -27,6 +27,8 @@ class TimerControlButtons extends StatefulWidget {
 }
 
 class _TimerControlButtonsState extends State<TimerControlButtons> {
+  final double _buttonHeight = 50.0;
+
   @override
   Widget build(BuildContext context) {
     // Only show Start button if timer has not started yet
@@ -35,17 +37,28 @@ class _TimerControlButtonsState extends State<TimerControlButtons> {
         return Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-              child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColorTheme.green,
-                      minimumSize: const Size.fromHeight(40)),
-                  onPressed: () {
-                    widget.resumeTimer();
-                  },
-                  child:
-                      const Text('Resume', style: TextStyle(fontSize: 20.0))),
+            SizedBox(
+              width: double.infinity,
+              height: _buttonHeight,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: CupertinoButton(
+                    padding: EdgeInsets.zero,
+                    color: AppColorTheme.green,
+                    onPressed: () {
+                      widget.resumeTimer();
+                    },
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('Resume ', style: TextStyle(fontSize: 20.0)),
+                        Icon(
+                          CupertinoIcons.play_arrow_solid,
+                          size: 30.0,
+                        ),
+                      ],
+                    )),
+              ),
             ),
             resetAndSkipButtons(),
           ],
@@ -54,16 +67,25 @@ class _TimerControlButtonsState extends State<TimerControlButtons> {
         return Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-              child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColorTheme.yellow,
-                      minimumSize: const Size.fromHeight(40)),
-                  onPressed: () {
-                    widget.pauseTimer();
-                  },
-                  child: const Text('Pause', style: TextStyle(fontSize: 20.0))),
+            SizedBox(
+              width: double.infinity,
+              height: _buttonHeight,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: CupertinoButton(
+                    padding: EdgeInsets.zero,
+                    color: AppColorTheme.yellow,
+                    onPressed: () {
+                      widget.pauseTimer();
+                    },
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('Pause ', style: TextStyle(fontSize: 20.0)),
+                        Icon(CupertinoIcons.pause_fill)
+                      ],
+                    )),
+              ),
             ),
             resetAndSkipButtons(),
           ],
@@ -71,16 +93,17 @@ class _TimerControlButtonsState extends State<TimerControlButtons> {
       }
     } else {
       return Center(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-          child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.secondary,
-                  minimumSize: const Size.fromHeight(40)),
-              onPressed: () {
-                widget.startTimer();
-              },
-              child: const Text('Start', style: TextStyle(fontSize: 20.0))),
+        child: SizedBox(
+          width: double.infinity,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: CupertinoButton(
+                color: AppColorTheme.blue,
+                onPressed: () {
+                  widget.startTimer();
+                },
+                child: const Text('START', style: TextStyle(fontSize: 20.0))),
+          ),
         ),
       );
     }
@@ -91,29 +114,50 @@ class _TimerControlButtonsState extends State<TimerControlButtons> {
     return Row(
       children: [
         Expanded(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-            child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColorTheme.red,
-                    minimumSize: const Size.fromHeight(40)),
-                onPressed: () {
-                  widget.resetTimer();
-                },
-                child: const Text('Reset', style: TextStyle(fontSize: 20.0))),
+          child: SizedBox(
+            width: double.infinity,
+            height: _buttonHeight,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20.0, right: 10.0),
+              child: CupertinoButton(
+                  padding: EdgeInsets.zero,
+                  color: AppColorTheme.red,
+                  onPressed: () {
+                    widget.resetTimer();
+                  },
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Reset ', style: TextStyle(fontSize: 20.0)),
+                      Icon(
+                        CupertinoIcons.arrow_counterclockwise,
+                        size: 30.0,
+                      )
+                    ],
+                  )),
+            ),
           ),
         ),
         Expanded(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-            child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColorTheme.blue,
-                    minimumSize: const Size.fromHeight(40)),
-                onPressed: () {
-                  widget.skipDuration();
-                },
-                child: const Text('Skip', style: TextStyle(fontSize: 20.0))),
+          child: SizedBox(
+            width: double.infinity,
+            height: _buttonHeight,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 10.0, right: 20.0),
+              child: CupertinoButton(
+                  padding: EdgeInsets.zero,
+                  color: AppColorTheme.blue,
+                  onPressed: () {
+                    widget.skipDuration();
+                  },
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Skip ', style: TextStyle(fontSize: 20.0)),
+                      Icon(CupertinoIcons.arrow_right, size: 30.0),
+                    ],
+                  )),
+            ),
           ),
         ),
       ],

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 
 /// Displays a horizontal progress bar that depicts the number of reps/sets
@@ -24,7 +24,7 @@ class ProgressCounter extends StatelessWidget {
           width: 48,
           child: Text(
             title,
-            style: TextStyle(color: Colors.grey.shade700, fontSize: fontSize),
+            style: TextStyle(color: CupertinoColors.black, fontSize: fontSize),
           ),
         ),
         Expanded(
@@ -33,8 +33,8 @@ class ProgressCounter extends StatelessWidget {
             currentStep: completed,
             size: 20,
             padding: 1.0,
-            selectedColor: Theme.of(context).colorScheme.secondary,
-            unselectedColor: Colors.grey.shade300,
+            selectedColor: CupertinoColors.systemBlue,
+            unselectedColor: CupertinoColors.systemGrey5,
             customStep: (index, color, _) {
               return Container(
                 decoration: _getCustomDecoration(index, color, context),
@@ -57,7 +57,7 @@ class ProgressCounter extends StatelessWidget {
     if (completed == index) {
       return BoxDecoration(
           border: Border.all(
-              color: Theme.of(context).colorScheme.primary,
+              color: CupertinoColors.systemBlue,
               width: 2.0,
               strokeAlign: BorderSide.strokeAlignCenter),
           borderRadius: const BorderRadius.all(Radius.circular(3.0)),
@@ -72,9 +72,9 @@ class ProgressCounter extends StatelessWidget {
   /// Returns the appropriate text style based on the current index
   TextStyle _getCustomStyle(int index) {
     if (completed == index) {
-      return TextStyle(color: Colors.grey.shade600);
+      return const TextStyle(color: CupertinoColors.systemGrey);
     } else {
-      return const TextStyle(color: Colors.white);
+      return const TextStyle(color: CupertinoColors.white);
     }
   }
 

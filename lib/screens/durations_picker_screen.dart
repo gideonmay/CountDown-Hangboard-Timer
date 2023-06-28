@@ -33,8 +33,8 @@ class _DurationsPickerScreenState extends State<DurationsPickerScreen> {
   /// Navigates to the countdown timer screen
   static navigateToTimer(
       BuildContext context, TimerDurationsDTO timerDurations) {
-    Navigator.push(
-      context,
+    // Set rootNavigator to true so bottom tab bar is hidden on next screen
+    Navigator.of(context, rootNavigator: true).push(
       CupertinoPageRoute(
           builder: (context) =>
               CountdownTimerScreen(timerDurations: timerDurations)),

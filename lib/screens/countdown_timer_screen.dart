@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import '../models/timer_durations_dto.dart';
 import '../widgets/countdown_timer.dart';
 
@@ -16,11 +16,11 @@ class CountdownTimerScreen extends StatefulWidget {
 class _CountdownTimerScreenState extends State<CountdownTimerScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Timer'),
+    return CupertinoPageScaffold(
+      navigationBar: const CupertinoNavigationBar(
+        middle: Text('Timer'),
       ),
-      body: SafeArea(
+      child: SafeArea(
         child: SizedBox.expand(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

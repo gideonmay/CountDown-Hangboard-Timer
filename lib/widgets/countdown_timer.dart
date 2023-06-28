@@ -1,5 +1,5 @@
 import 'dart:math' as math;
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import '../extensions/duration_ceil_extension.dart';
 import '../models/audio_pool.dart';
 import '../models/duration_status_list.dart';
@@ -191,50 +191,7 @@ class _CountdownTimerState extends State<CountdownTimer>
                             width: getTimerWidth(constraints)),
                         child: Container(),
                       ),
-                      Positioned.fill(
-                        child: Center(
-                          child: Text(
-                            timerString,
-                            style: const TextStyle(fontSize: 112.0),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        top: constraints.maxHeight / 2 - 230,
-                        child: Text(
-                          _durationStatusList[_durationIndex].status,
-                          style: TextStyle(
-                            fontSize: 38.0,
-                            color:
-                                _durationStatusList[_durationIndex].statusColor,
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                          top: constraints.maxHeight / 2 - 65,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(3.0),
-                                child: TimeTextRow(
-                                    title: 'Total ',
-                                    durationString: _durationString(Duration(
-                                        seconds:
-                                            _durationStatusList.totalSeconds)),
-                                    fontSize: 20.0,
-                                    titleWidth: 78.0),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(3.0),
-                                child: TimeTextRow(
-                                    title: 'Elapsed ',
-                                    durationString: _elapsedDurationString(),
-                                    fontSize: 20.0,
-                                    titleWidth: 78.0),
-                              ),
-                            ],
-                          )),
+                      _timerCenterText()
                     ],
                   );
                 }),
@@ -259,7 +216,7 @@ class _CountdownTimerState extends State<CountdownTimer>
   /// ensures that the timer animation never exceeds that available space.
   double getTimerWidth(BoxConstraints constraints) {
     double width = math.min(constraints.maxWidth, constraints.maxHeight);
-    return width * 0.87; // 0.87 arbitrarily chosen based on what looks good
+    return width * 0.87; // Value arbitrarily chosen based on what looks good
   }
 
   /// Returns a String representing the total duration that has passed during
@@ -345,6 +302,62 @@ class _CountdownTimerState extends State<CountdownTimer>
       }
     });
   }
+
+  /// The text showing the current timer information
+  Widget _timerCenterText() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _timerCountdown(),
+        _timerStatus(),
+      ],
+    );
+  }
+
+  /// Returns text showing the timer status and current countdown duration
+  Widget _timerCountdown() {
+    return Column(
+      children: [
+        Text(
+          _durationStatusList[_durationIndex].status,
+          style: TextStyle(
+            fontSize: 38.0,
+            color: _durationStatusList[_durationIndex].statusColor,
+          ),
+        ),
+        Text(
+          timerString,
+          style: const TextStyle(fontSize: 112.0),
+        ),
+      ],
+    );
+  }
+
+  /// Returns a widget displaying the total time and the elapsed time
+  Widget _timerStatus() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(3.0),
+          child: TimeTextRow(
+              title: 'Total ',
+              durationString: _durationString(
+                  Duration(seconds: _durationStatusList.totalSeconds)),
+              fontSize: 20.0,
+              titleWidth: 80.0),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(3.0),
+          child: TimeTextRow(
+              title: 'Elapsed ',
+              durationString: _elapsedDurationString(),
+              fontSize: 20.0,
+              titleWidth: 80.0),
+        ),
+      ],
+    );
+  }
 }
 
 /// Paints an Arc to visualize the time left in the countdown
@@ -363,7 +376,7 @@ class ArcPainter extends CustomPainter {
     // Draw circle
     Offset center = Offset(size.width / 2, size.height / 2);
     Paint circlePaint = Paint()
-      ..color = Colors.grey.shade200
+      ..color = CupertinoColors.systemGrey5
       ..strokeWidth = 20.0
       ..style = PaintingStyle.stroke;
 

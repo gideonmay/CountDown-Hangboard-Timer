@@ -4,18 +4,23 @@ import 'package:countdown_app/forms/workout_form.dart';
 import 'package:countdown_app/models/workout_dto.dart';
 
 void main() {
-  testWidgets('WorkoutForm shows correct initial values', (tester) async {
-    Widget workoutForm = MediaQuery(
+  // Widget under test
+  Widget workoutFormWidget(WorkoutDTO workoutDTO) {
+    return MediaQuery(
         data: const MediaQueryData(),
         child: CupertinoApp(
             home: CupertinoPageScaffold(
           child: WorkoutForm(
-            workoutDTO:
-                WorkoutDTO(name: 'My Workout', description: 'Something'),
+            workoutDTO: workoutDTO,
             onFormSaved: () => null,
             buttonText: 'Submit',
           ),
         )));
+  }
+
+  testWidgets('WorkoutForm shows correct initial values', (tester) async {
+    Widget workoutForm = workoutFormWidget(
+        WorkoutDTO(name: 'My Workout', description: 'Something'));
 
     await tester.pumpWidget(workoutForm);
 
@@ -25,16 +30,7 @@ void main() {
 
   testWidgets('WorkoutForm shows two errors if name and description are blank',
       (tester) async {
-    Widget workoutForm = MediaQuery(
-        data: const MediaQueryData(),
-        child: CupertinoApp(
-            home: CupertinoPageScaffold(
-          child: WorkoutForm(
-            workoutDTO: WorkoutDTO.blank(),
-            onFormSaved: () => null,
-            buttonText: 'Submit',
-          ),
-        )));
+    Widget workoutForm = workoutFormWidget(WorkoutDTO.blank());
 
     await tester.pumpWidget(workoutForm);
     await tester.tap(find.text('Submit'));
@@ -44,18 +40,9 @@ void main() {
     expect(find.text('Please enter a description'), findsOneWidget);
   });
 
-  testWidgets('WorkoutForm shows one error if name is blank',
-      (tester) async {
-    Widget workoutForm = MediaQuery(
-        data: const MediaQueryData(),
-        child: CupertinoApp(
-            home: CupertinoPageScaffold(
-          child: WorkoutForm(
-            workoutDTO: WorkoutDTO(name: null, description: 'Something'),
-            onFormSaved: () => null,
-            buttonText: 'Submit',
-          ),
-        )));
+  testWidgets('WorkoutForm shows one error if name is blank', (tester) async {
+    Widget workoutForm =
+        workoutFormWidget(WorkoutDTO(name: null, description: 'Something'));
 
     await tester.pumpWidget(workoutForm);
     await tester.tap(find.text('Submit'));
@@ -67,16 +54,8 @@ void main() {
 
   testWidgets('WorkoutForm shows one error if description is blank',
       (tester) async {
-    Widget workoutForm = MediaQuery(
-        data: const MediaQueryData(),
-        child: CupertinoApp(
-            home: CupertinoPageScaffold(
-          child: WorkoutForm(
-            workoutDTO: WorkoutDTO(name: 'My Workout', description: null),
-            onFormSaved: () => null,
-            buttonText: 'Submit',
-          ),
-        )));
+    Widget workoutForm =
+        workoutFormWidget(WorkoutDTO(name: 'My Workout', description: null));
 
     await tester.pumpWidget(workoutForm);
     await tester.tap(find.text('Submit'));

@@ -13,8 +13,9 @@ void main() {
     GripTypeWithGripCount(const GripType(id: 4, name: 'Warm Up Jug'), 0),
   ];
 
-  testWidgets('The correct grip type titles are rendered', (tester) async {
-    Widget gripTypeList = Provider(
+  // Widget under test
+  Widget gripTypeListWidget(GripTypeDTO initialGripType) {
+    return Provider(
       create: (context) => AppDatabase(openConnection()),
       dispose: (context, db) => db.close(),
       child: CupertinoApp(
@@ -27,6 +28,11 @@ void main() {
         )),
       ),
     );
+  }
+
+  testWidgets('The correct grip type titles are rendered', (tester) async {
+    Widget gripTypeList =
+        gripTypeListWidget(GripTypeDTO(id: 1, name: 'Half Crimp'));
 
     await tester.pumpWidget(gripTypeList);
 
@@ -42,19 +48,8 @@ void main() {
   testWidgets(
       'Error dialog shown if user tries to delete the currently selected grip type',
       (tester) async {
-    Widget gripTypeList = Provider(
-      create: (context) => AppDatabase(openConnection()),
-      dispose: (context, db) => db.close(),
-      child: CupertinoApp(
-        home: CupertinoPageScaffold(
-            child: GripTypesList(
-          gripTypes: gripTypes,
-          initialGripType: GripTypeDTO(id: 1, name: 'Half Crimp'),
-          onGripTypeChanged: (newGripType) => null,
-          previousPageTitle: 'Prev Page',
-        )),
-      ),
-    );
+    Widget gripTypeList =
+        gripTypeListWidget(GripTypeDTO(id: 1, name: 'Half Crimp'));
 
     await tester.pumpWidget(gripTypeList);
 
@@ -74,19 +69,8 @@ void main() {
   testWidgets(
       'Correct dialog shown if user tries to delete a grip type with 3 grips',
       (tester) async {
-    Widget gripTypeList = Provider(
-      create: (context) => AppDatabase(openConnection()),
-      dispose: (context, db) => db.close(),
-      child: CupertinoApp(
-        home: CupertinoPageScaffold(
-            child: GripTypesList(
-          gripTypes: gripTypes,
-          initialGripType: GripTypeDTO(id: 1, name: 'Half Crimp'),
-          onGripTypeChanged: (newGripType) => null,
-          previousPageTitle: 'Prev Page',
-        )),
-      ),
-    );
+    Widget gripTypeList =
+        gripTypeListWidget(GripTypeDTO(id: 1, name: 'Half Crimp'));
 
     await tester.pumpWidget(gripTypeList);
 
@@ -109,19 +93,8 @@ void main() {
   testWidgets(
       'Correct dialog shown if user tries to delete a grip type with 1 grips',
       (tester) async {
-    Widget gripTypeList = Provider(
-      create: (context) => AppDatabase(openConnection()),
-      dispose: (context, db) => db.close(),
-      child: CupertinoApp(
-        home: CupertinoPageScaffold(
-            child: GripTypesList(
-          gripTypes: gripTypes,
-          initialGripType: GripTypeDTO(id: 1, name: 'Half Crimp'),
-          onGripTypeChanged: (newGripType) => null,
-          previousPageTitle: 'Prev Page',
-        )),
-      ),
-    );
+    Widget gripTypeList =
+        gripTypeListWidget(GripTypeDTO(id: 1, name: 'Half Crimp'));
 
     await tester.pumpWidget(gripTypeList);
 
@@ -143,19 +116,8 @@ void main() {
   testWidgets(
       'Correct dialog shown if user tries to delete a grip type with 0 grips',
       (tester) async {
-    Widget gripTypeList = Provider(
-      create: (context) => AppDatabase(openConnection()),
-      dispose: (context, db) => db.close(),
-      child: CupertinoApp(
-        home: CupertinoPageScaffold(
-            child: GripTypesList(
-          gripTypes: gripTypes,
-          initialGripType: GripTypeDTO(id: 1, name: 'Half Crimp'),
-          onGripTypeChanged: (newGripType) => null,
-          previousPageTitle: 'Prev Page',
-        )),
-      ),
-    );
+    Widget gripTypeList =
+        gripTypeListWidget(GripTypeDTO(id: 1, name: 'Half Crimp'));
 
     await tester.pumpWidget(gripTypeList);
 

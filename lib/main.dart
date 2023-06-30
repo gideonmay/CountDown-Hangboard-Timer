@@ -44,8 +44,7 @@ class _AppScaffoldState extends State<AppScaffold> {
   static const List<Widget> _screenOptions = <Widget>[
     WorkoutsScreen(),
     DurationsPickerScreen(),
-    Text('Settings')
-    // SettingsScreen()
+    SettingsScreen()
   ];
 
   @override

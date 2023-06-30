@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../services/shared_preferences_service.dart';
-import '../widgets/app_divider.dart';
 
 /// A ListView that lists all of the settings available for the user to change
 class SettingsListView extends StatefulWidget {
@@ -35,31 +34,30 @@ class _SettingsListViewState extends State<SettingsListView> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
+    return CupertinoListSection.insetGrouped(
       children: [
-        ListTile(
-          leading: const Icon(Icons.volume_up),
+        CupertinoListTile(
+          leading: _soundOn
+              ? const Icon(CupertinoIcons.speaker_1)
+              : const Icon(CupertinoIcons.speaker_slash),
           title: const Text('Timer Sound'),
-          trailing: Switch(
+          trailing: CupertinoSwitch(
               value: _soundOn, onChanged: (bool value) => _setSound(value)),
         ),
-        const AppDivider(),
-        ListTile(
-          leading: const Icon(Icons.vibration),
+        CupertinoListTile(
+          leading: const Icon(CupertinoIcons.alarm),
           title: const Text('Timer Vibration'),
-          trailing: Switch(
+          trailing: CupertinoSwitch(
               value: _vibrationOn,
               onChanged: (bool value) => _setVibration(value)),
         ),
-        const AppDivider(),
-        ListTile(
-          leading: const Icon(Icons.dark_mode),
+        CupertinoListTile(
+          leading: const Icon(CupertinoIcons.moon),
           title: const Text('Dark Mode'),
-          trailing: Switch(
+          trailing: CupertinoSwitch(
               value: _darkModeOn,
               onChanged: (bool value) => _setDarkMode(value)),
         ),
-        const AppDivider(),
       ],
     );
   }

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import '../widgets/settings_list_view.dart';
 
 /// The screen that allows the user to changed settings such as sound on,
@@ -13,11 +13,18 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Settings'),
-      ),
-      body: const SettingsListView(),
-    );
+    return const CupertinoPageScaffold(
+        backgroundColor: CupertinoColors.systemGrey6,
+        child: CustomScrollView(slivers: <Widget>[
+          CupertinoSliverNavigationBar(
+            largeTitle: Text('Settings'),
+          ),
+          SliverSafeArea(
+              top: false,
+              minimum: EdgeInsets.only(top: 0),
+              sliver: SliverToBoxAdapter(
+                child: SettingsListView(),
+              ))
+        ]));
   }
 }

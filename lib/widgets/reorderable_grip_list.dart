@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../db/drift_database.dart';
 import '../screens/edit_grip_screen.dart';
-import '../widgets/app_divider.dart';
 
 /// A ReorderableListView that enables the user to tap and drag grips to
 /// reorder the list of grips for the current workout
@@ -107,12 +106,24 @@ class _ReorderableGripListState extends State<ReorderableGripList> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Expanded(child: AppDivider(indent: 62.0, height: 3.0)),
+          const Expanded(
+              child: Divider(
+            thickness: 1.0,
+            indent: 62.0,
+            endIndent: 8.0,
+            height: 3.0,
+          )),
           Text(
             _dividerText(grip, gripIndex, lastIndex),
             style: const TextStyle(fontSize: 14.0),
           ),
-          const Expanded(child: AppDivider(indent: 8.0, height: 3.0)),
+          const Expanded(
+              child: Divider(
+            thickness: 1.0,
+            indent: 8.0,
+            endIndent: 8.0,
+            height: 3.0,
+          )),
         ],
       ),
     );

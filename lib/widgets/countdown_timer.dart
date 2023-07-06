@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 import 'package:flutter/cupertino.dart';
+import '../db/drift_database.dart';
 import '../extensions/duration_ceil_extension.dart';
 import '../models/audio_pool.dart';
 import '../models/duration_status_list.dart';
@@ -14,7 +15,10 @@ import '../widgets/time_text_row.dart';
 class CountdownTimer extends StatefulWidget {
   final TimerDurationsDTO timerDurations;
 
-  const CountdownTimer({super.key, required this.timerDurations});
+  /// The workout to execute the timer for. Overrides timerDurations.
+  final Workout? workout;
+
+  const CountdownTimer({super.key, required this.timerDurations, this.workout});
 
   @override
   State<CountdownTimer> createState() => _CountdownTimerState();
@@ -53,13 +57,17 @@ class _CountdownTimerState extends State<CountdownTimer>
     _loadAudio();
 
     // Initialize DurationStatusList
-    _durationStatusList = DurationStatusList(
-        sets: widget.timerDurations.sets.toInt(),
-        reps: widget.timerDurations.reps.toInt(),
-        workDuration: widget.timerDurations.workDuration,
-        restDuration: widget.timerDurations.restDuration,
-        breakDuration: widget.timerDurations.breakDuration,
-        includePrepare: true);
+    if (widget.workout == null) {
+      _durationStatusList = TimerDurationStatusList(
+          durationStatusListDTO: DurationStatusListDTO(
+              sets: widget.timerDurations.sets,
+              reps: widget.timerDurations.reps,
+              workDuration: widget.timerDurations.workDuration,
+              restDuration: widget.timerDurations.restDuration,
+              breakDuration: widget.timerDurations.breakDuration,
+              includePrepare: true,
+              includeLastBreak: false));
+    }
 
     // Initialize AnimationController and associated listeners
     _controller = AnimationController(

@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import '../theme/color_theme.dart';
+import '../styles/color_theme.dart';
 
 /// A widget that contains the Start, Reset, and Skip buttons that can change
 /// depending on the state of the timer

@@ -1,127 +1,267 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'duration_status.dart';
 import 'status_value.dart';
-import '../theme/color_theme.dart';
+import '../db/drift_database.dart';
+import '../styles/color_theme.dart';
 
-// These colors correspond to different status values
+// Colors corresponding to different status values
 Color workColor = AppColorTheme.green;
 Color restColor = AppColorTheme.yellow;
 Color breakColor = AppColorTheme.red;
 Color prepareColor = AppColorTheme.blue;
 
-/// Represents a list of DurationStatus objects that can be 'fed' into the
-/// countdown timer. This object takes the given values for reps, sets,
-/// workDuration, restDuration, and breakDuration to build the list of
-/// DurationStatus objects that are fed into the countdown timer.
-class DurationStatusList {
+/// A class that serves as an object to store the parameters needed to create
+/// a DurationStatusList
+class DurationStatusListDTO {
   final int sets;
   final int reps;
   final Duration workDuration;
   final Duration restDuration;
   final Duration breakDuration;
-  final List<DurationStatus> _durationStatusList = [];
-  int _totalSeconds = 0;
+
+  /// Whether to include a final break or mark the workout as complete instead
+  final bool includeLastBreak;
+
+  /// The break duration between this list and the next. Only takes effect if
+  /// the includeLastBreak variable is set to true.
+  final Duration? lastBreakDuration;
 
   /// Whether or not to include prepare DurationStatus
   final bool includePrepare;
 
-  DurationStatusList(
+  /// Optional name of the grip that this list of durations is for
+  final String? gripName;
+
+  /// Optional name of the next grip succeeding this one
+  final String? nextGripName;
+
+  /// The current grip number in the workout
+  final int? currGrip;
+
+  DurationStatusListDTO(
       {required this.sets,
       required this.reps,
       required this.workDuration,
       required this.restDuration,
       required this.breakDuration,
-      required this.includePrepare}) {
-    _buildList();
+      required this.includePrepare,
+      required this.includeLastBreak,
+      this.lastBreakDuration,
+      this.gripName,
+      this.nextGripName,
+      this.currGrip}) {
+    _assertLastBreakDuration();
   }
 
+  /// Shows error if lastBreakDuration was not included when includeLastBreak ==
+  /// true
+  void _assertLastBreakDuration() {
+    if (includeLastBreak && lastBreakDuration == null) {
+      throw AssertionError(
+          "Last break duration is required when includeLastBreak is true");
+    }
+  }
+}
+
+/// An abstract class that defines an object containing a list of DurationStatus
+/// objects as one of the class members
+abstract class DurationStatusList {
+  final List<DurationStatus> _durationStatusList = [];
+
+  /// The total number of seconds that have passed for current countdown timer
+  int _totalSeconds = 0;
+
+  /// Returns the length of this list
   int get length => _durationStatusList.length;
+
+  /// Returns the underlying list of DurationStatus objects
+  List<DurationStatus> toList() => _durationStatusList;
+
+  /// Indexing operater
+  DurationStatus operator [](index) => _durationStatusList[index];
 
   /// The total number of seconds contained in the list
   int get totalSeconds => _totalSeconds;
 
-  /// Enable indexing of _durationStatusList
-  DurationStatus operator [](index) => _durationStatusList[index];
-
-  /// Builds a list of DurationStatus objects using the given number of sets and
-  /// reps. Each list starts with a DurationStatus object with a StatusValue of
-  /// 'prepare', which gives the user time seconds to prepare for the first rep.
-  void _buildList() {
+  /// Builds a list of DurationStatus objects using the given parameters
+  void _buildDurationStatusList(DurationStatusListDTO params) {
     // Add 'prepare' DurationStatus if includePrepare was specified
-    if (includePrepare && sets > 0 && reps > 0) {
+    if (params.includePrepare && params.sets > 0 && params.reps > 0) {
       _durationStatusList.add(DurationStatus(
           duration: const Duration(seconds: 15),
           statusValue: StatusValue.isPreparing(),
           statusColor: prepareColor,
           startTime: Duration(seconds: _totalSeconds),
           currSet: 1,
-          currRep: 1));
+          currRep: 1,
+          currGrip: 1,
+          gripName: null,
+          nextGripName: params.gripName));
 
       _totalSeconds += 15;
     }
 
     int currSet = 1;
-    while (currSet <= sets) {
+    while (currSet <= params.sets) {
       // Add initial work duration due to fence post problem
       int currRep = 1;
-      if (reps > 0) {
+      if (params.reps > 0) {
         _durationStatusList.add(DurationStatus(
-            duration: workDuration,
+            duration: params.workDuration,
             statusValue: StatusValue.isWorking(),
             statusColor: workColor,
             startTime: Duration(seconds: _totalSeconds),
             currSet: currSet,
-            currRep: currRep));
+            currRep: currRep,
+            currGrip: params.currGrip,
+            gripName: params.gripName,
+            nextGripName: params.nextGripName));
 
-        _totalSeconds += workDuration.inSeconds;
+        _totalSeconds += params.workDuration.inSeconds;
         currRep += 1;
       }
 
-      while (currRep <= reps) {
+      while (currRep <= params.reps) {
         _durationStatusList.add(DurationStatus(
-            duration: restDuration,
+            duration: params.restDuration,
             statusValue: StatusValue.isResting(),
             statusColor: restColor,
             startTime: Duration(seconds: _totalSeconds),
             currSet: currSet,
-            currRep: currRep));
-        _totalSeconds += restDuration.inSeconds;
+            currRep: currRep,
+            currGrip: params.currGrip,
+            gripName: params.gripName,
+            nextGripName: params.nextGripName));
+        _totalSeconds += params.restDuration.inSeconds;
 
         _durationStatusList.add(DurationStatus(
-            duration: workDuration,
+            duration: params.workDuration,
             statusValue: StatusValue.isWorking(),
             statusColor: workColor,
             startTime: Duration(seconds: _totalSeconds),
             currSet: currSet,
-            currRep: currRep));
+            currRep: currRep,
+            currGrip: params.currGrip,
+            gripName: params.gripName,
+            nextGripName: params.nextGripName));
 
-        _totalSeconds += workDuration.inSeconds;
+        _totalSeconds += params.workDuration.inSeconds;
         currRep += 1;
       }
 
       currSet += 1;
 
       // Add break duration after all but last set
-      if (currSet <= sets) {
+      if (currSet <= params.sets) {
         _durationStatusList.add(DurationStatus(
-            duration: breakDuration,
+            duration: params.breakDuration,
             statusValue: StatusValue.isBreak(),
             statusColor: breakColor,
             startTime: Duration(seconds: _totalSeconds),
             currSet: currSet,
-            currRep: 1));
+            currRep: 1,
+            currGrip: params.currGrip,
+            gripName: params.gripName,
+            nextGripName: params.nextGripName));
 
-        _totalSeconds += breakDuration.inSeconds;
+        _totalSeconds += params.breakDuration.inSeconds;
       }
     }
 
-    // Add final zero duration to mark timer as complete
-    _durationStatusList.add(DurationStatus(
-        duration: Duration.zero,
-        statusValue: StatusValue.isComplete(),
-        statusColor: prepareColor,
-        startTime: Duration(seconds: _totalSeconds),
-        currSet: sets + 1,
-        currRep: reps + 1));
+    /*
+     * Add lastBreakDuration if includeLastBreak == true. Otherwise, add a 
+     * duration to mark the workout as complete
+     */
+    if (params.includeLastBreak) {
+      _durationStatusList.add(DurationStatus(
+          duration: params.lastBreakDuration!,
+          statusValue: StatusValue.isBreak(),
+          statusColor: breakColor,
+          startTime: Duration(seconds: _totalSeconds),
+          currSet: 1,
+          currRep: 1,
+          // Set currGrip to zero if it was not given and is null
+          currGrip: params.currGrip == null ? 0 : params.currGrip! + 1,
+          gripName: params.nextGripName,
+          nextGripName: null));
+
+      _totalSeconds += params.lastBreakDuration!.inSeconds;
+    } else {
+      _durationStatusList.add(DurationStatus(
+          duration: Duration.zero,
+          statusValue: StatusValue.isComplete(),
+          statusColor: prepareColor,
+          startTime: Duration(seconds: _totalSeconds),
+          currSet: params.sets + 1,
+          currRep: params.reps + 1,
+          currGrip: params.currGrip == null ? null : params.currGrip! + 1));
+    }
+  }
+}
+
+/// Represents a list of DurationStatus objects that can be 'fed' into the
+/// countdown timer. This object takes the given values for reps, sets,
+/// workDuration, restDuration, and breakDuration to build the list of
+/// DurationStatus objects that are fed into the countdown timer.
+class TimerDurationStatusList extends DurationStatusList {
+  final DurationStatusListDTO durationStatusListDTO;
+
+  TimerDurationStatusList({required this.durationStatusListDTO}) {
+    _buildDurationStatusList(durationStatusListDTO);
+  }
+}
+
+/// Represents a List of DurationStatus objects that is built from the Grips
+/// within an individual Workout. This class is very similar to the
+/// TimerDurationStatusList class in that it contains a List of DurationStatus
+/// objects. However, this class contructs the List from a given List of Grips
+/// as opposed to the number of sets, reps, work duration, etc.
+class WorkoutDurationStatusList extends DurationStatusList {
+  /// The list of Grip objects to build the DurationStatusList from
+  final List<GripWithGripType> gripList;
+
+  WorkoutDurationStatusList({required this.gripList}) {
+    _buildList();
+  }
+
+  /// The number of Grips in the given list of Grips
+  int get gripCount => gripList.length;
+
+  /// Iterates over each Grip in the given gripList and adds the
+  void _buildList() {
+    for (int index = 0; index < gripList.length; index++) {
+      Grip grip = gripList[index].entry;
+      GripType gripType = gripList[index].gripType;
+
+      _buildDurationStatusList(DurationStatusListDTO(
+          sets: grip.setCount,
+          reps: grip.repCount,
+          workDuration: Duration(seconds: grip.workSeconds),
+          restDuration: Duration(seconds: grip.restSeconds),
+          breakDuration:
+              Duration(minutes: grip.breakMinutes, seconds: grip.breakSeconds),
+          includePrepare: index == 0, // Only include preapre for first grip
+          includeLastBreak: _isLastGrip(index),
+          lastBreakDuration: Duration(
+              minutes: grip.lastBreakMinutes, seconds: grip.lastBreakSeconds),
+          gripName: gripType.name,
+          nextGripName: _getNextGripName(index),
+          currGrip: index + 1));
+    }
+  }
+
+  /// Returns true if the given index is not the last index in the grip list
+  bool _isLastGrip(int index) {
+    return index < gripList.length - 1;
+  }
+
+  /// Returns the name of the grip succeeding the given index, or null if the
+  /// index is at the end of the list
+  String? _getNextGripName(int index) {
+    if (index >= gripList.length - 1) {
+      return null;
+    }
+
+    return gripList[index + 1].gripType.name;
   }
 }

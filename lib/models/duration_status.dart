@@ -17,13 +17,25 @@ class DurationStatus {
   /// startTime will have a Duration value of 10 seconds.
   late Duration startTime;
 
+  /// Optional name of the grip that this duration is for
+  final String? gripName;
+
+  /// Optional name of the next grip succeeding this one
+  final String? nextGripName;
+
+  /// The current grip number in the workout
+  final int? currGrip;
+
   DurationStatus(
       {required this.duration,
       required this.statusValue,
       required this.statusColor,
       required this.startTime,
       required this.currSet,
-      required this.currRep});
+      required this.currRep,
+      this.gripName,
+      this.nextGripName,
+      this.currGrip});
 
   String get status => statusValue.status.toString().toUpperCase();
 

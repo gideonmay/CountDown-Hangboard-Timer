@@ -8,13 +8,15 @@ class ProgressCounter extends StatelessWidget {
   final int total;
   final String title;
   final double fontSize;
+  final Color fillColor;
 
   const ProgressCounter(
       {super.key,
       required this.completed,
       required this.total,
       required this.title,
-      required this.fontSize});
+      required this.fontSize,
+      required this.fillColor});
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +35,8 @@ class ProgressCounter extends StatelessWidget {
             currentStep: completed,
             size: 20,
             padding: 1.0,
-            selectedColor: CupertinoColors.systemBlue,
-            unselectedColor: CupertinoColors.systemGrey5,
+            selectedColor: fillColor,
+            unselectedColor: CupertinoColors.systemGrey4,
             customStep: (index, color, _) {
               return Container(
                 decoration: _getCustomDecoration(index, color, context),
@@ -57,7 +59,7 @@ class ProgressCounter extends StatelessWidget {
     if (completed == index) {
       return BoxDecoration(
           border: Border.all(
-              color: CupertinoColors.systemBlue,
+              color: fillColor,
               width: 2.0,
               strokeAlign: BorderSide.strokeAlignCenter),
           borderRadius: const BorderRadius.all(Radius.circular(3.0)),

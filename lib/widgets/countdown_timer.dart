@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'package:countdown_app/models/timer_details_dto.dart';
 import 'package:flutter/cupertino.dart';
 import '../db/drift_database.dart';
 import '../extensions/duration_ceil_extension.dart';
@@ -13,12 +14,17 @@ import '../widgets/time_text_row.dart';
 /// and animation of the timer. The timer can be started, paused, and reset
 /// using a set of buttons included in this widget.
 class CountdownTimer extends StatefulWidget {
-  final TimerDurationsDTO timerDurations;
+  final TimerDurationsDTO? timerDurations;
 
-  /// The workout to execute the timer for. Overrides timerDurations.
-  final Workout? workout;
+  /// The workout to execute the timer for. Overrides timerDurations if given.
+  final List<GripWithGripType>? gripList;
 
-  const CountdownTimer({super.key, required this.timerDurations, this.workout});
+  const CountdownTimer({super.key, required this.timerDurations})
+      : gripList = null;
+
+  /// Creates a countdown timer from a list of grips for a particular workout
+  const CountdownTimer.fromGripList({super.key, required this.gripList})
+      : timerDurations = null;
 
   @override
   State<CountdownTimer> createState() => _CountdownTimerState();
@@ -56,17 +62,25 @@ class _CountdownTimerState extends State<CountdownTimer>
     super.initState();
     _loadAudio();
 
-    // Initialize DurationStatusList
-    if (widget.workout == null) {
+    // Initialize DurationStatusList based on which constructor was used
+    if (widget.timerDurations != null) {
+      final timerDetails = TimerDetailsDTO(
+          totalSets: widget.timerDurations!.sets,
+          totalReps: widget.timerDurations!.reps,
+          workDuration: widget.timerDurations!.workDuration,
+          restDuration: widget.timerDurations!.restDuration,
+          breakDuration: widget.timerDurations!.breakDuration);
+
       _durationStatusList = TimerDurationStatusList(
           durationStatusListDTO: DurationStatusListDTO(
-              sets: widget.timerDurations.sets,
-              reps: widget.timerDurations.reps,
-              workDuration: widget.timerDurations.workDuration,
-              restDuration: widget.timerDurations.restDuration,
-              breakDuration: widget.timerDurations.breakDuration,
+              timerDetails: timerDetails,
               includePrepare: true,
               includeLastBreak: false));
+    }
+
+    if (widget.gripList != null) {
+      _durationStatusList =
+          WorkoutDurationStatusList(gripList: widget.gripList!);
     }
 
     // Initialize AnimationController and associated listeners
@@ -179,9 +193,11 @@ class _CountdownTimerState extends State<CountdownTimer>
           Flexible(
             flex: 18,
             child: TimerDetails(
-                timerDurations: widget.timerDurations,
-                currentSet: _durationStatusList[_durationIndex].currSet,
-                currentRep: _durationStatusList[_durationIndex].currRep),
+              currSet: _durationStatusList[_durationIndex].currSet,
+              currRep: _durationStatusList[_durationIndex].currRep,
+              timerDetails: _durationStatusList[_durationIndex].timerDetails,
+              currGrip: _durationStatusList[_durationIndex].currGrip,
+            ),
           ),
           Flexible(
             flex: 75,

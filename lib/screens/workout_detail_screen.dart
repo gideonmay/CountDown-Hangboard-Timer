@@ -62,7 +62,7 @@ class _WorkoutDetailScreenState extends State<WorkoutDetailScreen> {
         1: Padding(
           padding: EdgeInsets.symmetric(horizontal: 30),
           child: Text(
-            'Edit Grips',
+            'Add Grips',
             style: TextStyle(color: CupertinoColors.black, fontSize: 14.0),
           ),
         ),

@@ -147,7 +147,7 @@ void main() {
       expect(grip.edgeSize, null);
     });
 
-    test('Grips have correct sequence numbers', () async {
+    test('Grips from a stream have correct sequence numbers', () async {
       final gripDTO = GripDTO.standard()..gripTypeID = gripTypeID;
       await db.addGrip(workoutID, gripDTO); // 1st grip
       await db.addGrip(workoutID, gripDTO); // 2nd grip
@@ -155,6 +155,20 @@ void main() {
 
       List<GripWithGripType> grips =
           await db.watchAllGripsWithType(workoutID).first;
+
+      expect(grips[0].entry.sequenceNum, 1);
+      expect(grips[1].entry.sequenceNum, 2);
+      expect(grips[2].entry.sequenceNum, 3);
+    });
+
+    test('Grips from a Future have correct sequence numbers', () async {
+      final gripDTO = GripDTO.standard()..gripTypeID = gripTypeID;
+      await db.addGrip(workoutID, gripDTO); // 1st grip
+      await db.addGrip(workoutID, gripDTO); // 2nd grip
+      await db.addGrip(workoutID, gripDTO); // 3rd grip
+
+      List<GripWithGripType> grips =
+          await db.fetchAllGripsWithType(workoutID);
 
       expect(grips[0].entry.sequenceNum, 1);
       expect(grips[1].entry.sequenceNum, 2);

@@ -1,3 +1,4 @@
+import 'package:countdown_app/models/timer_details_dto.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:countdown_app/models/duration_status_list.dart';
 import 'package:countdown_app/db/drift_database.dart';
@@ -5,33 +6,37 @@ import 'package:countdown_app/db/drift_database.dart';
 void main() {
   group('DurationStatusListDTO', () {
     test('All variables given as parameters are initialized properly', () {
-      final durationsListDTO = DurationStatusListDTO(
-          sets: 3,
-          reps: 2,
+      final timerDetails = TimerDetailsDTO(
+          totalSets: 3,
+          totalReps: 2,
           workDuration: const Duration(seconds: 10),
           restDuration: const Duration(seconds: 3),
-          breakDuration: const Duration(seconds: 30),
+          breakDuration: const Duration(seconds: 30));
+      final durationsListDTO = DurationStatusListDTO(
+          timerDetails: timerDetails,
           includePrepare: true,
           includeLastBreak: false);
 
-      expect(durationsListDTO.sets, 3);
-      expect(durationsListDTO.reps, 2);
-      expect(durationsListDTO.workDuration, const Duration(seconds: 10));
-      expect(durationsListDTO.restDuration, const Duration(seconds: 3));
-      expect(durationsListDTO.breakDuration, const Duration(seconds: 30));
+      expect(timerDetails.totalSets, 3);
+      expect(timerDetails.totalReps, 2);
+      expect(timerDetails.workDuration, const Duration(seconds: 10));
+      expect(timerDetails.restDuration, const Duration(seconds: 3));
+      expect(timerDetails.breakDuration, const Duration(seconds: 30));
       expect(durationsListDTO.includePrepare, true);
     });
 
     test(
         'AssertionError thrown if includeLastBreak == true but lastBreakDuration not included',
         () {
+      final timerDetails = TimerDetailsDTO(
+          totalSets: 3,
+          totalReps: 2,
+          workDuration: const Duration(seconds: 10),
+          restDuration: const Duration(seconds: 3),
+          breakDuration: const Duration(seconds: 30));
       expect(
           () => DurationStatusListDTO(
-              sets: 1,
-              reps: 1,
-              workDuration: const Duration(seconds: 10),
-              restDuration: const Duration(seconds: 3),
-              breakDuration: const Duration(seconds: 30),
+              timerDetails: timerDetails,
               includePrepare: false,
               includeLastBreak: true),
           throwsAssertionError);
@@ -39,12 +44,14 @@ void main() {
   });
   group('TimerDurationStatusList', () {
     test('A list with 0 sets and 0 reps only has one element', () {
-      final durationsListDTO = DurationStatusListDTO(
-          sets: 0,
-          reps: 0,
+      final timerDetails = TimerDetailsDTO(
+          totalSets: 0,
+          totalReps: 0,
           workDuration: const Duration(seconds: 10),
           restDuration: const Duration(seconds: 3),
-          breakDuration: const Duration(seconds: 30),
+          breakDuration: const Duration(seconds: 30));
+      final durationsListDTO = DurationStatusListDTO(
+          timerDetails: timerDetails,
           includePrepare: true,
           includeLastBreak: false);
       final durationsList =
@@ -56,12 +63,14 @@ void main() {
     });
 
     test('A list with 0 sets and 1 rep only has one element', () {
-      final durationsListDTO = DurationStatusListDTO(
-          sets: 0,
-          reps: 1,
+      final timerDetails = TimerDetailsDTO(
+          totalSets: 0,
+          totalReps: 1,
           workDuration: const Duration(seconds: 10),
           restDuration: const Duration(seconds: 3),
-          breakDuration: const Duration(seconds: 30),
+          breakDuration: const Duration(seconds: 30));
+      final durationsListDTO = DurationStatusListDTO(
+          timerDetails: timerDetails,
           includePrepare: true,
           includeLastBreak: false);
       final durationsList =
@@ -73,12 +82,14 @@ void main() {
     });
 
     test('A list with 1 sets and 0 reps is only has one element', () {
-      final durationsListDTO = DurationStatusListDTO(
-          sets: 1,
-          reps: 0,
+      final timerDetails = TimerDetailsDTO(
+          totalSets: 1,
+          totalReps: 0,
           workDuration: const Duration(seconds: 10),
           restDuration: const Duration(seconds: 3),
-          breakDuration: const Duration(seconds: 30),
+          breakDuration: const Duration(seconds: 30));
+      final durationsListDTO = DurationStatusListDTO(
+          timerDetails: timerDetails,
           includePrepare: true,
           includeLastBreak: false);
       final durationsList =
@@ -91,12 +102,14 @@ void main() {
 
     test('A list with includePrepare == false does not start with a prepare',
         () {
-      final durationsListDTO = DurationStatusListDTO(
-          sets: 1,
-          reps: 1,
+      final timerDetails = TimerDetailsDTO(
+          totalSets: 1,
+          totalReps: 1,
           workDuration: const Duration(seconds: 10),
           restDuration: const Duration(seconds: 3),
-          breakDuration: const Duration(seconds: 30),
+          breakDuration: const Duration(seconds: 30));
+      final durationsListDTO = DurationStatusListDTO(
+          timerDetails: timerDetails,
           includePrepare: false,
           includeLastBreak: false);
       final durationsList =
@@ -111,12 +124,14 @@ void main() {
     test(
         'A list with includeLastBreak == true ends with the last break duration',
         () {
-      final durationsListDTO = DurationStatusListDTO(
-          sets: 1,
-          reps: 1,
+      final timerDetails = TimerDetailsDTO(
+          totalSets: 1,
+          totalReps: 1,
           workDuration: const Duration(seconds: 10),
           restDuration: const Duration(seconds: 3),
-          breakDuration: const Duration(seconds: 30),
+          breakDuration: const Duration(seconds: 30));
+      final durationsListDTO = DurationStatusListDTO(
+          timerDetails: timerDetails,
           includePrepare: false,
           includeLastBreak: true,
           lastBreakDuration: const Duration(seconds: 35));
@@ -130,12 +145,14 @@ void main() {
     });
 
     test('A list with 1 sets and 1 reps contains 3 elements', () {
-      final durationsListDTO = DurationStatusListDTO(
-          sets: 1,
-          reps: 1,
+      final timerDetails = TimerDetailsDTO(
+          totalSets: 1,
+          totalReps: 1,
           workDuration: const Duration(seconds: 10),
           restDuration: const Duration(seconds: 3),
-          breakDuration: const Duration(seconds: 30),
+          breakDuration: const Duration(seconds: 30));
+      final durationsListDTO = DurationStatusListDTO(
+          timerDetails: timerDetails,
           includePrepare: true,
           includeLastBreak: false);
       final durationsList =
@@ -149,12 +166,14 @@ void main() {
     });
 
     test('A list with 1 sets and 2 reps contains the correct durations', () {
-      final durationsListDTO = DurationStatusListDTO(
-          sets: 1,
-          reps: 2,
+      final timerDetails = TimerDetailsDTO(
+          totalSets: 1,
+          totalReps: 2,
           workDuration: const Duration(seconds: 10),
           restDuration: const Duration(seconds: 3),
-          breakDuration: const Duration(seconds: 30),
+          breakDuration: const Duration(seconds: 30));
+      final durationsListDTO = DurationStatusListDTO(
+          timerDetails: timerDetails,
           includePrepare: true,
           includeLastBreak: false);
       final durationsList =
@@ -184,12 +203,14 @@ void main() {
     });
 
     test('A list with 2 sets and 1 reps contains the correct durations', () {
-      final durationsListDTO = DurationStatusListDTO(
-          sets: 2,
-          reps: 1,
+      final timerDetails = TimerDetailsDTO(
+          totalSets: 2,
+          totalReps: 1,
           workDuration: const Duration(seconds: 10),
           restDuration: const Duration(seconds: 3),
-          breakDuration: const Duration(seconds: 30),
+          breakDuration: const Duration(seconds: 30));
+      final durationsListDTO = DurationStatusListDTO(
+          timerDetails: timerDetails,
           includePrepare: true,
           includeLastBreak: false);
       final durationsList =
@@ -219,12 +240,14 @@ void main() {
     });
 
     test('A list with 2 sets and 2 reps contains the correct durations', () {
-      final durationsListDTO = DurationStatusListDTO(
-          sets: 2,
-          reps: 2,
+      final timerDetails = TimerDetailsDTO(
+          totalSets: 2,
+          totalReps: 2,
           workDuration: const Duration(seconds: 10),
           restDuration: const Duration(seconds: 3),
-          breakDuration: const Duration(seconds: 30),
+          breakDuration: const Duration(seconds: 30));
+      final durationsListDTO = DurationStatusListDTO(
+          timerDetails: timerDetails,
           includePrepare: true,
           includeLastBreak: false);
       final durationsList =
@@ -272,12 +295,14 @@ void main() {
     test(
         'A list with a gripName and nextGripName contains correct grips and durations',
         () {
-      final durationsListDTO = DurationStatusListDTO(
-          sets: 1,
-          reps: 2,
+      final timerDetails = TimerDetailsDTO(
+          totalSets: 1,
+          totalReps: 2,
           workDuration: const Duration(seconds: 10),
           restDuration: const Duration(seconds: 3),
-          breakDuration: const Duration(seconds: 30),
+          breakDuration: const Duration(seconds: 30));
+      final durationsListDTO = DurationStatusListDTO(
+          timerDetails: timerDetails,
           includePrepare: true,
           includeLastBreak: true,
           lastBreakDuration: const Duration(seconds: 35),
@@ -320,12 +345,14 @@ void main() {
     });
 
     test('The correct startTime is present at each index in the list', () {
-      final durationsListDTO = DurationStatusListDTO(
-          sets: 2,
-          reps: 1,
+      final timerDetails = TimerDetailsDTO(
+          totalSets: 2,
+          totalReps: 1,
           workDuration: const Duration(seconds: 10),
           restDuration: const Duration(seconds: 3),
-          breakDuration: const Duration(seconds: 30),
+          breakDuration: const Duration(seconds: 30));
+      final durationsListDTO = DurationStatusListDTO(
+          timerDetails: timerDetails,
           includePrepare: true,
           includeLastBreak: false);
       final durationsList =

@@ -2,10 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:countdown_app/models/duration_status.dart';
 import 'package:countdown_app/models/status_value.dart';
+import 'package:countdown_app/models/timer_details_dto.dart';
 
 void main() {
+  final timerDetails = TimerDetailsDTO(
+      totalSets: 1,
+      totalReps: 1,
+      workDuration: const Duration(seconds: 10),
+      restDuration: const Duration(seconds: 3),
+      breakDuration: const Duration(seconds: 30));
   test('DurationStatus object has correct values', () {
     final durationStatus = DurationStatus(
+        timerDetails: timerDetails,
         duration: const Duration(seconds: 10),
         statusValue: StatusValue.isWorking(),
         statusColor: const Color.fromARGB(0, 255, 0, 0),
@@ -21,6 +29,7 @@ void main() {
 
   test('DurationStatus toString returns correct value', () {
     final durationStatus = DurationStatus(
+        timerDetails: timerDetails,
         duration: const Duration(seconds: 10),
         statusValue: StatusValue.isWorking(),
         statusColor: const Color.fromARGB(0, 255, 0, 0),
@@ -33,6 +42,7 @@ void main() {
 
   test('DurationStatus status getter returns correct value', () {
     final durationStatus = DurationStatus(
+        timerDetails: timerDetails,
         duration: const Duration(seconds: 10),
         statusValue: StatusValue.isWorking(),
         statusColor: const Color.fromARGB(0, 255, 0, 0),

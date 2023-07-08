@@ -56,7 +56,7 @@ class _GripDetailsFormState extends State<GripDetailsForm> {
           CupertinoFormSection.insetGrouped(
               header: const Text('TIMER SETUP'),
               footer: const Text(
-                  '"Last Break" occurs between this grip and the next'),
+                  '"Last Break" occurs between this grip and the next. It is ignored if this grip is the last one in the workout.'),
               children: [
                 _setsPicker(),
                 _repsPicker(),

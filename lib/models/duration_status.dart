@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'status_value.dart';
+import 'timer_details_dto.dart';
 
 /// Represents a Duration that has an associated status value and color. While
 /// the duration is being counted down by the timer, the status value and color
@@ -9,6 +10,7 @@ class DurationStatus {
   final Duration duration;
   final StatusValue statusValue;
   Color statusColor;
+  final TimerDetailsDTO timerDetails;
   final int currSet;
   final int currRep;
 
@@ -26,16 +28,21 @@ class DurationStatus {
   /// The current grip number in the workout
   final int? currGrip;
 
+  /// The total number of grips in the workout
+  final int? totalGrips;
+
   DurationStatus(
       {required this.duration,
       required this.statusValue,
       required this.statusColor,
       required this.startTime,
+      required this.timerDetails,
       required this.currSet,
       required this.currRep,
       this.gripName,
       this.nextGripName,
-      this.currGrip});
+      this.currGrip,
+      this.totalGrips});
 
   String get status => statusValue.status.toString().toUpperCase();
 

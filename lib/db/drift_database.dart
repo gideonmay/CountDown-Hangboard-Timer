@@ -128,6 +128,20 @@ class AppDatabase extends _$AppDatabase {
     });
   }
 
+  /// Returns a Future to a List of all the Grips for a given workout ordered by
+  /// the sequene number of each Grip
+  Future<List<GripWithGripType>> fetchAllGripsWithType(int workoutID) {
+    final query = select(grips).join(
+        [leftOuterJoin(gripTypes, gripTypes.id.equalsExp(grips.gripType))])
+      ..where(grips.workout.equals(workoutID))
+      ..orderBy([OrderingTerm.asc(grips.sequenceNum)]);
+
+    return query
+        .map((row) =>
+            GripWithGripType(row.readTable(grips), row.readTable(gripTypes)))
+        .get();
+  }
+
   /// Returns a stream of grip types with a count of the number of grips that
   /// grip type is used by
   Stream<List<GripTypeWithGripCount>> watchAllGripTypesWithCount() {

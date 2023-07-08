@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
-import '../models/timer_durations_dto.dart';
+import '../models/timer_details_dto.dart';
+import '../styles/color_theme.dart';
 import '../widgets/progress_counter.dart';
 import '../widgets/time_text_row.dart';
 
 /// Displays details about the timer's current work, rest, and break durations,
 /// and the number of sets and reps left
 class TimerDetails extends StatefulWidget {
-  final TimerDurationsDTO timerDurations;
-  final int currentSet;
-  final int currentRep;
+  final int currSet;
+  final int currRep;
+  final TimerDetailsDTO timerDetails;
+  final int? currGrip;
 
   const TimerDetails(
       {super.key,
-      required this.timerDurations,
-      required this.currentSet,
-      required this.currentRep});
+      required this.currSet,
+      required this.currRep,
+      required this.timerDetails,
+      this.currGrip});
 
   @override
   State<TimerDetails> createState() => _TimerDetailsState();
@@ -52,19 +55,37 @@ class _TimerDetailsState extends State<TimerDetails> {
       return Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
+          _gripProgressCounter(constraints.maxHeight / 5),
           ProgressCounter(
-              completed: widget.currentSet - 1,
-              total: widget.timerDurations.sets.toInt(),
+              completed: widget.currSet - 1,
+              total: widget.timerDetails.totalSets,
               title: 'Sets ',
-              fontSize: constraints.maxHeight / 5),
+              fontSize: constraints.maxHeight / 5,
+              fillColor: AppColorTheme.blue),
           ProgressCounter(
-              completed: widget.currentRep - 1,
-              total: widget.timerDurations.reps.toInt(),
+              completed: widget.currRep - 1,
+              total: widget.timerDetails.totalReps,
               title: 'Reps ',
-              fontSize: constraints.maxHeight / 5),
+              fontSize: constraints.maxHeight / 5,
+              fillColor: AppColorTheme.blue),
         ],
       );
     });
+  }
+
+  /// Returns a ProgressCounter for the grips in the workout if the timer
+  /// details contains a totalGrips variable
+  Widget _gripProgressCounter(double fontSize) {
+    if (widget.timerDetails.totalGrips != null) {
+      return ProgressCounter(
+          completed: widget.currGrip! - 1,
+          total: widget.timerDetails.totalGrips!,
+          title: 'Grips',
+          fontSize: fontSize,
+          fillColor: AppColorTheme.green);
+    }
+
+    return Container();
   }
 
   /// A widget containing information about the work, rest, and break durations
@@ -76,20 +97,17 @@ class _TimerDetailsState extends State<TimerDetails> {
         children: [
           TimeTextRow(
               title: 'Work ',
-              durationString:
-                  durationString(widget.timerDurations.workDuration),
+              durationString: durationString(widget.timerDetails.workDuration),
               fontSize: constraints.maxHeight / 6,
               titleWidth: 50.0),
           TimeTextRow(
               title: 'Rest ',
-              durationString:
-                  durationString(widget.timerDurations.restDuration),
+              durationString: durationString(widget.timerDetails.restDuration),
               fontSize: constraints.maxHeight / 6,
               titleWidth: 50.0),
           TimeTextRow(
               title: 'Break ',
-              durationString:
-                  durationString(widget.timerDurations.breakDuration),
+              durationString: durationString(widget.timerDetails.breakDuration),
               fontSize: constraints.maxHeight / 6,
               titleWidth: 50.0),
         ],

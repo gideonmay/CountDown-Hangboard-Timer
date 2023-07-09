@@ -98,11 +98,6 @@ class _WorkoutsScreenState extends State<WorkoutsScreen> {
         ),
       ]),
       child: CupertinoListTile(
-        leading: CupertinoButton(
-          onPressed: () {},
-          child: const Icon(CupertinoIcons.play_arrow_solid,
-              size: 35.0, color: CupertinoColors.activeGreen),
-        ),
         leadingSize: 65.0,
         title: Text(workout.name, overflow: TextOverflow.ellipsis),
         subtitle: Text(workout.description,

@@ -28,9 +28,6 @@ class DurationStatus {
   /// The current grip number in the workout
   final int? currGrip;
 
-  /// The total number of grips in the workout
-  final int? totalGrips;
-
   DurationStatus(
       {required this.duration,
       required this.statusValue,
@@ -41,8 +38,7 @@ class DurationStatus {
       required this.currRep,
       this.gripName,
       this.nextGripName,
-      this.currGrip,
-      this.totalGrips});
+      this.currGrip});
 
   String get status => statusValue.status.toString().toUpperCase();
 

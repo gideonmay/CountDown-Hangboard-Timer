@@ -6,6 +6,7 @@ import '../extensions/duration_ceil_extension.dart';
 import '../models/audio_pool.dart';
 import '../models/duration_status_list.dart';
 import '../models/timer_durations_dto.dart';
+import '../widgets/grip_details_text.dart';
 import '../widgets/timer_control_buttons.dart';
 import '../widgets/timer_details.dart';
 import '../widgets/time_text_row.dart';
@@ -187,53 +188,96 @@ class _CountdownTimerState extends State<CountdownTimer>
   Widget build(BuildContext context) {
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
+      return _timerLayout(constraints);
+    });
+  }
+
+  /// Returns the timer with or without the grip details text
+  Widget _timerLayout(BoxConstraints constraints) {
+    // Do not show grip details text if there are were no grips given
+    if (_durationStatusList[_durationIndex].timerDetails.totalGrips == null) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Flexible(
-            flex: 18,
-            child: TimerDetails(
-              currSet: _durationStatusList[_durationIndex].currSet,
-              currRep: _durationStatusList[_durationIndex].currRep,
-              timerDetails: _durationStatusList[_durationIndex].timerDetails,
-              currGrip: _durationStatusList[_durationIndex].currGrip,
-            ),
-          ),
-          Flexible(
-            flex: 75,
-            child: AnimatedBuilder(
-                animation: _controller,
-                builder: (BuildContext context, Widget? child) {
-                  return Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      CustomPaint(
-                        painter: ArcPainter(
-                            animation: _controller,
-                            color:
-                                _durationStatusList[_durationIndex].statusColor,
-                            width: getTimerWidth(constraints)),
-                        child: Container(),
-                      ),
-                      _timerCenterText()
-                    ],
-                  );
-                }),
-          ),
-          Flexible(
-            flex: 25,
-            child: TimerControlButtons(
-                hasStarted: _hasStarted,
-                isPaused: _isPaused,
-                startTimer: startTimer,
-                pauseTimer: pauseTimer,
-                resumeTimer: resumeTimer,
-                resetTimer: resetTimer,
-                skipDuration: skipDuration),
-          )
+          _timerDetails(),
+          _animatedTimer(constraints),
+          _timerControlButtons(),
         ],
       );
-    });
+    }
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _timerDetails(),
+        _gripDetailsText(),
+        _animatedTimer(constraints),
+        _timerControlButtons(),
+      ],
+    );
+  }
+
+  /// The widget above the timer that displays info about sets, reps, grips, and
+  /// the timer durations
+  Widget _timerDetails() {
+    return Flexible(
+      flex: 19,
+      child: TimerDetails(
+        currSet: _durationStatusList[_durationIndex].currSet,
+        currRep: _durationStatusList[_durationIndex].currRep,
+        timerDetails: _durationStatusList[_durationIndex].timerDetails,
+        currGrip: _durationStatusList[_durationIndex].currGrip,
+      ),
+    );
+  }
+
+  /// The text that displays the name of the current and next grips
+  Widget _gripDetailsText() {
+    return Flexible(
+        flex: 10,
+        child: GripDetailsText(
+          currGripName: _durationStatusList[_durationIndex].gripName,
+          nextGripName: _durationStatusList[_durationIndex].nextGripName,
+        ));
+  }
+
+  /// The widget that renders the timer animation
+  Widget _animatedTimer(BoxConstraints constraints) {
+    return Flexible(
+      flex: 75,
+      child: AnimatedBuilder(
+          animation: _controller,
+          builder: (BuildContext context, Widget? child) {
+            return Stack(
+              alignment: Alignment.center,
+              children: [
+                CustomPaint(
+                  painter: ArcPainter(
+                      animation: _controller,
+                      color: _durationStatusList[_durationIndex].statusColor,
+                      width: getTimerWidth(constraints)),
+                  child: Container(),
+                ),
+                _timerCenterText()
+              ],
+            );
+          }),
+    );
+  }
+
+  /// The buttons that control the timer
+  Widget _timerControlButtons() {
+    return Flexible(
+      flex: 25,
+      child: TimerControlButtons(
+          hasStarted: _hasStarted,
+          isPaused: _isPaused,
+          startTimer: startTimer,
+          pauseTimer: pauseTimer,
+          resumeTimer: resumeTimer,
+          resetTimer: resetTimer,
+          skipDuration: skipDuration),
+    );
   }
 
   /// Returns the minimum between the widgets current width and height. This

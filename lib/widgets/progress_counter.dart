@@ -26,7 +26,7 @@ class ProgressCounter extends StatelessWidget {
           width: 48,
           child: Text(
             title,
-            style: TextStyle(color: CupertinoColors.black, fontSize: fontSize),
+            style: TextStyle(color: CupertinoColors.systemGrey, fontSize: fontSize),
           ),
         ),
         Expanded(

@@ -114,8 +114,8 @@ abstract class DurationStatusList {
           currSet: 1,
           currRep: 1,
           currGrip: 1,
-          gripName: null,
-          nextGripName: params.gripName));
+          gripName: params.gripName,
+          nextGripName: null));
 
       _totalSeconds += 15;
     }
@@ -291,11 +291,20 @@ class WorkoutDurationStatusList extends DurationStatusList {
           includeLastBreak: _isLastGrip(index),
           lastBreakDuration: Duration(
               minutes: grip.lastBreakMinutes, seconds: grip.lastBreakSeconds),
-          gripName: gripType.name,
+          gripName: _gripNameWithEdgeSize(gripType.name, grip.edgeSize),
           nextGripName: _getNextGripName(index),
           currGrip: index + 1,
           nextGripDetails: nextGripDetails));
     }
+  }
+
+  /// Appends the edge size to the end of the grip name if an edge size exists
+  String _gripNameWithEdgeSize(String gripName, int? edgeSize) {
+    if (edgeSize != null) {
+      return '$gripName - ${edgeSize}mm';
+    }
+
+    return gripName;
   }
 
   /// Returns true if the given index is not the last index in the grip list
@@ -310,6 +319,8 @@ class WorkoutDurationStatusList extends DurationStatusList {
       return null;
     }
 
-    return gripList[index + 1].gripType.name;
+    final nextGrip = gripList[index + 1];
+    return _gripNameWithEdgeSize(
+        nextGrip.gripType.name, nextGrip.entry.edgeSize);
   }
 }

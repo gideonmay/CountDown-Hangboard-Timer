@@ -52,25 +52,27 @@ class _TimerDetailsState extends State<TimerDetails> {
   Widget _setRepStatus() {
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _gripProgressCounter(constraints.maxHeight / 5),
-          ProgressCounter(
-              completed: widget.currSet - 1,
-              total: widget.timerDetails.totalSets,
-              title: 'Sets ',
-              fontSize: constraints.maxHeight / 5,
-              fillColor: AppColorTheme.blue),
-          ProgressCounter(
-              completed: widget.currRep - 1,
-              total: widget.timerDetails.totalReps,
-              title: 'Reps ',
-              fontSize: constraints.maxHeight / 5,
-              fillColor: AppColorTheme.blue),
-        ],
-      );
+      return _progressCounters(constraints.maxHeight / 5);
     });
+  }
+
+  /// Displays a column of progress counters for sets, reps, and grips. Only
+  /// includes the grips progress counter if totalGrips is not null.
+  Widget _progressCounters(double fontSize) {
+    if (widget.timerDetails.totalGrips != null) {
+      return Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            _gripProgressCounter(fontSize),
+            _setsProgressCounter(fontSize),
+            _repsProgressCounter(fontSize),
+          ]);
+    }
+
+    return Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+      _setsProgressCounter(fontSize),
+      _repsProgressCounter(fontSize),
+    ]);
   }
 
   /// Returns a ProgressCounter for the grips in the workout if the timer
@@ -86,6 +88,26 @@ class _TimerDetailsState extends State<TimerDetails> {
     }
 
     return Container();
+  }
+
+  /// Displays the current vs total sets
+  Widget _setsProgressCounter(double fontSize) {
+    return ProgressCounter(
+        completed: widget.currSet - 1,
+        total: widget.timerDetails.totalSets,
+        title: 'Sets ',
+        fontSize: fontSize,
+        fillColor: AppColorTheme.blue);
+  }
+
+  /// Displays the current vs total reps
+  Widget _repsProgressCounter(double fontSize) {
+    return ProgressCounter(
+        completed: widget.currRep - 1,
+        total: widget.timerDetails.totalReps,
+        title: 'Reps ',
+        fontSize: fontSize,
+        fillColor: AppColorTheme.blue);
   }
 
   /// A widget containing information about the work, rest, and break durations

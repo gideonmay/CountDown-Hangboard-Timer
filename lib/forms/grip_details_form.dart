@@ -66,6 +66,7 @@ class _GripDetailsFormState extends State<GripDetailsForm> {
                 _lastBreakDurationPicker(),
               ]),
           _submitButton(),
+          const SizedBox(height: 20),
         ],
       ),
     );

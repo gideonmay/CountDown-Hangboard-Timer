@@ -31,8 +31,12 @@ class _WorkoutFormState extends State<WorkoutForm> {
       child: ListView(
         children: [
           CupertinoFormSection.insetGrouped(
-            header: const Text('WORKOUT DETAILS'),
-            children: _formFieldRows(),
+            header: const Text('WORKOUT NAME'),
+            children: [_nameField()],
+          ),
+          CupertinoFormSection.insetGrouped(
+            header: const Text('WORKOUT DESCRIPTION'),
+            children: [_descriptionField()],
           ),
           const SizedBox(height: 20),
           _submitButton(context),
@@ -70,8 +74,7 @@ class _WorkoutFormState extends State<WorkoutForm> {
         initialValue: widget.workoutDTO.description,
         maxLength: 100,
         textInputAction: TextInputAction.next,
-        prefix: const Text('Description'),
-        placeholder: 'Enter description',
+        placeholder: 'Description',
         onSaved: (newValue) {
           if (newValue != null) {
             // Trim blank spaces off front and end of string
@@ -88,6 +91,53 @@ class _WorkoutFormState extends State<WorkoutForm> {
         },
       ),
     ];
+  }
+
+  Widget _nameField() {
+    return CupertinoTextFormFieldRow(
+      initialValue: widget.workoutDTO.name,
+      maxLength: 40,
+      textInputAction: TextInputAction.next,
+      placeholder: 'Name',
+      onSaved: (newValue) {
+        if (newValue != null) {
+          // Trim blank spaces off front and end of string
+          widget.workoutDTO.name = newValue.trim();
+        } else {
+          widget.workoutDTO.name = newValue;
+        }
+      },
+      validator: (String? value) {
+        // Check if string is blank, empty, or only spaces
+        if (value == null || value.isEmpty || value.trim().isEmpty) {
+          return 'Please enter a name';
+        }
+        return null;
+      },
+    );
+  }
+
+  Widget _descriptionField() {
+    return CupertinoTextFormFieldRow(
+      initialValue: widget.workoutDTO.description,
+      maxLength: 100,
+      textInputAction: TextInputAction.next,
+      placeholder: 'Description',
+      onSaved: (newValue) {
+        if (newValue != null) {
+          // Trim blank spaces off front and end of string
+          widget.workoutDTO.description = newValue.trim();
+        } else {
+          widget.workoutDTO.description = newValue;
+        }
+      },
+      validator: (String? value) {
+        if (value == null || value.isEmpty || value.trim().isEmpty) {
+          return 'Please enter a description';
+        }
+        return null;
+      },
+    );
   }
 
   Widget _submitButton(BuildContext context) {

@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 import 'package:countdown_app/models/timer_details_dto.dart';
 import 'package:flutter/cupertino.dart';
-import '../db/drift_database.dart';
 import '../extensions/duration_ceil_extension.dart';
 import '../models/audio_pool.dart';
 import '../models/duration_status_list.dart';
@@ -18,13 +17,13 @@ class CountdownTimer extends StatefulWidget {
   final TimerDurationsDTO? timerDurations;
 
   /// The workout to execute the timer for. Overrides timerDurations if given.
-  final List<GripWithGripType>? gripList;
+  final DurationStatusList? durationStatusList;
 
   const CountdownTimer({super.key, required this.timerDurations})
-      : gripList = null;
+      : durationStatusList = null;
 
   /// Creates a countdown timer from a list of grips for a particular workout
-  const CountdownTimer.fromGripList({super.key, required this.gripList})
+  const CountdownTimer.fromList({super.key, required this.durationStatusList})
       : timerDurations = null;
 
   @override
@@ -79,9 +78,8 @@ class _CountdownTimerState extends State<CountdownTimer>
               includeLastBreak: false));
     }
 
-    if (widget.gripList != null) {
-      _durationStatusList =
-          WorkoutDurationStatusList(gripList: widget.gripList!);
+    if (widget.durationStatusList != null) {
+      _durationStatusList = widget.durationStatusList!;
     }
 
     // Initialize AnimationController and associated listeners

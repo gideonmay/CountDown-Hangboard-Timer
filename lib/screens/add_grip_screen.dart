@@ -47,15 +47,4 @@ class _AddGripScreenState extends State<AddGripScreen> {
           onFormSaved: _createGrip,
         )));
   }
-
-  // TODO: Show this when user first visits this screen
-  // Future<String?> _showHelperDialog(BuildContext context) {
-  //   return showDialog<String>(
-  //       context: context,
-  //       builder: (BuildContext context) => const HelperDialog(
-  //           title: 'Adding Grips',
-  //           body:
-  //               'Specify the number of sets and reps, and the work, rest, and break durations for this grip.\n\n'
-  //               'A grip type is also required for each grip. This is a name used to describe a grip which can be reused among other grips.'));
-  // }
 }

@@ -61,8 +61,18 @@ class _WorkoutsScreenState extends State<WorkoutsScreen> {
         final workouts = snapshot.data ?? List.empty();
 
         if (workouts.isEmpty) {
-          return const Center(
-            child: Text('Add a workout to begin'),
+          return const Column(
+            children: [
+              SizedBox(
+                height: 250,
+              ),
+              Center(
+                child: Text(
+                  'Add a workout to begin',
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ],
           );
         }
 
@@ -71,7 +81,9 @@ class _WorkoutsScreenState extends State<WorkoutsScreen> {
           child: CupertinoListSection(
             topMargin: 0,
             dividerMargin: 50,
-            children: [for (var workout in workouts) _slideableListTile(workout)],
+            children: [
+              for (var workout in workouts) _slideableListTile(workout)
+            ],
           ),
         );
       },
@@ -129,8 +141,7 @@ class _WorkoutsScreenState extends State<WorkoutsScreen> {
 
   /// Navigates to the StartWorkoutScreen widget
   static _navigateToStartWorkout(BuildContext context, Workout workout) {
-    Navigator.push(
-      context,
+    Navigator.of(context, rootNavigator: true).push(
       CupertinoPageRoute(
           builder: (context) => WorkoutDetailScreen(workout: workout)),
     );

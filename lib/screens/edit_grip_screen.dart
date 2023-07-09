@@ -47,6 +47,7 @@ class _EditGripScreenState extends State<EditGripScreen> {
     final db = Provider.of<AppDatabase>(context, listen: false);
 
     return CupertinoPageScaffold(
+        backgroundColor: CupertinoColors.systemGrey6,
         navigationBar: CupertinoNavigationBar(
           previousPageTitle: widget.workout.name,
           middle: const Text('Edit Grip'),

@@ -120,17 +120,17 @@ class _TimerDetailsState extends State<TimerDetails> {
           TimeTextRow(
               title: 'Work ',
               durationString: durationString(widget.timerDetails.workDuration),
-              fontSize: constraints.maxHeight / 6,
+              fontSize: constraints.maxHeight / 5,
               titleWidth: 50.0),
           TimeTextRow(
               title: 'Rest ',
               durationString: durationString(widget.timerDetails.restDuration),
-              fontSize: constraints.maxHeight / 6,
+              fontSize: constraints.maxHeight / 5,
               titleWidth: 50.0),
           TimeTextRow(
               title: 'Break ',
               durationString: durationString(widget.timerDetails.breakDuration),
-              fontSize: constraints.maxHeight / 6,
+              fontSize: constraints.maxHeight / 5,
               titleWidth: 50.0),
         ],
       );

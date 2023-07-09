@@ -1,13 +1,13 @@
 import 'package:flutter/cupertino.dart';
-import '../db/drift_database.dart';
+import '../models/duration_status_list.dart';
 import '../widgets/countdown_timer.dart';
 
 class WorkoutTimerScreen extends StatelessWidget {
   final String title;
-  final List<GripWithGripType> gripList;
+  final DurationStatusList durationStatusList;
 
   const WorkoutTimerScreen(
-      {super.key, required this.title, required this.gripList});
+      {super.key, required this.title, required this.durationStatusList});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,8 @@ class WorkoutTimerScreen extends StatelessWidget {
         navigationBar: CupertinoNavigationBar(
           middle: Text(title),
         ),
-        child:
-            SafeArea(child: CountdownTimer.fromGripList(gripList: gripList)));
+        child: SafeArea(
+            child: CountdownTimer.fromList(
+                durationStatusList: durationStatusList)));
   }
 }

@@ -52,7 +52,7 @@ class _TimerDetailsState extends State<TimerDetails> {
   Widget _setRepStatus() {
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-      return _progressCounters(constraints.maxHeight / 5);
+      return _progressCounters(constraints.maxHeight / 6);
     });
   }
 
@@ -120,17 +120,17 @@ class _TimerDetailsState extends State<TimerDetails> {
           TimeTextRow(
               title: 'Work ',
               durationString: durationString(widget.timerDetails.workDuration),
-              fontSize: constraints.maxHeight / 5,
+              fontSize: constraints.maxHeight / 6,
               titleWidth: 50.0),
           TimeTextRow(
               title: 'Rest ',
               durationString: durationString(widget.timerDetails.restDuration),
-              fontSize: constraints.maxHeight / 5,
+              fontSize: constraints.maxHeight / 6,
               titleWidth: 50.0),
           TimeTextRow(
               title: 'Break ',
               durationString: durationString(widget.timerDetails.breakDuration),
-              fontSize: constraints.maxHeight / 5,
+              fontSize: constraints.maxHeight / 6,
               titleWidth: 50.0),
         ],
       );

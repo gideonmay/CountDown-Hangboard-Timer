@@ -230,6 +230,12 @@ class AppDatabase extends _$AppDatabase {
         WorkoutsCompanion(name: Value(name), description: Value(description)));
   }
 
+  /// Updates the last used date for the given workout
+  Future<int> updateWorkoutLastUsed(int workoutID, DateTime newDate) {
+    return (update(workouts)..where((w) => w.id.equals(workoutID)))
+        .write(WorkoutsCompanion(lastUsedDate: Value(newDate)));
+  }
+
   /// Updates the sequence number for a given grip
   Future<int> updateGripSeqNum(int gripID, int newSeqNum) {
     return (update(grips)..where((g) => g.id.equals(gripID)))

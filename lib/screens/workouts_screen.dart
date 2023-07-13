@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'add_workout_screen.dart';
 import 'edit_workout_screen.dart';
 import 'workout_detail_screen.dart';
 import '../db/drift_database.dart';
 import '../models/workout_dto.dart';
+import '../utils/date_utils.dart';
 
 /// A screen that lists all of the workouts available in the database
 class WorkoutsScreen extends StatefulWidget {
@@ -118,7 +118,7 @@ class _WorkoutsScreenState extends State<WorkoutsScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text('Last Used:', style: TextStyle(fontSize: 14.0)),
-            Text(' ${_formattedDate(workout.lastUsedDate)}',
+            Text(' ${formattedDate(workout.lastUsedDate)}',
                 style: const TextStyle(fontSize: 14.0)),
           ],
         ),
@@ -173,16 +173,6 @@ class _WorkoutsScreenState extends State<WorkoutsScreen> {
         ),
       ),
     );
-  }
-
-  /// Returns the given datetime formatted as 'MM/DD/YYYY'. If dateTime is null,
-  /// then returns 'Never'
-  String _formattedDate(DateTime? dateTime) {
-    if (dateTime == null) {
-      return 'Never';
-    }
-
-    return DateFormat('MM/dd/yyyy').format(dateTime);
   }
 
   /// Deletes the given workout from the database

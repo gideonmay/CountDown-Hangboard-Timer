@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../db/drift_database.dart';
 import '../models/duration_status_list.dart';
 import '../screens/workout_timer_screen.dart';
+import '../utils/date_utils.dart';
 
 /// A tab that enables the user to view workout details and begin their workout
 class StartWorkoutTab extends StatefulWidget {
@@ -148,7 +149,10 @@ class _StartWorkoutTabState extends State<StartWorkoutTab> {
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: CupertinoButton.filled(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            onPressed: () => _navigateToWorkoutTimer(context),
+            onPressed: () {
+              _updateLastUsedDate();
+              _navigateToWorkoutTimer(context);
+            },
             child: const Text(
               'Start Workout',
             )),
@@ -159,7 +163,7 @@ class _StartWorkoutTabState extends State<StartWorkoutTab> {
   /// Returns a string representation of the last date this workout was used
   String _getLastUsedDate() {
     if (widget.workout.lastUsedDate != null) {
-      return widget.workout.lastUsedDate.toString();
+      return formattedDate(widget.workout.lastUsedDate);
     }
 
     return '-';
@@ -175,6 +179,12 @@ class _StartWorkoutTabState extends State<StartWorkoutTab> {
     }
 
     return '-';
+  }
+
+  /// Updates the laste used date for the current workout
+  void _updateLastUsedDate() async {
+    final db = Provider.of<AppDatabase>(context, listen: false);
+    await db.updateWorkoutLastUsed(widget.workout.id, DateTime.now());
   }
 
   /// Navigates to screen to execute timer for this workout

@@ -27,7 +27,7 @@ class TimerControlButtons extends StatefulWidget {
 }
 
 class _TimerControlButtonsState extends State<TimerControlButtons> {
-  final double _buttonHeight = 50.0;
+  final double _buttonHeight = 45.0;
 
   @override
   Widget build(BuildContext context) {

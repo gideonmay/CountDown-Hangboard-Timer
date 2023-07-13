@@ -26,6 +26,18 @@ void main() {
       expect(workouts[0].description, workoutDTO.description);
     });
 
+    test('Workout is correctly updated with new date', () async {
+      final workoutDTO =
+          WorkoutDTO(name: 'Test Workout', description: 'Test description');
+      final int workoutID = await db.addWorkout(workoutDTO);
+      final newDate = DateTime(2023, 7, 12);
+      await db.updateWorkoutLastUsed(workoutID, newDate);
+      
+      final workouts = await db.watchAllWorkouts().first;
+
+      expect(workouts[0].lastUsedDate, newDate);
+    });
+
     test('Workout is correctly deleted', () async {
       // Create new workout
       final workoutDTO =

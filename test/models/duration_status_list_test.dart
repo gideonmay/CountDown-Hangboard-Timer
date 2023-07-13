@@ -316,8 +316,8 @@ void main() {
       expect(durationsList[0].toString(), '(prepare for 15 sec)');
       expect(durationsList[0].currRep, 1);
       expect(durationsList[0].currSet, 1);
-      expect(durationsList[0].gripName, null);
-      expect(durationsList[0].nextGripName, 'Half Crimp');
+      expect(durationsList[0].gripName, 'Half Crimp');
+      expect(durationsList[0].nextGripName, null);
 
       expect(durationsList[1].toString(), '(work for 10 sec)');
       expect(durationsList[1].currRep, 1);
@@ -370,7 +370,7 @@ void main() {
 
   group('WorkoutDurationStatusList', () {
     const halfCrimpType = GripType(id: 1, name: 'Half Crimp');
-    const warmUpJugType = GripType(id: 1, name: 'Warm Up Jug');
+    const warmUpJugType = GripType(id: 2, name: 'Warm Up Jug');
 
     // Various grips with different numbers or sets and reps
     const grip1Set1Rep = Grip(
@@ -439,8 +439,8 @@ void main() {
       expect(durationsList[0].toString(), '(prepare for 15 sec)');
       expect(durationsList[0].currRep, 1);
       expect(durationsList[0].currSet, 1);
-      expect(durationsList[0].gripName, null);
-      expect(durationsList[0].nextGripName, 'Half Crimp');
+      expect(durationsList[0].gripName, 'Half Crimp');
+      expect(durationsList[0].nextGripName, null);
       expect(durationsList[0].currGrip, 1);
 
       expect(durationsList[1].toString(), '(work for 7 sec)');
@@ -470,8 +470,8 @@ void main() {
       expect(durationsList[0].toString(), '(prepare for 15 sec)');
       expect(durationsList[0].currRep, 1);
       expect(durationsList[0].currSet, 1);
-      expect(durationsList[0].gripName, null);
-      expect(durationsList[0].nextGripName, 'Half Crimp');
+      expect(durationsList[0].gripName, 'Half Crimp');
+      expect(durationsList[0].nextGripName, null);
       expect(durationsList[0].currGrip, 1);
 
       expect(durationsList[1].toString(), '(work for 7 sec)');
@@ -515,8 +515,8 @@ void main() {
       expect(durationsList[0].toString(), '(prepare for 15 sec)');
       expect(durationsList[0].currRep, 1);
       expect(durationsList[0].currSet, 1);
-      expect(durationsList[0].gripName, null);
-      expect(durationsList[0].nextGripName, 'Half Crimp');
+      expect(durationsList[0].gripName, 'Half Crimp');
+      expect(durationsList[0].nextGripName, null);
       expect(durationsList[0].currGrip, 1);
 
       expect(durationsList[1].toString(), '(work for 7 sec)');
@@ -560,8 +560,8 @@ void main() {
       expect(durationsList[0].toString(), '(prepare for 15 sec)');
       expect(durationsList[0].currRep, 1);
       expect(durationsList[0].currSet, 1);
-      expect(durationsList[0].gripName, null);
-      expect(durationsList[0].nextGripName, 'Half Crimp');
+      expect(durationsList[0].gripName, 'Half Crimp');
+      expect(durationsList[0].nextGripName, null);
       expect(durationsList[0].currGrip, 1);
 
       expect(durationsList[1].toString(), '(work for 7 sec)');
@@ -634,8 +634,8 @@ void main() {
       expect(durationsList[0].toString(), '(prepare for 15 sec)');
       expect(durationsList[0].currRep, 1);
       expect(durationsList[0].currSet, 1);
-      expect(durationsList[0].gripName, null);
-      expect(durationsList[0].nextGripName, 'Warm Up Jug');
+      expect(durationsList[0].gripName, 'Warm Up Jug');
+      expect(durationsList[0].nextGripName, null);
       expect(durationsList[0].currGrip, 1);
 
       expect(durationsList[1].toString(), '(work for 7 sec)');
@@ -679,8 +679,8 @@ void main() {
       expect(durationsList[0].toString(), '(prepare for 15 sec)');
       expect(durationsList[0].currRep, 1);
       expect(durationsList[0].currSet, 1);
-      expect(durationsList[0].gripName, null);
-      expect(durationsList[0].nextGripName, 'Warm Up Jug');
+      expect(durationsList[0].gripName, 'Warm Up Jug');
+      expect(durationsList[0].nextGripName, null);
       expect(durationsList[0].currGrip, 1);
 
       expect(durationsList[1].toString(), '(work for 7 sec)');
@@ -738,8 +738,8 @@ void main() {
       expect(durationsList[0].toString(), '(prepare for 15 sec)');
       expect(durationsList[0].currRep, 1);
       expect(durationsList[0].currSet, 1);
-      expect(durationsList[0].gripName, null);
-      expect(durationsList[0].nextGripName, 'Warm Up Jug');
+      expect(durationsList[0].gripName, 'Warm Up Jug');
+      expect(durationsList[0].nextGripName, null);
       expect(durationsList[0].currGrip, 1);
 
       expect(durationsList[1].toString(), '(work for 7 sec)');
@@ -799,8 +799,8 @@ void main() {
       expect(durationsList[0].toString(), '(prepare for 15 sec)');
       expect(durationsList[0].currRep, 1);
       expect(durationsList[0].currSet, 1);
-      expect(durationsList[0].gripName, null);
-      expect(durationsList[0].nextGripName, 'Warm Up Jug');
+      expect(durationsList[0].gripName, 'Warm Up Jug');
+      expect(durationsList[0].nextGripName, null);
       expect(durationsList[0].currGrip, 1);
 
       expect(durationsList[1].toString(), '(work for 7 sec)');

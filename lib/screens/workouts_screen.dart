@@ -117,7 +117,9 @@ class _WorkoutsScreenState extends State<WorkoutsScreen> {
         trailing: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('Last Used:', style: TextStyle(fontSize: 14.0)),
+            const Text('Last Used',
+                style: TextStyle(
+                    fontSize: 14.0, color: CupertinoColors.systemGrey)),
             Text(' ${formattedDate(workout.lastUsedDate)}',
                 style: const TextStyle(fontSize: 14.0)),
           ],

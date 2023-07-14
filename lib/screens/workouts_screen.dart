@@ -69,6 +69,8 @@ class _WorkoutsScreenState extends State<WorkoutsScreen> {
               Center(
                 child: Text(
                   'Add a workout to begin',
+                  style: TextStyle(
+                      fontSize: 24.0, color: CupertinoColors.systemGrey2),
                   textAlign: TextAlign.center,
                 ),
               ),

@@ -56,7 +56,11 @@ class _ChooseGripTypeScreenState extends State<ChooseGripTypeScreen> {
         // Show message to user if they have not yet created any grip types
         if (_gripTypes.isEmpty) {
           return const Center(
-            child: Text('No grip types added'),
+            child: Text(
+              'Add a grip type to begin',
+              style:
+                  TextStyle(fontSize: 24.0, color: CupertinoColors.systemGrey2),
+            ),
           );
         }
 

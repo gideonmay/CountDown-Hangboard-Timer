@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import '../db/drift_database.dart';
-import '../tabs/edit_grips_tab.dart';
+import '../tabs/add_grips_tab.dart';
 import '../tabs/start_workout_tab.dart';
 import 'add_grip_screen.dart';
 
@@ -83,7 +83,7 @@ class _WorkoutDetailScreenState extends State<WorkoutDetailScreen> {
       return StartWorkoutTab(workout: widget.workout);
     }
 
-    return EditGripsTab(workout: widget.workout);
+    return AddGripsTab(workout: widget.workout);
   }
 
   /// Returns a navigation bar that optionally shows a button to add a grip

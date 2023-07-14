@@ -5,16 +5,16 @@ import '../db/drift_database.dart';
 
 /// A ListView that displays the sequence of grips for a given workout. Allows
 /// the user to add, edit, remove, and re-sequence grips for their workout.
-class EditGripsTab extends StatefulWidget {
+class AddGripsTab extends StatefulWidget {
   final Workout workout;
 
-  const EditGripsTab({super.key, required this.workout});
+  const AddGripsTab({super.key, required this.workout});
 
   @override
-  State<EditGripsTab> createState() => _EditGripsTabState();
+  State<AddGripsTab> createState() => _AddGripsTabState();
 }
 
-class _EditGripsTabState extends State<EditGripsTab> {
+class _AddGripsTabState extends State<AddGripsTab> {
   @override
   Widget build(BuildContext context) {
     return _buildGripList(context);
@@ -28,13 +28,21 @@ class _EditGripsTabState extends State<EditGripsTab> {
     return StreamBuilder(
       stream: db.watchAllGripsWithType(widget.workout.id),
       builder: (context, AsyncSnapshot<List<GripWithGripType>> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Container();
+        }
+
         final List<GripWithGripType> grips = snapshot.data ?? List.empty();
 
-        if (snapshot.hasData && grips.isEmpty) {
+        if (grips.isEmpty) {
           return const Center(
             child: Padding(
               padding: EdgeInsets.all(16.0),
-              child: Text('Start adding grips to build your workout'),
+              child: Text(
+                'Add grips to build your workout',
+                style: TextStyle(
+                    fontSize: 24.0, color: CupertinoColors.systemGrey2),
+              ),
             ),
           );
         }

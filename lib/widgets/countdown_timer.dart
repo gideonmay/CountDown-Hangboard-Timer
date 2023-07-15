@@ -1,10 +1,13 @@
 import 'dart:math' as math;
 import 'package:countdown_app/models/timer_details_dto.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vibration/vibration.dart';
 import '../extensions/duration_ceil_extension.dart';
 import '../models/audio_pool.dart';
 import '../models/duration_status_list.dart';
 import '../models/timer_durations_dto.dart';
+import '../services/shared_preferences_service.dart';
 import '../widgets/grip_details_text.dart';
 import '../widgets/timer_control_buttons.dart';
 import '../widgets/timer_details.dart';
@@ -19,12 +22,16 @@ class CountdownTimer extends StatefulWidget {
   /// The workout to execute the timer for. Overrides timerDurations if given.
   final DurationStatusList? durationStatusList;
 
-  const CountdownTimer({super.key, required this.timerDurations})
-      : durationStatusList = null;
+  const CountdownTimer({
+    super.key,
+    required this.timerDurations,
+  }) : durationStatusList = null;
 
   /// Creates a countdown timer from a list of grips for a particular workout
-  const CountdownTimer.fromList({super.key, required this.durationStatusList})
-      : timerDurations = null;
+  const CountdownTimer.fromList({
+    super.key,
+    required this.durationStatusList,
+  }) : timerDurations = null;
 
   @override
   State<CountdownTimer> createState() => _CountdownTimerState();
@@ -33,6 +40,7 @@ class CountdownTimer extends StatefulWidget {
 class _CountdownTimerState extends State<CountdownTimer>
     with TickerProviderStateMixin {
   late DurationStatusList _durationStatusList;
+  late final SharedPreferencesService _prefService;
 
   /// The index in the durationStatusList that the timer is currently on
   int _durationIndex = 0;
@@ -61,6 +69,7 @@ class _CountdownTimerState extends State<CountdownTimer>
   void initState() {
     super.initState();
     _loadAudio();
+    _loadSharedPreferences();
 
     // Initialize DurationStatusList based on which constructor was used
     if (widget.timerDurations != null) {
@@ -88,12 +97,9 @@ class _CountdownTimerState extends State<CountdownTimer>
       vsync: this,
     )
       ..addStatusListener((status) {
-        // Reset low beep statuses and play high beep when a countdown completes
+        // Play final beep once countdown timer reaches zero
         if (status == AnimationStatus.completed) {
-          _hasPlayedAtSecond[3] = false;
-          _hasPlayedAtSecond[2] = false;
-          _hasPlayedAtSecond[1] = false;
-          _audioPool.play(_highBeepIndex);
+          _playFinalBeep();
         }
 
         if (status == AnimationStatus.completed &&
@@ -114,30 +120,7 @@ class _CountdownTimerState extends State<CountdownTimer>
         }
       })
       ..addListener(() {
-        // Play low beeps at 3, 2, and 1 seconds left
-        if (!_hasPlayedAtSecond[3]! && timerString == '0:03') {
-          // Do not play the beep if the current duration is 3 seconds long
-          if (_durationStatusList[_durationIndex].duration.inSeconds != 3) {
-            _hasPlayedAtSecond[3] = true;
-            _audioPool.play(_lowBeepIndex);
-          }
-        }
-
-        if (!_hasPlayedAtSecond[2]! && timerString == '0:02') {
-          // Do not play the beep if the current duration is 2 seconds long
-          if (_durationStatusList[_durationIndex].duration.inSeconds != 2) {
-            _hasPlayedAtSecond[2] = true;
-            _audioPool.play(_lowBeepIndex);
-          }
-        }
-
-        if (!_hasPlayedAtSecond[1]! && timerString == '0:01') {
-          // Do not play the beep if the current duration is 1 second long
-          if (_durationStatusList[_durationIndex].duration.inSeconds != 1) {
-            _hasPlayedAtSecond[1] = true;
-            _audioPool.play(_lowBeepIndex);
-          }
-        }
+        _playLeadingBeeps();
       });
   }
 
@@ -147,9 +130,66 @@ class _CountdownTimerState extends State<CountdownTimer>
     _highBeepIndex = _audioPool.addAsset('assets/audio/beep_high.wav');
   }
 
-  /// Returns a Duration object representing the time left in the countdown
-  Duration get _timeLeft {
-    return _controller.duration! - (_controller.duration! * _controller.value);
+  /// Loads shared preferences service to check if sound/vibrate is on or off
+  Future<void> _loadSharedPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    _prefService = SharedPreferencesService(sharedPreferences: prefs);
+  }
+
+  /// Plays the beep at the end of the countdown at the zero second mark
+  void _playFinalBeep() {
+    // Reset played state of leading beeps
+    _hasPlayedAtSecond[3] = false;
+    _hasPlayedAtSecond[2] = false;
+    _hasPlayedAtSecond[1] = false;
+
+    // Play final beep and vibrate
+    _playBeep(_highBeepIndex);
+    _vibrate();
+  }
+
+  /// Plays beeps at the 3, 2, and 1 second marks in the timer.
+  void _playLeadingBeeps() {
+    if (!_hasPlayedAtSecond[3]! && timerString == '0:03') {
+      // Do not play the beep if the current duration is 3 seconds long
+      if (_durationStatusList[_durationIndex].duration.inSeconds != 3) {
+        _hasPlayedAtSecond[3] = true;
+        _playBeep(_lowBeepIndex);
+        _vibrate();
+      }
+    }
+
+    if (!_hasPlayedAtSecond[2]! && timerString == '0:02') {
+      // Do not play the beep if the current duration is 2 seconds long
+      if (_durationStatusList[_durationIndex].duration.inSeconds != 2) {
+        _hasPlayedAtSecond[2] = true;
+        _playBeep(_lowBeepIndex);
+        _vibrate();
+      }
+    }
+
+    if (!_hasPlayedAtSecond[1]! && timerString == '0:01') {
+      // Do not play the beep if the current duration is 1 second long
+      if (_durationStatusList[_durationIndex].duration.inSeconds != 1) {
+        _hasPlayedAtSecond[1] = true;
+        _playBeep(_lowBeepIndex);
+        _vibrate();
+      }
+    }
+  }
+
+  /// Vibrates if the vibration setting is on
+  void _vibrate() {
+    if (_prefService.getVibrationOn()) {
+      Vibration.vibrate(duration: 500);
+    }
+  }
+
+  /// Plays a beep if the sound setting is on
+  void _playBeep(int beepIndex) {
+    if (_prefService.getSoundOn()) {
+      _audioPool.play(beepIndex);
+    }
   }
 
   /// Returns a string representing the time left in the format "M:SS". If the
@@ -169,6 +209,11 @@ class _CountdownTimerState extends State<CountdownTimer>
 
     timeLeftCeil = _timeLeft.ceil(const Duration(seconds: 1));
     return _durationString(timeLeftCeil);
+  }
+
+  /// Returns a Duration object representing the time left in the countdown
+  Duration get _timeLeft {
+    return _controller.duration! - (_controller.duration! * _controller.value);
   }
 
   /// Takes a Duration object then returns a String formatted like "M:SS"

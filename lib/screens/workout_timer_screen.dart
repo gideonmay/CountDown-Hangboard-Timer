@@ -18,6 +18,7 @@ class WorkoutTimerScreen extends StatelessWidget {
         ),
         child: SafeArea(
             child: CountdownTimer.fromList(
-                durationStatusList: durationStatusList)));
+          durationStatusList: durationStatusList,
+        )));
   }
 }

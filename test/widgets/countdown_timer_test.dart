@@ -4,10 +4,13 @@ import 'package:countdown_app/db/drift_database.dart';
 import 'package:countdown_app/models/duration_status_list.dart';
 import 'package:countdown_app/widgets/countdown_timer.dart';
 import 'package:countdown_app/models/timer_durations_dto.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   group('CountdownTimer created from TimerDurationsDTO', () {
-    var timerDurations = TimerDurationsDTO(
+    late Widget timerFromTimerDTO;
+
+    final timerDurations = TimerDurationsDTO(
         sets: 5,
         reps: 6,
         workSeconds: 7,
@@ -15,11 +18,15 @@ void main() {
         breakMinutes: 3,
         breakSeconds: 0);
 
-    // Countdown timer created from a TimerDurationsDTO
-    Widget timerFromTimerDTO = MediaQuery(
-        data: const MediaQueryData(),
-        child:
-            CupertinoApp(home: CountdownTimer(timerDurations: timerDurations)));
+    setUp(() async {
+      SharedPreferences.setMockInitialValues({});
+      timerFromTimerDTO = MediaQuery(
+          data: const MediaQueryData(),
+          child: CupertinoApp(
+              home: CountdownTimer(
+                  timerDurations: timerDurations)));
+    });
+
     testWidgets('CountdownTimer has correct initial state', (tester) async {
       await tester.pumpWidget(timerFromTimerDTO);
 
@@ -121,6 +128,8 @@ void main() {
   });
 
   group('CountdownTimer created from a DurationStatusList', () {
+    late Widget timerFromList;
+
     const halfCrimpType = GripType(id: 1, name: 'Half Crimp');
     const warmUpJugType = GripType(id: 2, name: 'Warm Up Jug');
 
@@ -145,11 +154,14 @@ void main() {
     ];
     final durationsList = WorkoutDurationStatusList(gripList: gripsList);
 
-    // Countdown timer created from a DurationStatusLIst
-    Widget timerFromList = MediaQuery(
-        data: const MediaQueryData(),
-        child: CupertinoApp(
-            home: CountdownTimer.fromList(durationStatusList: durationsList)));
+    setUp(() async {
+      SharedPreferences.setMockInitialValues({});
+      timerFromList = MediaQuery(
+          data: const MediaQueryData(),
+          child: CupertinoApp(
+              home: CountdownTimer.fromList(
+                  durationStatusList: durationsList)));
+    });
 
     testWidgets('The first grip in workout is shown during PREPARE countdown',
         (tester) async {

@@ -4,16 +4,11 @@ import '../widgets/countdown_timer.dart';
 
 /// Provides a layout for the countdown timer, timer details, and timer control
 /// buttons. Contains the state variable necessary to start a countdown timer.
-class CountdownTimerScreen extends StatefulWidget {
+class CountdownTimerScreen extends StatelessWidget {
   final TimerDurationsDTO timerDurations;
 
   const CountdownTimerScreen({super.key, required this.timerDurations});
 
-  @override
-  State<CountdownTimerScreen> createState() => _CountdownTimerScreenState();
-}
-
-class _CountdownTimerScreenState extends State<CountdownTimerScreen> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
@@ -28,7 +23,7 @@ class _CountdownTimerScreenState extends State<CountdownTimerScreen> {
               Flexible(
                 flex: 88,
                 child: CountdownTimer(
-                  timerDurations: widget.timerDurations,
+                  timerDurations: timerDurations,
                 ),
               ),
             ],

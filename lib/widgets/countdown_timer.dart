@@ -8,6 +8,7 @@ import '../models/audio_pool.dart';
 import '../models/duration_status_list.dart';
 import '../models/timer_durations_dto.dart';
 import '../services/shared_preferences_service.dart';
+import '../utils/sound_utils.dart';
 import '../widgets/grip_details_text.dart';
 import '../widgets/timer_control_buttons.dart';
 import '../widgets/timer_details.dart';
@@ -68,7 +69,6 @@ class _CountdownTimerState extends State<CountdownTimer>
   @override
   void initState() {
     super.initState();
-    _loadAudio();
     _loadSharedPreferences();
 
     // Initialize DurationStatusList based on which constructor was used
@@ -99,7 +99,7 @@ class _CountdownTimerState extends State<CountdownTimer>
       ..addStatusListener((status) {
         // Play final beep once countdown timer reaches zero
         if (status == AnimationStatus.completed) {
-          _playFinalBeep();
+          _playFinalBeepAndVibration();
         }
 
         if (status == AnimationStatus.completed &&
@@ -120,24 +120,23 @@ class _CountdownTimerState extends State<CountdownTimer>
         }
       })
       ..addListener(() {
-        _playLeadingBeeps();
+        _playLeadingBeepAndVibration();
       });
   }
 
-  /// Loads audio assets into memory
-  void _loadAudio() {
-    _lowBeepIndex = _audioPool.addAsset('assets/audio/beep_low.wav');
-    _highBeepIndex = _audioPool.addAsset('assets/audio/beep_high.wav');
-  }
-
-  /// Loads shared preferences service to check if sound/vibrate is on or off
+  /// Loads shared preferences service and timer audio files
   Future<void> _loadSharedPreferences() async {
     final prefs = await SharedPreferences.getInstance();
     _prefService = SharedPreferencesService(sharedPreferences: prefs);
+
+    final soundIndex = _prefService.getTimerSoundIndex();
+    final filePrefix = timerSoundList[soundIndex].filePrefix;
+    _lowBeepIndex = _audioPool.addAsset('assets/audio/${filePrefix}_low.wav');
+    _highBeepIndex = _audioPool.addAsset('assets/audio/${filePrefix}_high.wav');
   }
 
-  /// Plays the beep at the end of the countdown at the zero second mark
-  void _playFinalBeep() {
+  /// Plays the beep and vibration at the zero second mark
+  void _playFinalBeepAndVibration() {
     // Reset played state of leading beeps
     _hasPlayedAtSecond[3] = false;
     _hasPlayedAtSecond[2] = false;
@@ -148,8 +147,8 @@ class _CountdownTimerState extends State<CountdownTimer>
     _vibrate();
   }
 
-  /// Plays beeps at the 3, 2, and 1 second marks in the timer.
-  void _playLeadingBeeps() {
+  /// Plays beeps and vibrations at the 3, 2, and 1 second marks in the timer.
+  void _playLeadingBeepAndVibration() {
     if (!_hasPlayedAtSecond[3]! && timerString == '0:03') {
       // Do not play the beep if the current duration is 3 seconds long
       if (_durationStatusList[_durationIndex].duration.inSeconds != 3) {

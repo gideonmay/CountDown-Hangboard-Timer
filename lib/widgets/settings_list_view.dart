@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../screens/choose_timer_sound_screen.dart';
 import '../services/shared_preferences_service.dart';
+import '../utils/sound_utils.dart';
 
 /// A ListView that lists all of the settings available for the user to change
 class SettingsListView extends StatefulWidget {
@@ -14,7 +16,7 @@ class _SettingsListViewState extends State<SettingsListView> {
   late final SharedPreferencesService prefService;
   bool _soundOn = false;
   bool _vibrationOn = false;
-  bool _darkModeOn = false;
+  int _timerSoundIndex = 0;
 
   @override
   void initState() {
@@ -28,7 +30,7 @@ class _SettingsListViewState extends State<SettingsListView> {
     setState(() {
       _soundOn = prefService.getSoundOn();
       _vibrationOn = prefService.getVibrationOn();
-      _darkModeOn = prefService.getDarkModeOn();
+      _timerSoundIndex = prefService.getTimerSoundIndex();
     });
   }
 
@@ -36,6 +38,13 @@ class _SettingsListViewState extends State<SettingsListView> {
   Widget build(BuildContext context) {
     return CupertinoListSection.insetGrouped(
       children: [
+        CupertinoListTile(
+          leading: const Icon(CupertinoIcons.alarm),
+          title: const Text('Timer Vibration'),
+          trailing: CupertinoSwitch(
+              value: _vibrationOn,
+              onChanged: (bool value) => _setVibration(value)),
+        ),
         CupertinoListTile(
           leading: _soundOn
               ? const Icon(CupertinoIcons.speaker_1)
@@ -45,18 +54,10 @@ class _SettingsListViewState extends State<SettingsListView> {
               value: _soundOn, onChanged: (bool value) => _setSound(value)),
         ),
         CupertinoListTile(
-          leading: const Icon(CupertinoIcons.alarm),
-          title: const Text('Timer Vibration'),
-          trailing: CupertinoSwitch(
-              value: _vibrationOn,
-              onChanged: (bool value) => _setVibration(value)),
-        ),
-        CupertinoListTile(
-          leading: const Icon(CupertinoIcons.moon),
-          title: const Text('Dark Mode'),
-          trailing: CupertinoSwitch(
-              value: _darkModeOn,
-              onChanged: (bool value) => _setDarkMode(value)),
+          title: const Text('Sound Type'),
+          additionalInfo: Text(_soundType()),
+          trailing: const CupertinoListTileChevron(),
+          onTap: () => _navigateToChooseTimerSound(context),
         ),
       ],
     );
@@ -78,11 +79,28 @@ class _SettingsListViewState extends State<SettingsListView> {
     });
   }
 
-  /// Set dark mode on or off
-  Future<void> _setDarkMode(bool newValue) async {
+  /// Set new timer sound index
+  Future<void> _setTimerSound(int newIndex) async {
     setState(() {
-      _darkModeOn = newValue;
-      prefService.setDarkModeOn(newValue);
+      _timerSoundIndex = newIndex;
+      prefService.setTimerSoundIndex(newIndex);
     });
+  }
+
+  /// Returns the name of the timer sound based on the chosen timer sound index
+  String _soundType() {
+    return timerSoundList[_timerSoundIndex].soundName;
+  }
+
+  // Navigates to screen to choose a timer sound
+  void _navigateToChooseTimerSound(BuildContext context) {
+    final int soundIndex = prefService.getTimerSoundIndex();
+
+    Navigator.push(
+        context,
+        CupertinoPageRoute(
+            builder: (context) => ChooseTimerSoundScreen(
+                initialSoundIndex: soundIndex,
+                onTimerSoundChanged: _setTimerSound)));
   }
 }

@@ -12,17 +12,20 @@ void main() {
     bool soundOn = prefService.getSoundOn();
     bool vibrationOn = prefService.getVibrationOn();
     bool darkModeOn = prefService.getDarkModeOn();
+    int timerSoundIndex = prefService.getTimerSoundIndex();
 
     expect(soundOn, false);
     expect(vibrationOn, false);
     expect(darkModeOn, false);
+    expect(timerSoundIndex, 0);
   });
 
-  test('Getting all values returns true if keys already set', () async {
+  test('Correct values are returned if keys already set', () async {
     SharedPreferences.setMockInitialValues({
       SharedPreferencesService.soundOnKey: true,
       SharedPreferencesService.vibrationOnKey: true,
-      SharedPreferencesService.darkModeOnKey: true
+      SharedPreferencesService.darkModeOnKey: true,
+      SharedPreferencesService.timerSoundIndex: 1,
     });
 
     final prefs = await SharedPreferences.getInstance();
@@ -31,10 +34,12 @@ void main() {
     bool soundOn = prefService.getSoundOn();
     bool vibrationOn = prefService.getVibrationOn();
     bool darkModeOn = prefService.getDarkModeOn();
+    int timerSoundIndex = prefService.getTimerSoundIndex();
 
     expect(soundOn, true);
     expect(vibrationOn, true);
     expect(darkModeOn, true);
+    expect(timerSoundIndex, 1);
   });
 
   test('Setting initial sound on value sets value correctly', () async {
@@ -104,5 +109,28 @@ void main() {
     prefService.setDarkModeOn(false);
     bool darkModeOn = prefService.getDarkModeOn();
     expect(darkModeOn, false);
+  });
+
+  test('Setting initial timer sound index sets value correctly', () async {
+    SharedPreferences.setMockInitialValues({});
+
+    final prefs = await SharedPreferences.getInstance();
+    final prefService = SharedPreferencesService(sharedPreferences: prefs);
+
+    prefService.setTimerSoundIndex(2);
+    int timerSoundIndex = prefService.getTimerSoundIndex();
+    expect(timerSoundIndex, 2);
+  });
+
+  test('Updating timer sound index sets new value correctly', () async {
+    SharedPreferences.setMockInitialValues(
+        {SharedPreferencesService.timerSoundIndex: 1});
+
+    final prefs = await SharedPreferences.getInstance();
+    final prefService = SharedPreferencesService(sharedPreferences: prefs);
+
+    prefService.setTimerSoundIndex(3);
+    int timerSoundIndex = prefService.getTimerSoundIndex();
+    expect(timerSoundIndex, 3);
   });
 }

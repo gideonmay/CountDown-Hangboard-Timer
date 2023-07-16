@@ -14,6 +14,8 @@ class SharedPreferencesService {
   /// Indicates if dark mode is turned on
   static const darkModeOnKey = 'countdownTimerDarkModeOn';
 
+  static const timerSoundIndex = 'countdownTimerNoiseKey';
+
   SharedPreferencesService({required this.sharedPreferences});
 
   /// Sets the timer sound on value
@@ -44,5 +46,15 @@ class SharedPreferencesService {
   /// Gets the dark mode on value or false if key has not yet been set
   bool getDarkModeOn() {
     return sharedPreferences.getBool(darkModeOnKey) ?? false;
+  }
+
+  /// Sets the index of the timer sound
+  void setTimerSoundIndex(int newValue) {
+    sharedPreferences.setInt(timerSoundIndex, newValue);
+  }
+
+  /// Gets the timer sound index of zero if the key has not been set
+  int getTimerSoundIndex() {
+    return sharedPreferences.getInt(timerSoundIndex) ?? 0;
   }
 }

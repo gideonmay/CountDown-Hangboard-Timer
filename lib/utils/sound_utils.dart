@@ -5,6 +5,10 @@ import 'package:flutter/services.dart';
 /// before '_high.wav' or '_low.wav'. For example, a filePrefix of 'beep'
 /// indicates that there are two files, 'beep_high.wav' and 'beep_low.wav' in
 /// the assets folder.
+///
+/// Any audio file added to assets should be 0.4 seconds long. That is the audio
+/// length that the app has been tested for. It is unknown if adding longer
+/// audio will cause error, so best to keep audio to the 0.4 seconds.
 class TimerSoundDTO {
   final String soundName;
   final String filePrefix;

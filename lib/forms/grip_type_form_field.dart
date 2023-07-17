@@ -48,11 +48,16 @@ class GripTypeFormField extends FormField<GripTypeDTO> {
                   // Show 'None' as grip type if no grip type is chosen
                   additionalInfo: state.value?.name == null
                       ? const Text('None')
-                      : Flexible(
+                      : SizedBox(
+                        width: 175,
+                        child: Align(
+                          alignment: Alignment.centerRight,
                           child: Text(
                           state.value!.name!,
                           overflow: TextOverflow.ellipsis,
-                        )),
+                            ),
+                        ),
+                      ),
                   trailing: const CupertinoListTileChevron(),
                   onTap: () => navigateToChooseGripType(context, state.value!,
                       currentPageTitle, gripTypeDidChange),

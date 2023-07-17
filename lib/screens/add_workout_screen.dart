@@ -17,16 +17,19 @@ class _AddWorkoutScreenState extends State<AddWorkoutScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-      backgroundColor: CupertinoColors.systemGrey6,
-      navigationBar: const CupertinoNavigationBar(
-        previousPageTitle: 'Workouts',
-        middle: Text('Add Workout'),
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: CupertinoPageScaffold(
+        backgroundColor: CupertinoColors.systemGrey6,
+        navigationBar: const CupertinoNavigationBar(
+          previousPageTitle: 'Workouts',
+          middle: Text('Add Workout'),
+        ),
+        child: WorkoutForm(
+            workoutDTO: _workoutDTO,
+            onFormSaved: _createWorkout,
+            buttonText: 'Submit'),
       ),
-      child: WorkoutForm(
-          workoutDTO: _workoutDTO,
-          onFormSaved: _createWorkout,
-          buttonText: 'Submit'),
     );
   }
 

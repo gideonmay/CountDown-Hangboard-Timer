@@ -40,8 +40,7 @@ class _WorkoutsScreenState extends State<WorkoutsScreen> {
 
   /// Navigates to the CreateWorkoutScreen widget
   static _navigateToCreateWorkout(BuildContext context) {
-    Navigator.push(
-      context,
+    Navigator.of(context, rootNavigator: true).push(
       CupertinoPageRoute(builder: (context) => const AddWorkoutScreen()),
     );
   }

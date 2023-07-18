@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import '../utils/dialog_utils.dart';
-import '../utils/sound_utils.dart';
 
 /// A widget containing minutes and seconds text that allows the user to choose
 /// a duration using a Cupertino time picker widget
@@ -44,7 +43,6 @@ class _DurationPickerState extends State<DurationPicker> {
                         mode: CupertinoTimerPickerMode.ms,
                         initialTimerDuration: _duration,
                         onTimerDurationChanged: (Duration newDuration) {
-                          playButtonSound();
                           setState(() => _duration = newDuration);
                           widget.onDurationChanged(newDuration);
                         },

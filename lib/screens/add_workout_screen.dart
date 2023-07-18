@@ -18,6 +18,7 @@ class _AddWorkoutScreenState extends State<AddWorkoutScreen> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      // Close the keyboard when user taps away from input box
       onTap: () => FocusScope.of(context).unfocus(),
       child: CupertinoPageScaffold(
         backgroundColor: CupertinoColors.systemGrey6,

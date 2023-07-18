@@ -46,26 +46,30 @@ class _EditGripScreenState extends State<EditGripScreen> {
   Widget build(BuildContext context) {
     final db = Provider.of<AppDatabase>(context, listen: false);
 
-    return CupertinoPageScaffold(
-        backgroundColor: CupertinoColors.systemGrey6,
-        navigationBar: CupertinoNavigationBar(
-          previousPageTitle: widget.workout.name,
-          middle: const Text('Edit Grip'),
-          trailing: CupertinoButton(
-            padding: EdgeInsets.zero,
-            child: const Icon(CupertinoIcons.ellipsis_circle),
-            onPressed: () => _showActionSheet(context),
+    return GestureDetector(
+      // Close the number keyboard when user taps away from input box
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: CupertinoPageScaffold(
+          backgroundColor: CupertinoColors.systemGrey6,
+          navigationBar: CupertinoNavigationBar(
+            previousPageTitle: widget.workout.name,
+            middle: const Text('Edit Grip'),
+            trailing: CupertinoButton(
+              padding: EdgeInsets.zero,
+              child: const Icon(CupertinoIcons.ellipsis_circle),
+              onPressed: () => _showActionSheet(context),
+            ),
           ),
-        ),
-        child: SafeArea(
-            child: GripDetailsForm(
-          currentPageTitle: 'Edit Grip',
-          gripDTO: gripDTO,
-          gripTypeStream: db.watchAllGripTypesWithCount(),
-          buttonText: 'Save Changes',
-          onFormSaved: _updateGrip,
-          onGripTypeChanged: _updateGripType,
-        )));
+          child: SafeArea(
+              child: GripDetailsForm(
+            currentPageTitle: 'Edit Grip',
+            gripDTO: gripDTO,
+            gripTypeStream: db.watchAllGripTypesWithCount(),
+            buttonText: 'Save Changes',
+            onFormSaved: _updateGrip,
+            onGripTypeChanged: _updateGripType,
+          ))),
+    );
   }
 
   /// Shows an action sheet allowing user navigate to screen to edit grip types

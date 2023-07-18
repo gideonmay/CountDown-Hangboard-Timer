@@ -32,19 +32,23 @@ class _AddGripScreenState extends State<AddGripScreen> {
   Widget build(BuildContext context) {
     final db = Provider.of<AppDatabase>(context, listen: false);
 
-    return CupertinoPageScaffold(
-        backgroundColor: CupertinoColors.systemGrey6,
-        navigationBar: CupertinoNavigationBar(
-          previousPageTitle: widget.workout.name,
-          middle: const Text('Add Grip'),
-        ),
-        child: SafeArea(
-            child: GripDetailsForm(
-          currentPageTitle: 'Add Grip',
-          gripDTO: gripDTO,
-          gripTypeStream: db.watchAllGripTypesWithCount(),
-          buttonText: 'Submit',
-          onFormSaved: _createGrip,
-        )));
+    return GestureDetector(
+      // Close the number keyboard when user taps away from input box
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: CupertinoPageScaffold(
+          backgroundColor: CupertinoColors.systemGrey6,
+          navigationBar: CupertinoNavigationBar(
+            previousPageTitle: widget.workout.name,
+            middle: const Text('Add Grip'),
+          ),
+          child: SafeArea(
+              child: GripDetailsForm(
+            currentPageTitle: 'Add Grip',
+            gripDTO: gripDTO,
+            gripTypeStream: db.watchAllGripTypesWithCount(),
+            buttonText: 'Submit',
+            onFormSaved: _createGrip,
+          ))),
+    );
   }
 }

@@ -45,54 +45,6 @@ class _WorkoutFormState extends State<WorkoutForm> {
     ));
   }
 
-  /// The text fields for this form
-  List<Widget> _formFieldRows() {
-    return [
-      CupertinoTextFormFieldRow(
-        initialValue: widget.workoutDTO.name,
-        maxLength: 40,
-        textInputAction: TextInputAction.next,
-        prefix: const Text('Name'),
-        placeholder: 'Enter name',
-        onSaved: (newValue) {
-          if (newValue != null) {
-            // Trim blank spaces off front and end of string
-            widget.workoutDTO.name = newValue.trim();
-          } else {
-            widget.workoutDTO.name = newValue;
-          }
-        },
-        validator: (String? value) {
-          // Check if string is blank, empty, or only spaces
-          if (value == null || value.isEmpty || value.trim().isEmpty) {
-            return 'Please enter a name';
-          }
-          return null;
-        },
-      ),
-      CupertinoTextFormFieldRow(
-        initialValue: widget.workoutDTO.description,
-        maxLength: 100,
-        textInputAction: TextInputAction.next,
-        placeholder: 'Description',
-        onSaved: (newValue) {
-          if (newValue != null) {
-            // Trim blank spaces off front and end of string
-            widget.workoutDTO.description = newValue.trim();
-          } else {
-            widget.workoutDTO.description = newValue;
-          }
-        },
-        validator: (String? value) {
-          if (value == null || value.isEmpty || value.trim().isEmpty) {
-            return 'Please enter a description';
-          }
-          return null;
-        },
-      ),
-    ];
-  }
-
   Widget _nameField() {
     return CupertinoTextFormFieldRow(
       initialValue: widget.workoutDTO.name,

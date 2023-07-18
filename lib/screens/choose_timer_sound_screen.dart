@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:just_audio/just_audio.dart';
 import '../utils/sound_utils.dart';
 
 /// A screen that allows the user to choose a sound that they would like the
@@ -58,11 +59,20 @@ class _ChooseTimerSoundScreenState extends State<ChooseTimerSoundScreen> {
           setState(() {
             _currSoundIndex = index;
             widget.onTimerSoundChanged(index);
+            _playSound(timerSound.filePrefix);
           });
         },
       ));
     }
 
     return soundChoices;
+  }
+
+  /// Plays the lower version of the audio file with the givin prefix
+  void _playSound(String filePrefix) async {
+    String assetPath = 'assets/audio/${filePrefix}_low.wav';
+    final player = AudioPlayer();
+    await player.setAsset(assetPath);
+    await player.play();
   }
 }

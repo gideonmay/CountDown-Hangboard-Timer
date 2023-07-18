@@ -49,15 +49,15 @@ class GripTypeFormField extends FormField<GripTypeDTO> {
                   additionalInfo: state.value?.name == null
                       ? const Text('None')
                       : SizedBox(
-                        width: 175,
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: Text(
-                          state.value!.name!,
-                          overflow: TextOverflow.ellipsis,
+                          width: 175,
+                          child: Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              state.value!.name!,
+                              overflow: TextOverflow.ellipsis,
                             ),
+                          ),
                         ),
-                      ),
                   trailing: const CupertinoListTileChevron(),
                   onTap: () => navigateToChooseGripType(context, state.value!,
                       currentPageTitle, gripTypeDidChange),

@@ -18,8 +18,11 @@ class TimerSoundDTO {
 
 /// A List of the available timer sounds.
 final List<TimerSoundDTO> timerSoundList = [
-  TimerSoundDTO(soundName: 'Beep', filePrefix: 'beep'),
+  TimerSoundDTO(soundName: 'Beep (default)', filePrefix: 'beep'),
+  TimerSoundDTO(soundName: 'Buzzer', filePrefix: 'buzzer'),
+  TimerSoundDTO(soundName: 'Chime', filePrefix: 'chime'),
   TimerSoundDTO(soundName: 'Electronic', filePrefix: 'electric'),
+  TimerSoundDTO(soundName: 'Glass', filePrefix: 'glass'),
 ];
 
 /// Plays system button sound

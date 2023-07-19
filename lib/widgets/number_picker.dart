@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../utils/sound_utils.dart';
 
 /// A widget with plus and minus buttons that allows the user to pick a number
@@ -67,9 +68,9 @@ class _NumberPickerState extends State<NumberPicker> {
   Widget _changeValueButtons() {
     return Container(
       height: 35.0,
-      decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(7.0)),
-          color: CupertinoColors.systemGrey4),
+      // decoration: const BoxDecoration(
+      //     borderRadius: BorderRadius.all(Radius.circular(10.0)),
+      //     color: CupertinoColors.systemGrey4),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -92,7 +93,7 @@ class _NumberPickerState extends State<NumberPicker> {
       color: Colors.transparent,
       child: GestureDetector(
         onLongPress: () {
-          _timer = Timer.periodic(const Duration(milliseconds: 50), (timer) {
+          _timer = Timer.periodic(const Duration(milliseconds: 60), (timer) {
             _decreaseValueBy(1);
           });
         },
@@ -100,12 +101,13 @@ class _NumberPickerState extends State<NumberPicker> {
           _timer.cancel();
         },
         child: InkWell(
-          borderRadius: const BorderRadius.all(Radius.circular(7.0)),
+          customBorder: const CircleBorder(),
           onTap: () => _decreaseValueBy(1),
           child: const Padding(
             padding: EdgeInsets.only(left: 16.0, right: 16.0),
             child: Center(
-              child: Icon(CupertinoIcons.minus, color: CupertinoColors.black),
+              child: Icon(CupertinoIcons.minus_circle_fill,
+                  color: CupertinoColors.systemGrey2),
             ),
           ),
         ),
@@ -119,6 +121,7 @@ class _NumberPickerState extends State<NumberPicker> {
 
     if (newValue >= widget.minValue) {
       playButtonSound();
+      HapticFeedback.lightImpact();
       setState(() {
         _currValue = newValue;
       });
@@ -132,7 +135,7 @@ class _NumberPickerState extends State<NumberPicker> {
       color: Colors.transparent,
       child: GestureDetector(
         onLongPress: () {
-          _timer = Timer.periodic(const Duration(milliseconds: 50), (timer) {
+          _timer = Timer.periodic(const Duration(milliseconds: 60), (timer) {
             _increaseValueBy(1);
           });
         },
@@ -140,12 +143,13 @@ class _NumberPickerState extends State<NumberPicker> {
           _timer.cancel();
         },
         child: InkWell(
-          borderRadius: const BorderRadius.all(Radius.circular(7.0)),
+          customBorder: const CircleBorder(),
           onTap: () => _increaseValueBy(1),
           child: const Padding(
             padding: EdgeInsets.only(left: 16.0, right: 16.0),
             child: Center(
-              child: Icon(CupertinoIcons.add, color: CupertinoColors.black),
+              child: Icon(CupertinoIcons.add_circled_solid,
+                  color: CupertinoColors.systemGrey2),
             ),
           ),
         ),
@@ -159,6 +163,7 @@ class _NumberPickerState extends State<NumberPicker> {
 
     if (newValue <= widget.maxValue) {
       playButtonSound();
+      HapticFeedback.lightImpact();
       setState(() {
         _currValue = newValue;
       });

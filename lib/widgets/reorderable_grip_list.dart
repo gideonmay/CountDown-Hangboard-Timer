@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'haptic_wrapper.dart';
 import '../db/drift_database.dart';
 import '../screens/edit_grip_screen.dart';
 
@@ -24,6 +25,21 @@ class _ReorderableGripListState extends State<ReorderableGripList> {
 
     return ReorderableListView(
         footer: const SizedBox(height: 20),
+        proxyDecorator: (child, index, animation) {
+          // Execute haptic feedback when a list tile is moved
+          return HapticWrapper(
+            child: Container(
+                decoration: BoxDecoration(boxShadow: [
+                  BoxShadow(
+                    color: CupertinoColors.systemGrey.withOpacity(0.5),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: const Offset(0, 3),
+                  ),
+                ]),
+                child: child),
+          );
+        },
         children: <Widget>[
           for (int index = 0; index < widget.gripList.length; index++)
             _listTileWithDivider(

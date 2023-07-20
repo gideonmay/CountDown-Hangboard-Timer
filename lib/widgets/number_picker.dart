@@ -66,11 +66,8 @@ class _NumberPickerState extends State<NumberPicker> {
 
   /// A plus and a minus button in a single row
   Widget _changeValueButtons() {
-    return Container(
+    return SizedBox(
       height: 35.0,
-      // decoration: const BoxDecoration(
-      //     borderRadius: BorderRadius.all(Radius.circular(10.0)),
-      //     color: CupertinoColors.systemGrey4),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [

@@ -20,7 +20,7 @@ String formattedDate(DateTime? dateTime) {
   }
 
   if (isToday(dateTime)) {
-    return DateFormat('h:m a').format(dateTime);
+    return DateFormat('h:mm a').format(dateTime);
   }
 
   return DateFormat('M/dd/yyyy').format(dateTime);

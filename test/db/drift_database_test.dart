@@ -138,9 +138,9 @@ void main() {
       expect(grip.workSeconds, 10);
       expect(grip.restSeconds, 5);
       expect(grip.breakMinutes, 0);
-      expect(grip.breakSeconds, 30);
+      expect(grip.breakSeconds, 0);
       expect(grip.lastBreakMinutes, 0);
-      expect(grip.lastBreakSeconds, 30);
+      expect(grip.lastBreakSeconds, 0);
       expect(grip.edgeSize, 16);
       expect(grip.sequenceNum, 1);
       expect(grip.workout, workoutID);

@@ -27,7 +27,7 @@ void main() {
     expect(timerDurations.workSeconds, 10);
     expect(timerDurations.restSeconds, 5);
     expect(timerDurations.breakMinutes, 0);
-    expect(timerDurations.breakSeconds, 30);
+    expect(timerDurations.breakSeconds, 0);
   });
 
   test('TimerDurations returns the correct rest, work and break durations', () {

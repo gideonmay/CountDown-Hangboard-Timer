@@ -25,7 +25,7 @@ class TimerDurationsDTO {
         workSeconds = 10,
         restSeconds = 5,
         breakMinutes = 0,
-        breakSeconds = 30;
+        breakSeconds = 0;
 
   /// Returns a Duration object with workSeconds duration
   Duration get workDuration => Duration(seconds: workSeconds.toInt());

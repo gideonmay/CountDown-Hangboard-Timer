@@ -32,7 +32,7 @@ void main() {
       final int workoutID = await db.addWorkout(workoutDTO);
       final newDate = DateTime(2023, 7, 12);
       await db.updateWorkoutLastUsed(workoutID, newDate);
-      
+
       final workouts = await db.watchAllWorkouts().first;
 
       expect(workouts[0].lastUsedDate, newDate);
@@ -54,23 +54,38 @@ void main() {
   });
 
   group('GripTypes table', () {
-    test('GripType is created with correct values', () async {
-      await db.addGripType('Half Crimp');
+    test('The 11 initial GripTypes are correctly created', () async {
       final gripTypes = await db.watchAllGripTypes().first;
 
-      expect(gripTypes[0].name, 'Half Crimp');
+      expect(gripTypes[0].name, 'Full Crimp');
+      expect(gripTypes[1].name, 'Half Crimp');
+      expect(gripTypes[2].name, 'Open Hand Crimp');
+      expect(gripTypes[3].name, 'Pocket 2-Finger IM');
+      expect(gripTypes[4].name, 'Pocket 2-Finger MR');
+      expect(gripTypes[5].name, 'Pocket Index Finger');
+      expect(gripTypes[6].name, 'Pocket Middle Finger');
+      expect(gripTypes[7].name, 'Pocket Pinky Finger');
+      expect(gripTypes[8].name, 'Pocket Ring Finger');
+      expect(gripTypes[9].name, 'Three Finger Drag');
+      expect(gripTypes[10].name, 'Warm Up Jug');
+    });
+    test('GripType is created with correct values', () async {
+      await db.addGripType('1st Grip Type');
+      final gripTypes = await db.watchAllGripTypes().first;
+
+      expect(gripTypes[0].name, '1st Grip Type');
     });
 
     test('GripType is correctly deleted', () async {
       // Create a new grip type
-      await db.addGripType('Half Crimp');
+      await db.addGripType('1st Grip Type');
       List<GripType> gripTypes = await db.watchAllGripTypes().first;
 
       // Delete the created grip type
       await db.deleteGripType(gripTypes[0]);
       gripTypes = await db.watchAllGripTypes().first;
 
-      expect(gripTypes.length, 0);
+      expect(gripTypes.length, 11);
     });
   });
 
@@ -80,7 +95,7 @@ void main() {
 
     setUp(() async {
       // Create a grip type and workout to be used to create test grips
-      gripTypeID = await db.addGripType('Open Hand Crimp');
+      gripTypeID = await db.addGripType('1st Grip Type');
       final workoutDTO =
           WorkoutDTO(name: 'Test Workout', description: 'Test description');
       workoutID = await db.addWorkout(workoutDTO);
@@ -179,8 +194,7 @@ void main() {
       await db.addGrip(workoutID, gripDTO); // 2nd grip
       await db.addGrip(workoutID, gripDTO); // 3rd grip
 
-      List<GripWithGripType> grips =
-          await db.fetchAllGripsWithType(workoutID);
+      List<GripWithGripType> grips = await db.fetchAllGripsWithType(workoutID);
 
       expect(grips[0].entry.sequenceNum, 1);
       expect(grips[1].entry.sequenceNum, 2);

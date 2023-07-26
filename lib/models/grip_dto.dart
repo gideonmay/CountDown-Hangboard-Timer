@@ -18,7 +18,7 @@ class GripDTO extends TimerDurationsDTO {
   /// Create a gripDTO with initial standard values
   GripDTO.standard()
       : lastBreakMinutes = 0,
-        lastBreakSeconds = 30,
+        lastBreakSeconds = 0,
         super.standard();
 
   /// Returns a Duration object with last break duration

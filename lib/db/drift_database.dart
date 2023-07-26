@@ -6,7 +6,6 @@ import 'package:drift/native.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import '../models/grip_dto.dart';
-
 import '../models/workout_dto.dart';
 
 part 'drift_database.g.dart';
@@ -95,10 +94,27 @@ class AppDatabase extends _$AppDatabase {
   @override
   MigrationStrategy get migration {
     return MigrationStrategy(
-        // Must manually enable foreign key constrains for SQLite db
-        beforeOpen: (details) async {
-      await customStatement('PRAGMA foreign_keys = ON;');
-    });
+      // Add a handful of initial grip types so user doesn't need to add many
+      onCreate: (Migrator m) async {
+        await m.createAll();
+
+        // 11 initial grip types
+        await addGripType('Full Crimp');
+        await addGripType('Half Crimp');
+        await addGripType('Open Hand Crimp');
+        await addGripType('Pocket 2-Finger IM');
+        await addGripType('Pocket 2-Finger MR');
+        await addGripType('Pocket Index Finger');
+        await addGripType('Pocket Middle Finger');
+        await addGripType('Pocket Pinky Finger');
+        await addGripType('Pocket Ring Finger');
+        await addGripType('Three Finger Drag');
+        await addGripType('Warm Up Jug');
+      },
+      // Must manually enable foreign key constraints for SQLite db
+      beforeOpen: (details) async {
+        await customStatement('PRAGMA foreign_keys = ON;');
+      });
   }
 
   /// Returns a stream of workouts any time the workouts table is changed

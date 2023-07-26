@@ -7,7 +7,11 @@ import 'screens/durations_picker_screen.dart';
 import 'screens/workouts_screen.dart';
 
 void main() {
-  runApp(const App());
+  runApp(Provider<AppDatabase>(
+    create: (context) => AppDatabase(openConnection()),
+    dispose: (context, db) => db.close(),
+    child: const App(),
+  ));
 }
 
 class App extends StatelessWidget {
@@ -15,19 +19,15 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Provider(
-      create: (context) => AppDatabase(openConnection()),
-      dispose: (context, db) => db.close(),
-      child: const CupertinoApp(
-          localizationsDelegates: [
-            // These are necessary for the ReorderableListView widget to work
-            DefaultMaterialLocalizations.delegate,
-            DefaultCupertinoLocalizations.delegate,
-            DefaultWidgetsLocalizations.delegate,
-          ],
-          theme: CupertinoThemeData(brightness: Brightness.light),
-          home: AppScaffold()),
-    );
+    return const CupertinoApp(
+        localizationsDelegates: [
+          // These are necessary for the ReorderableListView widget to work
+          DefaultMaterialLocalizations.delegate,
+          DefaultCupertinoLocalizations.delegate,
+          DefaultWidgetsLocalizations.delegate,
+        ],
+        theme: CupertinoThemeData(brightness: Brightness.light),
+        home: AppScaffold());
   }
 }
 

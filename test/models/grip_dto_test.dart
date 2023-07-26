@@ -10,15 +10,15 @@ void main() {
     expect(gripDTO.workSeconds, 10);
     expect(gripDTO.restSeconds, 5);
     expect(gripDTO.breakMinutes, 0);
-    expect(gripDTO.breakSeconds, 30);
+    expect(gripDTO.breakSeconds, 0);
     expect(gripDTO.lastBreakMinutes, 0);
-    expect(gripDTO.lastBreakSeconds, 30);
+    expect(gripDTO.lastBreakSeconds, 0);
     expect(gripDTO.edgeSize, null);
     expect(gripDTO.gripTypeID, null);
   });
 
   test('GripDTO.standard() returns correct last break duration', () {
     final gripDTO = GripDTO.standard();
-    expect(gripDTO.lastBreakDuration, const Duration(seconds: 30));
+    expect(gripDTO.lastBreakDuration, const Duration(seconds: 0));
   });
 }

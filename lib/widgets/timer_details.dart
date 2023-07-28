@@ -116,22 +116,23 @@ class _TimerDetailsState extends State<TimerDetails> {
         builder: (BuildContext context, BoxConstraints constraints) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TimeTextRow(
               title: 'Work ',
               durationString: durationString(widget.timerDetails.workDuration),
               fontSize: constraints.maxHeight / 6,
-              titleWidth: 50.0),
+              titleWidth: 55.0),
           TimeTextRow(
               title: 'Rest ',
               durationString: durationString(widget.timerDetails.restDuration),
               fontSize: constraints.maxHeight / 6,
-              titleWidth: 50.0),
+              titleWidth: 55.0),
           TimeTextRow(
               title: 'Break ',
               durationString: durationString(widget.timerDetails.breakDuration),
               fontSize: constraints.maxHeight / 6,
-              titleWidth: 50.0),
+              titleWidth: 55.0),
         ],
       );
     });

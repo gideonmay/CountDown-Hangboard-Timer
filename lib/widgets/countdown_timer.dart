@@ -196,18 +196,18 @@ class _CountdownTimerState extends State<CountdownTimer>
   /// the nearest second. This allows the current second being counted down to
   /// be displayed, as opposed to showing the next second in the countdown.
   String get timerString {
-    Duration timeLeftCeil;
+    final Duration timeLeftCeil = _timeLeft.ceil(const Duration(seconds: 1));
+    final String timeLeftStr = _durationString(timeLeftCeil);
 
     /// Only show a time of zero on the very last countdown. This prevents
     /// animation jank where zero flashes very briefly before starting next
     /// countdown.
-    if (_timeLeft == Duration.zero &&
+    if (timeLeftStr == '0:00' &&
         _durationIndex < _durationStatusList.length - 1) {
-      timeLeftCeil = const Duration(seconds: 1);
+      return '0:01';
     }
 
-    timeLeftCeil = _timeLeft.ceil(const Duration(seconds: 1));
-    return _durationString(timeLeftCeil);
+    return timeLeftStr;
   }
 
   /// Returns a Duration object representing the time left in the countdown

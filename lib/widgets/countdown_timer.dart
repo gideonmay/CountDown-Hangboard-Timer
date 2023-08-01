@@ -285,7 +285,7 @@ class _CountdownTimerState extends State<CountdownTimer>
       return constraints.maxWidth * 0.31;
     }
 
-    return constraints.maxWidth * 0.33;
+    return constraints.maxWidth * 0.30;
   }
 
   /// The text that displays the name of the current and next grips

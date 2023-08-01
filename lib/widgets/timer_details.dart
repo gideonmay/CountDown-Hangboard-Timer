@@ -26,6 +26,12 @@ class TimerDetails extends StatefulWidget {
 }
 
 class _TimerDetailsState extends State<TimerDetails> {
+  /// The factor used to determine the font size
+  final double _fontHeightFactor = 0.17;
+
+  /// The width of the title in the TimeTextRow widget
+  final double _titleWidth = 55.0;
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -57,7 +63,7 @@ class _TimerDetailsState extends State<TimerDetails> {
   Widget _timerProgressCounters() {
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-      return _progressCounters(constraints.maxHeight / 5.5);
+      return _progressCounters(constraints.maxHeight * _fontHeightFactor);
     });
   }
 
@@ -126,18 +132,18 @@ class _TimerDetailsState extends State<TimerDetails> {
           TimeTextRow(
               title: 'Work ',
               durationString: durationString(widget.timerDetails.workDuration),
-              fontSize: constraints.maxHeight / 5.5,
-              titleWidth: 58.0),
+              fontSize: constraints.maxHeight * _fontHeightFactor,
+              titleWidth: _titleWidth),
           TimeTextRow(
               title: 'Rest ',
               durationString: durationString(widget.timerDetails.restDuration),
-              fontSize: constraints.maxHeight / 5.5,
-              titleWidth: 58.0),
+              fontSize: constraints.maxHeight * _fontHeightFactor,
+              titleWidth: _titleWidth),
           TimeTextRow(
               title: 'Break ',
               durationString: durationString(widget.timerDetails.breakDuration),
-              fontSize: constraints.maxHeight / 5.5,
-              titleWidth: 58.0),
+              fontSize: constraints.maxHeight * _fontHeightFactor,
+              titleWidth: _titleWidth),
         ],
       );
     });

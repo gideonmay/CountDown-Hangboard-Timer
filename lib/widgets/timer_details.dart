@@ -11,27 +11,38 @@ class TimerDetails extends StatefulWidget {
   final int currRep;
   final TimerDetailsDTO timerDetails;
   final int? currGrip;
+  final double width;
 
   const TimerDetails(
       {super.key,
       required this.currSet,
       required this.currRep,
       required this.timerDetails,
-      this.currGrip});
+      this.currGrip,
+      required this.width});
 
   @override
   State<TimerDetails> createState() => _TimerDetailsState();
 }
 
 class _TimerDetailsState extends State<TimerDetails> {
+  /// The factor used to determine the font size
+  final double _fontHeightFactor = 0.17;
+
+  /// The width of the title in the TimeTextRow widget
+  final double _titleWidth = 55.0;
+
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: _timerDurationInfo(),
+        SizedBox(
+          width: widget.width,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: _timerDurationInfo(),
+          ),
         ),
         const VerticalDivider(
           thickness: 1.5,
@@ -41,18 +52,18 @@ class _TimerDetailsState extends State<TimerDetails> {
         Expanded(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: _setRepStatus(),
+            child: _timerProgressCounters(),
           ),
         ),
       ],
     );
   }
 
-  /// A widget containing the current rep and set status info
-  Widget _setRepStatus() {
+  /// A widget containing the progress counters for sets, reps, and grips
+  Widget _timerProgressCounters() {
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-      return _progressCounters(constraints.maxHeight / 6);
+      return _progressCounters(constraints.maxHeight * _fontHeightFactor);
     });
   }
 
@@ -116,22 +127,23 @@ class _TimerDetailsState extends State<TimerDetails> {
         builder: (BuildContext context, BoxConstraints constraints) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TimeTextRow(
               title: 'Work ',
               durationString: durationString(widget.timerDetails.workDuration),
-              fontSize: constraints.maxHeight / 6,
-              titleWidth: 50.0),
+              fontSize: constraints.maxHeight * _fontHeightFactor,
+              titleWidth: _titleWidth),
           TimeTextRow(
               title: 'Rest ',
               durationString: durationString(widget.timerDetails.restDuration),
-              fontSize: constraints.maxHeight / 6,
-              titleWidth: 50.0),
+              fontSize: constraints.maxHeight * _fontHeightFactor,
+              titleWidth: _titleWidth),
           TimeTextRow(
               title: 'Break ',
               durationString: durationString(widget.timerDetails.breakDuration),
-              fontSize: constraints.maxHeight / 6,
-              titleWidth: 50.0),
+              fontSize: constraints.maxHeight * _fontHeightFactor,
+              titleWidth: _titleWidth),
         ],
       );
     });

@@ -20,13 +20,14 @@ class TimeTextRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         SizedBox(
           width: titleWidth,
           child: Text(
             title,
-            style: TextStyle(color: CupertinoColors.systemGrey, fontSize: fontSize),
+            style: TextStyle(
+                color: CupertinoColors.systemGrey, fontSize: fontSize),
           ),
         ),
         Text(

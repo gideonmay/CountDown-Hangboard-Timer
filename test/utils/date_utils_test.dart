@@ -14,6 +14,6 @@ void main() {
     final now = DateTime.now();
     final dateString = formattedDate(now);
 
-    expect(dateString, DateFormat('h:m a').format(now));
+    expect(dateString, DateFormat('h:mm a').format(now));
   });
 }

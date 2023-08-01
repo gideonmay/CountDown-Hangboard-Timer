@@ -264,13 +264,28 @@ class _CountdownTimerState extends State<CountdownTimer>
   Widget _timerDetails() {
     return Flexible(
       flex: 19,
-      child: TimerDetails(
-        currSet: _durationStatusList[_durationIndex].currSet,
-        currRep: _durationStatusList[_durationIndex].currRep,
-        timerDetails: _durationStatusList[_durationIndex].timerDetails,
-        currGrip: _durationStatusList[_durationIndex].currGrip,
-      ),
+      child: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+        return TimerDetails(
+          currSet: _durationStatusList[_durationIndex].currSet,
+          currRep: _durationStatusList[_durationIndex].currRep,
+          timerDetails: _durationStatusList[_durationIndex].timerDetails,
+          currGrip: _durationStatusList[_durationIndex].currGrip,
+          width: _timerDetailsWidth(context, constraints),
+        );
+      }),
     );
+  }
+
+  /// Calculates the width of the TimerDetails widget depending on screen size
+  double _timerDetailsWidth(BuildContext context, BoxConstraints constraints) {
+    final width = MediaQuery.of(context).size.width;
+
+    if (width < 380) {
+      return constraints.maxWidth * 0.31;
+    }
+
+    return constraints.maxWidth * 0.33;
   }
 
   /// The text that displays the name of the current and next grips
@@ -413,19 +428,19 @@ class _CountdownTimerState extends State<CountdownTimer>
     });
   }
 
-  /// The text showing the current timer information
+  /// The text showing the timmer total time, elapsed time, and status
   Widget _timerCenterText() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        _timerCountdown(),
-        _timerStatus(),
+        _timerStatusAndTime(),
+        _timerTotalAndElapsedTime(),
       ],
     );
   }
 
   /// Returns text showing the timer status and current countdown duration
-  Widget _timerCountdown() {
+  Widget _timerStatusAndTime() {
     return Column(
       children: [
         Text(
@@ -444,29 +459,47 @@ class _CountdownTimerState extends State<CountdownTimer>
   }
 
   /// Returns a widget displaying the total time and the elapsed time
-  Widget _timerStatus() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(3.0),
-          child: TimeTextRow(
-              title: 'Total ',
-              durationString: _durationString(
-                  Duration(seconds: _durationStatusList.totalSeconds)),
-              fontSize: 20.0,
-              titleWidth: 80.0),
+  Widget _timerTotalAndElapsedTime() {
+    return LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+      return SizedBox(
+        width: _elapsedAndTotalTimeWidth(context, constraints),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(3.0),
+              child: TimeTextRow(
+                  title: 'Total ',
+                  durationString: _durationString(
+                      Duration(seconds: _durationStatusList.totalSeconds)),
+                  fontSize: 20.0,
+                  titleWidth: 80.0),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(3.0),
+              child: TimeTextRow(
+                  title: 'Elapsed ',
+                  durationString: _elapsedDurationString(),
+                  fontSize: 20.0,
+                  titleWidth: 80.0),
+            ),
+          ],
         ),
-        Padding(
-          padding: const EdgeInsets.all(3.0),
-          child: TimeTextRow(
-              title: 'Elapsed ',
-              durationString: _elapsedDurationString(),
-              fontSize: 20.0,
-              titleWidth: 80.0),
-        ),
-      ],
-    );
+      );
+    });
+  }
+
+  /// Returns a width value that changes depending on the screen width
+  double _elapsedAndTotalTimeWidth(
+      BuildContext context, BoxConstraints constraints) {
+    final width = MediaQuery.of(context).size.width;
+
+    if (width < 400) {
+      return constraints.maxWidth * 0.45;
+    }
+
+    return constraints.maxWidth * 0.40;
   }
 }
 

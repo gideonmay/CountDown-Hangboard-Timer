@@ -11,13 +11,15 @@ class TimerDetails extends StatefulWidget {
   final int currRep;
   final TimerDetailsDTO timerDetails;
   final int? currGrip;
+  final double width;
 
   const TimerDetails(
       {super.key,
       required this.currSet,
       required this.currRep,
       required this.timerDetails,
-      this.currGrip});
+      this.currGrip,
+      required this.width});
 
   @override
   State<TimerDetails> createState() => _TimerDetailsState();
@@ -29,9 +31,12 @@ class _TimerDetailsState extends State<TimerDetails> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: _timerDurationInfo(),
+        SizedBox(
+          width: widget.width,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: _timerDurationInfo(),
+          ),
         ),
         const VerticalDivider(
           thickness: 1.5,
@@ -41,18 +46,18 @@ class _TimerDetailsState extends State<TimerDetails> {
         Expanded(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: _setRepStatus(),
+            child: _timerProgressCounters(),
           ),
         ),
       ],
     );
   }
 
-  /// A widget containing the current rep and set status info
-  Widget _setRepStatus() {
+  /// A widget containing the progress counters for sets, reps, and grips
+  Widget _timerProgressCounters() {
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-      return _progressCounters(constraints.maxHeight / 6);
+      return _progressCounters(constraints.maxHeight / 5.5);
     });
   }
 
@@ -121,18 +126,18 @@ class _TimerDetailsState extends State<TimerDetails> {
           TimeTextRow(
               title: 'Work ',
               durationString: durationString(widget.timerDetails.workDuration),
-              fontSize: constraints.maxHeight / 6,
-              titleWidth: 55.0),
+              fontSize: constraints.maxHeight / 5.5,
+              titleWidth: 58.0),
           TimeTextRow(
               title: 'Rest ',
               durationString: durationString(widget.timerDetails.restDuration),
-              fontSize: constraints.maxHeight / 6,
-              titleWidth: 55.0),
+              fontSize: constraints.maxHeight / 5.5,
+              titleWidth: 58.0),
           TimeTextRow(
               title: 'Break ',
               durationString: durationString(widget.timerDetails.breakDuration),
-              fontSize: constraints.maxHeight / 6,
-              titleWidth: 55.0),
+              fontSize: constraints.maxHeight / 5.5,
+              titleWidth: 58.0),
         ],
       );
     });

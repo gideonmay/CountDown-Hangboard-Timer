@@ -105,15 +105,4 @@ class _WorkoutDetailScreenState extends State<WorkoutDetailScreen> {
       middle: Text(widget.workout.name),
     );
   }
-
-  // TODO: Only show when user first visits this screen
-  // Future<String?> _showHelperDialog(BuildContext context) {
-  //   return showDialog<String>(
-  //       context: context,
-  //       builder: (BuildContext context) => HelperDialog(
-  //           title: 'Editing Grips',
-  //           body:
-  //               'To edit the order of a grip, tap and hold the grip then drag it to the desired position. Alternatively, move the grip using the drag handle on the right.',
-  //           image: Image.asset('assets/gifs/grip_sequence_demo.gif')));
-  // }
 }

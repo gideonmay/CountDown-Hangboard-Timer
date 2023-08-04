@@ -39,9 +39,19 @@ class CountdownTimer extends StatefulWidget {
 }
 
 class _CountdownTimerState extends State<CountdownTimer>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin, WidgetsBindingObserver {
   late DurationStatusList _durationStatusList;
   late final SharedPreferencesService _prefService;
+
+  /// The activity state of the app. The following AppLifecycleState indexes
+  /// indicate the following: 0 = resumed, 1 = inactive (app switcher mode),
+  /// 2 = paused (app is in background), null = no changes
+  ///
+  /// The purpose of this state variable is to prevent the sound and vibration
+  /// from occurring if the app is not in the foreground. This solution was
+  /// adapted from the following source:
+  /// https://stackoverflow.com/questions/51835039/how-do-i-check-if-the-flutter-application-is-in-the-foreground-or-not
+  AppLifecycleState? _appState;
 
   /// The index in the durationStatusList that the timer is currently on
   int _durationIndex = 0;
@@ -61,8 +71,14 @@ class _CountdownTimerState extends State<CountdownTimer>
   late final AnimationController _controller;
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    _appState = state;
+  }
+
+  @override
   void dispose() {
     _controller.dispose();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
@@ -70,6 +86,8 @@ class _CountdownTimerState extends State<CountdownTimer>
   void initState() {
     super.initState();
     _loadSharedPreferences();
+
+    WidgetsBinding.instance.addObserver(this);
 
     // Initialize DurationStatusList based on which constructor was used
     if (widget.timerDurations != null) {
@@ -179,14 +197,18 @@ class _CountdownTimerState extends State<CountdownTimer>
 
   /// Vibrates if the vibration setting is on
   void _vibrate() {
-    if (_prefService.getVibrationOn()) {
+    // Do not vibrate if app is not in the foreground (_appState 0 or null)
+    if (_prefService.getVibrationOn() &&
+        (_appState?.index == 0 || _appState?.index == null)) {
       Vibration.vibrate(duration: 500);
     }
   }
 
   /// Plays a beep if the sound setting is on
   void _playBeep(int beepIndex) {
-    if (_prefService.getSoundOn()) {
+    // Do not play sound if app is not in the foreground (_appState 0 or null)
+    if (_prefService.getSoundOn() &&
+        (_appState?.index == 0 || _appState?.index == null)) {
       _audioPool.play(beepIndex);
     }
   }

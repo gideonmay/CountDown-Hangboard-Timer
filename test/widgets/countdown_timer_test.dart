@@ -21,10 +21,10 @@ void main() {
     setUp(() async {
       SharedPreferences.setMockInitialValues({});
       timerFromTimerDTO = MediaQuery(
-          data: const MediaQueryData(),
+          data: const MediaQueryData(
+              textScaleFactor: 0.5), // Prevents overflow in test
           child: CupertinoApp(
-              home: CountdownTimer(
-                  timerDurations: timerDurations)));
+              home: CountdownTimer(timerDurations: timerDurations)));
     });
 
     testWidgets('CountdownTimer has correct initial state', (tester) async {
@@ -159,8 +159,8 @@ void main() {
       timerFromList = MediaQuery(
           data: const MediaQueryData(),
           child: CupertinoApp(
-              home: CountdownTimer.fromList(
-                  durationStatusList: durationsList)));
+              home:
+                  CountdownTimer.fromList(durationStatusList: durationsList)));
     });
 
     testWidgets('The first grip in workout is shown during PREPARE countdown',

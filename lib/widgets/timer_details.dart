@@ -30,7 +30,7 @@ class _TimerDetailsState extends State<TimerDetails> {
   final double _fontHeightFactor = 0.17;
 
   /// The width of the title in the TimeTextRow widget
-  final double _titleWidth = 55.0;
+  final double _titleWidth = 50.0;
 
   @override
   Widget build(BuildContext context) {

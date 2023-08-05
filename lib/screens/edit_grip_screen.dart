@@ -7,7 +7,10 @@ import '../forms/grip_details_form.dart';
 
 /// A screen with a form to edit the details of a given grip
 class EditGripScreen extends StatefulWidget {
+  /// The grip to be edited on this screen
   final GripWithGripType grip;
+
+  /// The workout that the given grip belongs to
   final Workout workout;
 
   const EditGripScreen({super.key, required this.grip, required this.workout});

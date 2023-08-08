@@ -551,7 +551,7 @@ class ArcPainter extends CustomPainter {
     Paint arcPaint = Paint()
       ..color = color
       ..strokeWidth = 20.0
-      ..strokeCap = StrokeCap.butt
+      ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke;
 
     double progress = (1.0 - animation.value) * 2 * math.pi;

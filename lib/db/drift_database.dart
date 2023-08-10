@@ -94,31 +94,32 @@ class AppDatabase extends _$AppDatabase {
   @override
   MigrationStrategy get migration {
     return MigrationStrategy(
-      // Add a handful of initial grip types so user doesn't need to add many
-      onCreate: (Migrator m) async {
-        await m.createAll();
+        // Add a handful of initial grip types so user doesn't need to add many
+        onCreate: (Migrator m) async {
+      await m.createAll();
 
-        // 11 initial grip types
-        await addGripType('Full Crimp');
-        await addGripType('Half Crimp');
-        await addGripType('Open Hand Crimp');
-        await addGripType('Pocket 2-Finger IM');
-        await addGripType('Pocket 2-Finger MR');
-        await addGripType('Pocket Index Finger');
-        await addGripType('Pocket Middle Finger');
-        await addGripType('Pocket Pinky Finger');
-        await addGripType('Pocket Ring Finger');
-        await addGripType('Three Finger Drag');
-        await addGripType('Warm Up Jug');
-      },
-      // Must manually enable foreign key constraints for SQLite db
-      beforeOpen: (details) async {
-        await customStatement('PRAGMA foreign_keys = ON;');
-      });
+      // 11 initial grip types
+      await addGripType('Full Crimp');
+      await addGripType('Half Crimp');
+      await addGripType('Open Hand Crimp');
+      await addGripType('Pocket 2-Finger IM');
+      await addGripType('Pocket 2-Finger MR');
+      await addGripType('Pocket Index Finger');
+      await addGripType('Pocket Middle Finger');
+      await addGripType('Pocket Pinky Finger');
+      await addGripType('Pocket Ring Finger');
+      await addGripType('Three Finger Drag');
+      await addGripType('Warm Up Jug');
+    },
+        // Must manually enable foreign key constraints for SQLite db
+        beforeOpen: (details) async {
+      await customStatement('PRAGMA foreign_keys = ON;');
+    });
   }
 
   /// Returns a stream of workouts any time the workouts table is changed
-  Stream<List<Workout>> watchAllWorkouts() => select(workouts).watch();
+  Stream<List<Workout>> watchAllWorkouts() =>
+      (select(workouts)..orderBy([(w) => OrderingTerm.asc(w.name)])).watch();
 
   /// Returns a stream of all grip types sorted by grip name in ascending order
   Stream<List<GripType>> watchAllGripTypes() =>

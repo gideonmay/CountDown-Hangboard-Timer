@@ -11,12 +11,12 @@ All source code for is located in the /lib directory, as standard for Flutter pr
 The below screenshots highlight the main functionality of the app.  
 
 ***************
-Custom Timer Configuration  
-![timer config](screenshots/configure_timer.png)  
-
-***************
 Countdown Timer  
 ![timer](screenshots/timer.png)  
+
+***************
+Custom Timer Configuration  
+![timer config](screenshots/configure_timer.png)  
 
 ***************
 Create Custom Workouts  

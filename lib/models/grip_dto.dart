@@ -8,6 +8,7 @@ class GripDTO extends TimerDurationsDTO {
   int? gripTypeID;
   String? gripTypeName;
   int? edgeSize;
+  int? weight;
 
   /// Break minutes between this grip and the next grip
   int lastBreakMinutes;

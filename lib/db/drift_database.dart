@@ -26,6 +26,7 @@ class Grips extends Table {
   IntColumn get gripType =>
       integer().references(GripTypes, #id, onDelete: KeyAction.cascade)();
   IntColumn get edgeSize => integer().nullable()();
+  IntColumn get weight => integer().nullable()();
   IntColumn get setCount => integer().check(setCount.isBetweenValues(1, 30))();
   IntColumn get repCount => integer().check(repCount.isBetweenValues(1, 30))();
   IntColumn get workSeconds =>
@@ -110,6 +111,7 @@ class AppDatabase extends _$AppDatabase {
       await addGripType('Pocket Ring Finger');
       await addGripType('Three Finger Drag');
       await addGripType('Warm Up Jug');
+      await addGripType('Pull-Up');
     },
         // Must manually enable foreign key constraints for SQLite db
         beforeOpen: (details) async {
@@ -195,6 +197,7 @@ class AppDatabase extends _$AppDatabase {
         workout: workoutID,
         gripType: gripDTO.gripTypeID!,
         edgeSize: Value(gripDTO.edgeSize),
+        weight: Value(gripDTO.weight),
         setCount: gripDTO.sets,
         repCount: gripDTO.reps,
         workSeconds: gripDTO.workSeconds,
@@ -216,6 +219,7 @@ class AppDatabase extends _$AppDatabase {
         workout: grip.workout,
         gripType: grip.gripType,
         edgeSize: Value(grip.edgeSize),
+        weight: Value(grip.weight),
         setCount: grip.setCount,
         repCount: grip.repCount,
         workSeconds: grip.workSeconds,
@@ -271,6 +275,7 @@ class AppDatabase extends _$AppDatabase {
         .write(GripsCompanion(
       gripType: Value(gripDTO.gripTypeID!),
       edgeSize: Value(gripDTO.edgeSize),
+      weight: Value(gripDTO.weight),
       setCount: Value(gripDTO.sets),
       repCount: Value(gripDTO.reps),
       workSeconds: Value(gripDTO.workSeconds),

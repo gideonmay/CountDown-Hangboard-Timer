@@ -34,6 +34,7 @@ class _EditGripScreenState extends State<EditGripScreen> {
       gripDTO.gripTypeID = widget.grip.entry.gripType;
       gripDTO.gripTypeName = widget.grip.gripType.name;
       gripDTO.edgeSize = widget.grip.entry.edgeSize;
+      gripDTO.weight = widget.grip.entry.weight;
       gripDTO.sets = widget.grip.entry.setCount;
       gripDTO.reps = widget.grip.entry.repCount;
       gripDTO.workSeconds = widget.grip.entry.workSeconds;

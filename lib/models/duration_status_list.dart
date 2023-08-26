@@ -291,7 +291,7 @@ class WorkoutDurationStatusList extends DurationStatusList {
           includeLastBreak: _isLastGrip(index),
           lastBreakDuration: Duration(
               minutes: grip.lastBreakMinutes, seconds: grip.lastBreakSeconds),
-          gripName: _gripNameWithEdgeSize(gripType.name, grip.edgeSize),
+          gripName: _gripNameWithEdgeSizeWeight(gripType.name, grip.edgeSize, grip.weight),
           nextGripName: _getNextGripName(index),
           currGrip: index + 1,
           nextGripDetails: nextGripDetails));
@@ -299,9 +299,13 @@ class WorkoutDurationStatusList extends DurationStatusList {
   }
 
   /// Appends the edge size to the end of the grip name if an edge size exists
-  String _gripNameWithEdgeSize(String gripName, int? edgeSize) {
-    if (edgeSize != null) {
+  String _gripNameWithEdgeSizeWeight(String gripName, int? edgeSize, int? weight) {
+    if (edgeSize != null && weight != null) {
+      return '$gripName - ${edgeSize}mm - ${weight}kg';
+    } else if (edgeSize != null) {
       return '$gripName - ${edgeSize}mm';
+    } else if (weight != null) {
+      return '$gripName - ${weight}kg';
     }
 
     return gripName;
@@ -320,7 +324,7 @@ class WorkoutDurationStatusList extends DurationStatusList {
     }
 
     final nextGrip = gripList[index + 1];
-    return _gripNameWithEdgeSize(
-        nextGrip.gripType.name, nextGrip.entry.edgeSize);
+    return _gripNameWithEdgeSizeWeight(
+        nextGrip.gripType.name, nextGrip.entry.edgeSize, nextGrip.entry.weight);
   }
 }

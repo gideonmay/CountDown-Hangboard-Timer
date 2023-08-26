@@ -140,6 +140,7 @@ void main() {
     test('Grip is created with correct values', () async {
       final gripDTO = GripDTO.standard()
         ..edgeSize = 16
+        ..weight = 10
         ..gripTypeID = gripTypeID;
 
       await db.addGrip(workoutID, gripDTO);
@@ -157,6 +158,7 @@ void main() {
       expect(grip.lastBreakMinutes, 0);
       expect(grip.lastBreakSeconds, 0);
       expect(grip.edgeSize, 16);
+      expect(grip.weight, 10);
       expect(grip.sequenceNum, 1);
       expect(grip.workout, workoutID);
       expect(grip.gripType, gripTypeID);
@@ -172,6 +174,7 @@ void main() {
       final grip = grips[0].entry;
 
       expect(grip.edgeSize, null);
+      expect(grip.weight, null);
     });
 
     test('Grips from a stream have correct sequence numbers', () async {
@@ -246,6 +249,7 @@ void main() {
 
       // Change all grip attributes
       gripDTO.edgeSize = 25;
+      gripDTO.weight = 25;
       gripDTO.sets = 10;
       gripDTO.reps = 8;
       gripDTO.workSeconds = 21;
@@ -269,6 +273,7 @@ void main() {
       expect(grip.lastBreakMinutes, gripDTO.lastBreakMinutes);
       expect(grip.lastBreakSeconds, gripDTO.lastBreakSeconds);
       expect(grip.edgeSize, gripDTO.edgeSize);
+      expect(grip.weight, gripDTO.edgeSize);
       expect(grip.workout, workoutID);
       expect(grip.gripType, gripTypeID);
       expect(gripType.name, 'Open Hand Crimp');

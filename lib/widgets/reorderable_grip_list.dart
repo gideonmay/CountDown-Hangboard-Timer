@@ -100,11 +100,19 @@ class _ReorderableGripListState extends State<ReorderableGripList> {
 
   /// Returns a Text widget that omits the edge size if it is null
   Widget _titleText(GripWithGripType grip) {
-    if (grip.entry.edgeSize == null) {
+    if (grip.entry.edgeSize == null && grip.entry.weight == null) {
       return Text(grip.gripType.name);
     }
 
-    return Text('${grip.gripType.name} - ${grip.entry.edgeSize}mm');
+    if (grip.entry.edgeSize != null && grip.entry.weight != null) {
+      return Text('${grip.gripType.name} - ${grip.entry.edgeSize}mm - ${grip.entry.weight}kg');
+    }
+
+    if (grip.entry.edgeSize != null) {
+      return Text('${grip.gripType.name} - ${grip.entry.edgeSize}mm');
+    } else {
+      return Text('${grip.gripType.name} - ${grip.entry.weight}kg');
+    }
   }
 
   /// Specifies details about the given grip

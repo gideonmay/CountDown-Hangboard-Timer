@@ -51,6 +51,7 @@ class _GripDetailsFormState extends State<GripDetailsForm> {
             children: [
               _gripTypeFormField(context),
               _edgeSizeInput(),
+              _weightInput()
             ],
           ),
           CupertinoFormSection.insetGrouped(
@@ -133,6 +134,50 @@ class _GripDetailsFormState extends State<GripDetailsForm> {
   String _initialEdgeSize() {
     return widget.gripDTO.edgeSize != null
         ? widget.gripDTO.edgeSize.toString()
+        : '';
+  }
+
+  Widget _weightInput() {
+    return CupertinoTextFormFieldRow(
+      initialValue: _initialWeight(),
+      maxLength: 2,
+      keyboardType: TextInputType.number,
+      textInputAction: TextInputAction.next,
+      prefix: const Text('Added weight (kg)'),
+      placeholder: 'optional',
+      textAlign: TextAlign.center,
+      inputFormatters: [
+        FilteringTextInputFormatter.digitsOnly,
+        /*
+         * Remove leading zeroes. Obtained from following source:
+         * https://stackoverflow.com/questions/64367743/remove-the-first-zeros-of-phone-input-textformfield-of-type-numbers-flutter
+         */
+        FilteringTextInputFormatter.deny(RegExp(r'^0+'))
+      ],
+      validator: (value) {
+        if (value != null) {
+          int? weight = int.tryParse(value);
+
+          if (weight != null && weight <= 0) {
+            return 'Weight must be a positive number';
+          }
+        }
+
+        return null;
+      },
+      onSaved: (newValue) {
+        if (newValue != null) {
+          int? weight = int.tryParse(newValue);
+          widget.gripDTO.weight = weight;
+        }
+      },
+    );
+  }
+
+  /// Returns the edge size if not null. Otherwise, returns en empty string
+  String _initialWeight() {
+    return widget.gripDTO.weight != null
+        ? widget.gripDTO.weight.toString()
         : '';
   }
 

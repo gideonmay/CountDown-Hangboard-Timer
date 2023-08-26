@@ -99,7 +99,7 @@ class AppDatabase extends _$AppDatabase {
         onCreate: (Migrator m) async {
       await m.createAll();
 
-      // 11 initial grip types
+      // 12 initial grip types
       await addGripType('Full Crimp');
       await addGripType('Half Crimp');
       await addGripType('Open Hand Crimp');

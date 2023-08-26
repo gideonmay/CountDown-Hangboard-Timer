@@ -54,7 +54,7 @@ void main() {
   });
 
   group('GripTypes table', () {
-    test('The 11 initial GripTypes are correctly created', () async {
+    test('The 12 initial GripTypes are correctly created', () async {
       final gripTypes = await db.watchAllGripTypes().first;
 
       expect(gripTypes[0].name, 'Full Crimp');
@@ -68,7 +68,7 @@ void main() {
       expect(gripTypes[8].name, 'Pocket Ring Finger');
       expect(gripTypes[9].name, 'Three Finger Drag');
       expect(gripTypes[10].name, 'Warm Up Jug');
-      expect(gripTypes[10].name, 'Pull-Up');
+      expect(gripTypes[11].name, 'Pull-Up');
     });
     test('GripType is created with correct values', () async {
       await db.addGripType('1st Grip Type');
@@ -86,7 +86,7 @@ void main() {
       await db.deleteGripType(gripTypes[0]);
       gripTypes = await db.watchAllGripTypes().first;
 
-      expect(gripTypes.length, 11);
+      expect(gripTypes.length, 12);
     });
   });
 

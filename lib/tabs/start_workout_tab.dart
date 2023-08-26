@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 import '../db/drift_database.dart';
 import '../models/duration_status_list.dart';
 import '../screens/workout_timer_screen.dart';
@@ -150,6 +151,7 @@ class _StartWorkoutTabState extends State<StartWorkoutTab> {
         child: CupertinoButton.filled(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             onPressed: () {
+              WakelockPlus.enable();
               _updateLastUsedDate();
               _navigateToWorkoutTimer(context);
             },

@@ -68,6 +68,7 @@ void main() {
       expect(gripTypes[8].name, 'Pocket Ring Finger');
       expect(gripTypes[9].name, 'Three Finger Drag');
       expect(gripTypes[10].name, 'Warm Up Jug');
+      expect(gripTypes[10].name, 'Pull-Up');
     });
     test('GripType is created with correct values', () async {
       await db.addGripType('1st Grip Type');

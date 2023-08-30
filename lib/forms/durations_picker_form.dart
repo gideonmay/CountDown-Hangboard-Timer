@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 import '../models/timer_durations_dto.dart';
 import '../widgets/duration_picker.dart';
 import '../widgets/number_picker.dart';
@@ -102,6 +103,7 @@ class _DurationsPickerFormState extends State<DurationsPickerForm> {
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: CupertinoButton.filled(
             onPressed: () {
+              WakelockPlus.enable();
               widget.onStartPressed(context, timerDurations);
             },
             child: const Text(
